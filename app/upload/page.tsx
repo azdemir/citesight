@@ -109,10 +109,10 @@ export default function UploadPage(){
             </div>
 
             <div className="mt-6 border border-[#EDEDEB] rounded-[16px] p-5 bg-white">
-              <div className="text-[11px] font-mono uppercase tracking-[0.08em] text-[#9A9A98]">How it works • cheap at scale</div>
+              <div className="text-[11px] font-mono uppercase tracking-[0.08em] text-[#9A9A98]">How it works • efficient at scale</div>
               <div className="mt-3 space-y-3 text-[12px] leading-[1.6] text-[#6B6B6B]">
                 <div><b className="text-black">LLM once:</b> Spark 1M compiles manual → DSL $0.50-$2 one-time, pages p87, p112 citations kept.</div>
-                <div><b className="text-black">Watch cheap:</b> SAM + YOLO geometry $0.35/hr/cam, 0 LLM calls/frame, vs VLM $4.20/hr = 12x cheaper.</div>
+                <div><b className="text-black">Watch efficient:</b> SAM + YOLO geometry $0.35/hr/cam, 0 LLM calls/frame, vs VLM $4.20/hr = 12x more efficient.</div>
                 <div><b className="text-black">Explain only on violation:</b> 10-20/day, not 108k frames/day. Wonder writes incident p87 + 5-sec clip + Slack/SMS.</div>
                 <div><b className="text-black">Edge:</b> Jetson taps RTSP <span className="font-mono bg-black text-white px-1 rounded">rtsp://.../cam12</span>, no new cameras.</div>
               </div>
@@ -122,7 +122,7 @@ export default function UploadPage(){
           <div className="md:col-span-7">
             {!file && (
               <div className="border border-dashed border-[#EDEDEB] rounded-[24px] p-12 text-center bg-white">
-                <div className="text-[13px] text-[#9A9A98]">No manual uploaded yet. Drop PDF to see DSL with page citations p87 §4.2, p112 §4.1 — auditable, precise, cheap.</div>
+                <div className="text-[13px] text-[#9A9A98]">No manual uploaded yet. Drop PDF to see DSL with page citations p87 §4.2, p112 §4.1 — auditable, precise, efficient.</div>
               </div>
             )}
             {file && (
@@ -159,7 +159,7 @@ export default function UploadPage(){
               <div className="mt-6 grid grid-cols-3 gap-px bg-[#EDEDEB] rounded-[16px] overflow-hidden border border-[#EDEDEB]">
                 <div className="bg-white p-4"><div className="text-[11px] font-mono uppercase text-[#9A9A98]">Precision</div><div className="mt-1 text-[18px] font-[800]">0.89</div><div className="text-[11px] text-[#6B6B6B]">vs VLM 0.62</div></div>
                 <div className="bg-white p-4"><div className="text-[11px] font-mono uppercase text-[#9A9A98]">Recall</div><div className="mt-1 text-[18px] font-[800]">0.84</div><div className="text-[11px] text-[#6B6B6B]">vs VLM 0.71</div></div>
-                <div className="bg-[#FFD60A] p-4 text-black"><div className="text-[11px] font-mono uppercase opacity-60">Cost/hr</div><div className="mt-1 text-[20px] font-[800]">$0.35</div><div className="text-[11px]">vs VLM $4.20 • 12x cheaper • p87</div></div>
+                <div className="bg-[#FFD60A] p-4 text-black"><div className="text-[11px] font-mono uppercase opacity-60">Cost/hr</div><div className="mt-1 text-[20px] font-[800]">$0.35</div><div className="text-[11px]">vs VLM $4.20 • 12x more efficient • p87</div></div>
               </div>
             )}
           </div>

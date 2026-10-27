@@ -58,7 +58,7 @@ export default function FeaturesPage() {
       <section className="bg-[#FAFAF9] border-y border-[#EDEDEB]">
         <div className="mx-auto max-w-[1120px] px-8 py-[88px] grid md:grid-cols-12 gap-12 items-start">
           <div className="md:col-span-5 sticky top-[96px]">
-            <h2 className="text-[36px] leading-[0.9] tracking-[-0.04em] font-[750]">12x cheaper.<br />Auditable.</h2>
+            <h2 className="text-[36px] leading-[0.9] tracking-[-0.04em] font-[750]">12x more efficient.<br />Auditable.</h2>
             <p className="mt-4 text-[14px] leading-[1.6] text-[#6B6B6B]">Precision and recall per rule on labeled video, plus cost per hour vs VLM every few frames baseline.</p>
           </div>
           <div className="md:col-span-7 grid grid-cols-2 gap-px bg-black rounded-[24px] overflow-hidden border border-black">

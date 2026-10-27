@@ -48,7 +48,7 @@ export default function IncidentsPage(){
     const lower = (q || query).toLowerCase();
     if(!lower.trim()) return;
     if(lower.includes("saw") && (lower.includes("2pm") || lower.includes("14:"))){
-      setAnswer("14:03:12 — Person within 0.8m of running saw (R-04.2, p87 §4.2). Clip 14:03:10–15 shows green person mask overlapping red saw mask at 0.8m < 1.5m. Geometry measured, not VLM guess. Action: stop + LOTO. No other saw events 14:00–15:00. Page citation p87 auditable, holds up in production. Cost $0.35/hr vs $4.20/hr VLM 12x cheaper.");
+      setAnswer("14:03:12 — Person within 0.8m of running saw (R-04.2, p87 §4.2). Clip 14:03:10–15 shows green person mask overlapping red saw mask at 0.8m < 1.5m. Geometry measured, not VLM guess. Action: stop + LOTO. No other saw events 14:00–15:00. Page citation p87 auditable, holds up in production. Cost $0.35/hr vs $4.20/hr VLM 12x more efficient.");
     } else if(lower.includes("glove")){
       setAnswer("14:07:44 — No gloves at station 3 (R-07.1, p112 §7.1). Person #2 at station 3 without gloves during cut. Severity high. Clip 14:07:42–48. Wonder: PPE audit required, supervisor verify. Page citation p112.");
     } else if(lower.includes("forklift")){
@@ -56,7 +56,7 @@ export default function IncidentsPage(){
     } else if(lower.includes("hard hat") || lower.includes("lumber")){
       setAnswer("14:18:27 — No hard hat within 5m of overhead crane, violates p64 §3.4 Head Protection. Person in lumber yard without hard hat. Severity critical. Clip 14:18:25–30. Page citation p64.");
     } else {
-      setAnswer(`Found ${incidents.length} incidents. ${incidents.map(i=>`${i.time} ${i.rule} p${i.page} ${i.severity}`).join(", ")}. All with page citations + clips. Auditable Yes p87. $0.35/hr vs $4.20/hr VLM 12x cheaper. Ask: "What happened near saw around 2pm?" or "Show glove violations" or "Forklift events"`);
+      setAnswer(`Found ${incidents.length} incidents. ${incidents.map(i=>`${i.time} ${i.rule} p${i.page} ${i.severity}`).join(", ")}. All with page citations + clips. Auditable Yes p87. $0.35/hr vs $4.20/hr VLM 12x more efficient. Ask: "What happened near saw around 2pm?" or "Show glove violations" or "Forklift events"`);
     }
   };
 
@@ -170,7 +170,7 @@ export default function IncidentsPage(){
               <div className="mt-4 flex gap-2 flex-wrap">
                 <span className="text-[11px] font-mono bg-white text-black px-2 py-1 rounded-full">p{active.page} {active.section} • auditable</span>
                 <span className="text-[11px] font-mono bg-[#FFD60A] text-black px-2 py-1 rounded-full">{active.dist} &lt; {active.limit} measured • geometry not VLM guess</span>
-                <span className="text-[11px] font-mono bg-white/10 border border-white/20 px-2 py-1 rounded-full text-white">$0.35/hr vs $4.20/hr • 12x cheaper • holds up in production</span>
+                <span className="text-[11px] font-mono bg-white/10 border border-white/20 px-2 py-1 rounded-full text-white">$0.35/hr vs $4.20/hr • 12x more efficient • holds up in production</span>
               </div>
               <div className="mt-6 grid grid-cols-3 gap-px bg-white/10 rounded-[12px] overflow-hidden border border-white/10 text-[11px] font-mono">
                 <div className="bg-[#111] p-3"><div className="opacity-60">Zone</div><div className="mt-1 text-white">{active.zone} • drawn once in /zone • zones.json</div></div>
@@ -196,7 +196,7 @@ export default function IncidentsPage(){
               ) : (
                 <div className="text-[13px] leading-[1.6] whitespace-pre-wrap">{answer}</div>
               )}
-              {answer && <div className="mt-3 text-[10px] font-mono text-[#9A9A98]">CITATIONS: p87 §4.2, p112 §7.1, p203 §12.8 • CLIPS ATTACHED • AUDITABLE YES p87 • $0.35/hr vs $4.20/hr 12x CHEAPER • HOLDS UP IN PRODUCTION</div>}
+              {answer && <div className="mt-3 text-[10px] font-mono text-[#9A9A98]">CITATIONS: p87 §4.2, p112 §7.1, p203 §12.8 • CLIPS ATTACHED • AUDITABLE YES p87 • $0.35/hr vs $4.20/hr 12x MORE EFFICIENT • HOLDS UP IN PRODUCTION</div>}
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2 text-[11px] font-mono">
               <div className="bg-[#F6F6F5] border border-[#EDEDEB] rounded-[10px] p-3"><b className="text-black">Real Whisper:</b> Web Speech API (webkitSpeechRecognition) for demo, fallback to OpenAI Whisper API via /api/transcribe for production. Transcribes supervisor voice in real time.</div>

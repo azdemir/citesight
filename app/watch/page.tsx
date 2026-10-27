@@ -106,7 +106,7 @@ export default function WatchPage(){
             <div className="absolute left-4 bottom-4 right-4 md:w-[360px] bg-white border border-black rounded-[16px] p-4 shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
               <div className="flex justify-between"><span className="text-[11px] font-mono font-[700]">{incidents[0]?.id || "R-04.2"} • p{incidents[0]?.page || 87} §4.2</span><span className="bg-[#FFD60A] text-black text-[9px] px-1.5 py-0.5 rounded">HIGH</span></div>
               <div className="mt-2 text-[12px] leading-[1.4]">{incidents[0]?.text || "Person within 0.8 m of running saw, violates 1.5 m. Clip 14:03:10–15."}</div>
-              <div className="mt-2 text-[10px] font-mono text-[#9A9A98]">Geometry 0.8m measured, not VLM guess. Page citation p87. 12x cheaper.</div>
+              <div className="mt-2 text-[10px] font-mono text-[#9A9A98]">Geometry 0.8m measured, not VLM guess. Page citation p87. 12x more efficient.</div>
             </div>
           </div>
           <div className="mt-4 grid grid-cols-3 gap-px bg-black rounded-[12px] overflow-hidden border border-black text-[11px] font-mono">

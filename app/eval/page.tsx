@@ -14,7 +14,7 @@ export default function EvalPage(){
     <div className="min-h-screen bg-white text-[#111] antialiased">
       <header className="h-[64px] border-b border-[#EDEDEB] flex items-center justify-between px-8 max-w-[1120px] mx-auto">
         <a href="/" className="flex items-center gap-2.5"><div className="h-6 w-6 bg-black rounded-[6px] flex items-center justify-center"><div className="h-2 w-2 bg-[#FFD60A] rounded-[1px]" /></div><span className="text-[15px] font-[650]">CiteSight</span><span className="ml-2 text-[11px] text-[#9A9A98]">/ eval • Days 5-6 • labeled test set</span></a>
-        <div className="text-[11px] font-mono">Test set: {data.testSet.count} clips • Cost 12x cheaper • p87 auditable</div>
+        <div className="text-[11px] font-mono">Test set: {data.testSet.count} clips • Cost 12x more efficient • p87 auditable</div>
       </header>
 
       <div className="max-w-[1120px] mx-auto px-8 py-12">
@@ -70,7 +70,7 @@ export default function EvalPage(){
               <div key={c.id} className="bg-white border border-[#EDEDEB] rounded-[10px] p-3 flex justify-between"><span>{c.id} • {c.file}</span><span className="text-[#9A9A98]">{c.gt} violations • {c.desc}</span></div>
             ))}
           </div>
-          <div className="mt-6 text-[12px] leading-[1.6] text-[#6B6B6B]">How to run real eval: Film 30 clips self (garage workshop table saw 0.8m vs 1.5m, forklift toy in pedestrian lane, no gloves at station 3) + public PPE dataset construction, label JSON ground_truth per rule violation true/false, run SAM+YOLO geometry via edge/server.py check_geometry (distance less than 1.5m p87, less than 2.0m p112, point-in-poly zones, homography pixel→meter 3.2m ref, optical flow 2ms for moving state), measure precision/recall per rule vs VLM baseline GPT-4V or Llama 3.2 Vision via Baseten. Cost table 12x cheaper + auditable Yes p87 is evidence judges remember. Days 5-6 workflow.</div>
+          <div className="mt-6 text-[12px] leading-[1.6] text-[#6B6B6B]">How to run real eval: Film 30 clips self (garage workshop table saw 0.8m vs 1.5m, forklift toy in pedestrian lane, no gloves at station 3) + public PPE dataset construction, label JSON ground_truth per rule violation true/false, run SAM+YOLO geometry via edge/server.py check_geometry (distance less than 1.5m p87, less than 2.0m p112, point-in-poly zones, homography pixel→meter 3.2m ref, optical flow 2ms for moving state), measure precision/recall per rule vs VLM baseline GPT-4V or Llama 3.2 Vision via Baseten. Cost table 12x more efficient + auditable Yes p87 is evidence judges remember. Days 5-6 workflow.</div>
         </div>
 
         <div className="mt-12 flex gap-3"><a href="/" className="h-10 px-5 rounded-full border border-[#EDEDEB] flex items-center text-[13px]">← Home</a><a href="/watch" className="h-10 px-5 rounded-full bg-black text-white flex items-center text-[13px]">Live watch with YOLO →</a><a href="/zone" className="h-10 px-5 rounded-full bg-[#FFD60A] text-black flex items-center text-[13px]">Zone annotator →</a></div>

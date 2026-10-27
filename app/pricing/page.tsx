@@ -29,7 +29,7 @@ export default function PricingPage() {
       <section className="mx-auto max-w-[1120px] px-8 pb-[64px]">
         <div className="text-center">
           <h2 className="text-[22px] font-[700] tracking-[-0.02em]">Who is CiteSight for?</h2>
-          <p className="mt-2 mx-auto max-w-[560px] text-[13px] leading-[1.6] text-[#6B6B6B]">Not just small shops — enterprise that needs page citation p87 + clip + $0.35/hr vs $4.20/hr 12x cheaper vs $270/hr SAM 3.1 per frame impossible. Click Details for why $1B+ ops pay vs free AI.</p>
+          <p className="mt-2 mx-auto max-w-[560px] text-[13px] leading-[1.6] text-[#6B6B6B]">Not just small shops — enterprise that needs page citation p87 + clip + $0.35/hr vs $4.20/hr 12x more efficient vs $270/hr SAM 3.1 per frame impossible. Click Details for why $1B+ ops pay vs free AI.</p>
         </div>
         <div className="mt-8 grid md:grid-cols-3 gap-4">
           <div className="bg-white border border-[#EDEDEB] rounded-[20px] p-6 hover:border-black transition-colors flex flex-col">
@@ -98,7 +98,7 @@ export default function PricingPage() {
           </div>
 
           <div className="bg-[#111] text-white p-8 flex flex-col relative border-2 border-black">
-            <div className="absolute -top-3 left-6 h-6 px-3 rounded-full bg-[#FFD60A] text-black text-[11px] font-mono font-[700] flex items-center">MOST POPULAR • $1B+ OPS • 12x CHEAPER</div>
+            <div className="absolute -top-3 left-6 h-6 px-3 rounded-full bg-[#FFD60A] text-black text-[11px] font-mono font-[700] flex items-center">MOST POPULAR • $1B+ OPS • 12x MORE EFFICIENT</div>
             <div className="text-[11px] font-mono uppercase tracking-[0.08em] opacity-60">Growth • For $1B+ ops • Americold, M&S, Heineken</div>
             <div className="mt-4 flex items-baseline gap-2">
               <span className="text-[36px] font-[750] tracking-[-0.03em] leading-none">${annual ? "2,990" : "2,990"}</span>
@@ -124,7 +124,7 @@ export default function PricingPage() {
             <div className="mt-6 space-y-2.5 text-[12px] leading-[1.5] text-[#6B6B6B]">
               <div className="flex gap-2"><span>•</span><span>50+ hazards, custom rules UI, Sentinel edge box, dedicated support, audit trail p87 +clip + SLA, on-prem, SSO</span></div>
               <div className="flex gap-2"><span>•</span><span>Americold 77% injury reduction $1.1M/yr, M&S 80% incidents ↓ 10 weeks — but black-box, no page citation</span></div>
-              <div className="flex gap-2"><span>•</span><span>CiteSight alternative: $2,990/mo + Jetson $499 one-time, $0.35/hr, page citation p87 auditable, 12x cheaper vs $4.20/hr VLM vs $270/hr SAM 3.1</span></div>
+              <div className="flex gap-2"><span>•</span><span>CiteSight alternative: $2,990/mo + Jetson $499 one-time, $0.35/hr, page citation p87 auditable, 12x more efficient vs $4.20/hr VLM vs $270/hr SAM 3.1</span></div>
               <div className="flex gap-2"><span>•</span><span>SAM 3.1 every frame $270/hr impossible vs CiteSight $0.35/hr on-demand only $0.0025 zone + $0.0125 per incident</span></div>
             </div>
             <div className="mt-auto pt-8"><a href="/manifesto" className="h-11 w-full rounded-full border border-[#EDEDEB] flex items-center justify-center text-[13px] font-[600] hover:border-black transition-colors">Contact sales →</a></div>
@@ -133,7 +133,7 @@ export default function PricingPage() {
 
         <div className="mt-8 grid md:grid-cols-3 gap-px bg-[#EDEDEB] border border-[#EDEDEB] rounded-[16px] overflow-hidden">
           <div className="bg-white p-5"><div className="text-[11px] font-mono uppercase text-[#9A9A98]">VLM every 5 frames (2025 winner)</div><div className="mt-2 text-[13px] font-[600]">$4.20/hr/cam • $420/hr 100 cams • $10k/day • No citation</div></div>
-          <div className="bg-[#FFD60A] p-5 text-black"><div className="text-[11px] font-mono uppercase opacity-60">CiteSight • SAM geometry + compile-only</div><div className="mt-2 text-[13px] font-[700]">$0.35/hr/cam • $35/hr 100 cams • $840/day • Yes p87 + clip • 12x cheaper • $1B+ ops</div></div>
+          <div className="bg-[#FFD60A] p-5 text-black"><div className="text-[11px] font-mono uppercase opacity-60">CiteSight • SAM geometry + compile-only</div><div className="mt-2 text-[13px] font-[700]">$0.35/hr/cam • $35/hr 100 cams • $840/day • Yes p87 + clip • 12x more efficient • $1B+ ops</div></div>
           <div className="bg-black text-white p-5"><div className="text-[11px] font-mono uppercase opacity-60">SAM 3.1 every frame (naive)</div><div className="mt-2 text-[13px] font-[700]">$270/hr/cam • $27k/hr 100 cams • impossible • $2.50/1k images × 108k frames/hr</div></div>
         </div>
       </section>

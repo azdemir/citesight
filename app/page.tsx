@@ -177,7 +177,7 @@ export default function Page() {
         <div className="mx-auto max-w-[1280px] px-[32px] py-[96px]">
           <div className="flex justify-between items-end">
             <h2 className="text-[28px] md:text-[40px] leading-[0.9] tracking-[-0.04em] font-[700]">How it works</h2>
-            <span className="text-[13px] text-[#9A9A98] hidden md:block font-mono">Auditable • Precise • Cheap at scale</span>
+            <span className="text-[13px] text-[#9A9A98] hidden md:block font-mono">Auditable • Precise • Efficient at scale</span>
           </div>
           <div className="mt-[64px] grid md:grid-cols-3 gap-[1px] bg-[#E8E6E1] border border-[#E8E6E1] rounded-[24px] overflow-hidden">
             {[
@@ -202,7 +202,7 @@ export default function Page() {
           <div className="md:col-span-5 sticky top-[96px]">
             <h2 className="text-[36px] md:text-[48px] leading-[0.9] tracking-[-0.05em] font-[750]">Numbers judges<br /><span className="text-[#9A9A98]">remember.</span></h2>
             <p className="mt-[24px] text-[15px] leading-[1.6] text-[#6B6B6B] max-w-[360px]">Precision and recall per rule on labeled video, plus cost per hour vs VLM every few frames baseline. 10x+ difference is evidence.</p>
-            <div className="mt-[32px] inline-flex items-center gap-[8px] h-[32px] px-[14px] rounded-full bg-[#111] text-white text-[12px] font-[500]">12x cheaper • auditable p87 • holds up in production</div>
+            <div className="mt-[32px] inline-flex items-center gap-[8px] h-[32px] px-[14px] rounded-full bg-[#111] text-white text-[12px] font-[500]">12x more efficient • auditable p87 • holds up in production</div>
           </div>
           <div className="md:col-span-7 space-y-[16px]">
             <div className="grid grid-cols-2 gap-px bg-[#111] rounded-[20px] overflow-hidden border border-[#111] shadow-[0_24px_64px_rgba(0,0,0,0.08)]">
@@ -230,17 +230,17 @@ export default function Page() {
             <div className="grid grid-cols-3 gap-px bg-[#E8E6E1] rounded-[16px] overflow-hidden border border-[#E8E6E1]">
               <div className="bg-white p-[16px]"><div className="text-[11px] font-mono uppercase text-[#9A9A98]">Enterprise</div><div className="mt-[8px] text-[12px] font-[600]">$100k/yr/site</div><div className="mt-[4px] text-[11px] text-[#6B6B6B]">50+ hazards, no page citation</div></div>
               <div className="bg-white p-[16px]"><div className="text-[11px] font-mono uppercase text-[#9A9A98]">VLM baseline</div><div className="mt-[8px] text-[12px] font-[600]">$4.20/hr/cam</div><div className="mt-[4px] text-[11px] text-[#6B6B6B]">LLM per frame, no audit</div></div>
-              <div className="bg-[#111] text-white p-[16px]"><div className="text-[11px] font-mono uppercase opacity-60">CiteSight</div><div className="mt-[8px] text-[12px] font-[700]">$0.35/hr/cam • $299/mo</div><div className="mt-[4px] text-[11px] opacity-70">SAM geometry, p87, cheap, auditable</div></div>
+              <div className="bg-[#111] text-white p-[16px]"><div className="text-[11px] font-mono uppercase opacity-60">CiteSight</div><div className="mt-[8px] text-[12px] font-[700]">$0.35/hr/cam • $299/mo</div><div className="mt-[4px] text-[11px] opacity-70">SAM geometry, p87, efficient, auditable</div></div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* How you implement cheap — 4 cards */}
+      {/* How you implement at scale — 4 cards */}
       <section className="border-t border-[#E8E6E1] bg-[#111] text-white">
         <div className="mx-auto max-w-[1280px] px-[32px] py-[96px]">
           <div className="flex justify-between items-end">
-            <h2 className="text-[32px] md:text-[44px] leading-[0.9] tracking-[-0.05em] font-[700]">How you implement cheap<br /><span className="text-[#6B6B6B]">for any workplace.</span></h2>
+            <h2 className="text-[32px] md:text-[44px] leading-[0.9] tracking-[-0.05em] font-[700]">How you implement at scale<br /><span className="text-[#6B6B6B]">for any workplace.</span></h2>
             <span className="hidden md:flex text-[11px] font-mono border border-white/20 px-[12px] h-[28px] rounded-full items-center">NO NEW CAMERAS • RTSP TAP • $0.35/hr</span>
           </div>
           <div className="mt-[48px] grid md:grid-cols-4 gap-px bg-white/10 border border-white/10 rounded-[24px] overflow-hidden">
@@ -276,7 +276,7 @@ export default function Page() {
         <div className="mx-auto max-w-[1280px] px-[32px] py-[48px] grid md:grid-cols-12 gap-[32px] text-[12px]">
           <div className="md:col-span-5">
             <div className="flex items-center gap-[8px]"><div className="h-[20px] w-[20px] bg-black rounded-[5px] flex items-center justify-center"><div className="h-[6px] w-[6px] bg-[#FFD60A] rounded-[1px]" /></div><span className="font-[650]">CiteSight</span><span className="text-[#9A9A98] ml-2">Rulebook Eyes</span></div>
-            <div className="mt-[12px] text-[#6B6B6B] leading-[1.6] max-w-[320px]">Compile long manual into deterministic video checks. SAM geometry, page citations, 10x cheaper. Edge box RTSP tap, no new cameras. Built as digital instrument — every scroll intentional, every animation weighted.</div>
+            <div className="mt-[12px] text-[#6B6B6B] leading-[1.6] max-w-[320px]">Compile long manual into deterministic video checks. SAM geometry, page citations, 10x more efficient. Edge box RTSP tap, no new cameras. Built as digital instrument — every scroll intentional, every animation weighted.</div>
           </div>
           <div className="md:col-span-7 grid grid-cols-3 gap-[32px]">
             <div><div className="font-[600]">Product</div><div className="mt-[12px] space-y-[8px] text-[#6B6B6B]"><a href="/features" className="block hover:text-black transition-colors">Features</a><a href="/watch" className="block hover:text-black transition-colors">Live watch</a><a href="/zone" className="block hover:text-black transition-colors">Zone annotator</a><a href="/eval" className="block hover:text-black transition-colors">Eval 0.89/0.84</a></div></div>

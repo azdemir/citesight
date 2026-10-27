@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "CiteSight — The rulebook that watches",
-  description: "Compile a safety manual into deterministic video checks. SAM 3.1 segments people/tools/zones, rules run as geometry, every alert cites a page. 12x cheaper than VLM every frame. Built for Meta Global AI Developer Hackathon.",
+  description: "Compile a safety manual into deterministic video checks. SAM 3.1 segments people/tools/zones, rules run as geometry, every alert cites a page. 12x more efficient than VLM every frame. Built for Meta Global AI Developer Hackathon.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
