@@ -109,11 +109,6 @@ export default function Page() {
                 Live watch →
               </a>
             </div>
-            <div className="reveal reveal-3 mt-[40px] flex flex-wrap gap-[16px] text-[11px] font-mono text-[#9A9A98] tracking-[0.02em]" ref={el=>{revealRefs.current[3]=el}}>
-              <span className="flex items-center gap-1.5"><span className="h-1 w-1 bg-[#30D158] rounded-full animate-pulse" />No new cameras • RTSP tap</span>
-              <span>5 min • once • p87</span>
-              <span>0 LLM calls/frame</span>
-            </div>
           </div>
 
           <div className="col-span-12 md:col-span-6 mt-[48px] md:mt-0 space-y-[16px]">
