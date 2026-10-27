@@ -28,8 +28,8 @@ export default function PricingPage() {
 
       <section className="mx-auto max-w-[1120px] px-8 pb-[48px]">
         <div className="text-center">
-          <h2 className="text-[24px] font-[700] tracking-[-0.02em]">Who is CiteSight for?</h2>
-          <p className="mt-3 mx-auto max-w-[600px] text-[14px] leading-[1.6] text-[#6B6B6B]">Built for workplaces where a missed rule costs $50k shutdown, $15k OSHA fine, or a life. Click Details to see why they pay vs free AI.</p>
+          <h2 className="text-[24px] font-[700] tracking-[-0.02em]">Who is CiteSight for? — $1B+ operations</h2>
+          <p className="mt-3 mx-auto max-w-[600px] text-[14px] leading-[1.6] text-[#6B6B6B]">Built for billion-dollar operations where a missed rule costs $1M shutdown, $100k OSHA fine, or a life — Americold, Marks & Spencer, Heineken, Bridgestone, Mars, Caterpillar, Coca-Cola. Not just small shops — enterprise that needs page citation p87 + clip + $0.35/hr vs $4.20/hr 12x cheaper vs $270/hr SAM 3.1 per frame impossible. Click Details.</p>
         </div>
         <div className="mt-8 grid md:grid-cols-3 gap-4">
           <div className="bg-white border border-[#EDEDEB] rounded-[20px] p-6 hover:border-black transition-colors">
@@ -110,13 +110,13 @@ export default function PricingPage() {
           </div>
 
           <div className="bg-[#111] text-white p-8 flex flex-col relative border-2 border-black">
-            <div className="absolute -top-3 left-6 h-6 px-3 rounded-full bg-[#FFD60A] text-black text-[11px] font-mono font-[700] flex items-center">MOST POPULAR • 12x CHEAPER</div>
-            <div className="text-[12px] font-mono uppercase tracking-[0.08em] opacity-60">Pro • Rulebook Eyes</div>
+            <div className="absolute -top-3 left-6 h-6 px-3 rounded-full bg-[#FFD60A] text-black text-[11px] font-mono font-[700] flex items-center">MOST POPULAR • $1B+ OPS • 12x CHEAPER</div>
+            <div className="text-[12px] font-mono uppercase tracking-[0.08em] opacity-60">Growth • Rulebook Eyes • For $1B+ ops</div>
             <div className="mt-4 flex items-baseline gap-2">
-              <span className="text-[36px] font-[750] tracking-[-0.03em] leading-none">${annual ? "299" : "299"}</span>
+              <span className="text-[36px] font-[750] tracking-[-0.03em] leading-none">${annual ? "2,990" : "2,990"}</span>
               <span className="text-[14px] opacity-60">/mo + $0.35/hr/cam</span>
             </div>
-            <div className="mt-1 text-[13px] opacity-60">{annual ? "$2,990/yr • 2 months free • $0.35/hr/cam" : "$299/mo • $0.35/hr per camera • $840/day 100 cams"}</div>
+            <div className="mt-1 text-[13px] opacity-60">{annual ? "$29,900/yr • 2 months free • $0.35/hr/cam • Americold, M&S, Heineken scale" : "$2,990/mo • $0.35/hr per camera • $840/day 100 cams • $1B+ ops"}</div>
             <div className="mt-8 space-y-3 text-[13px] leading-[1.6]">
               <div className="flex gap-2"><span className="text-[#FFD60A]">✓</span><span>Real Spark 1M compile any length 10 to 1000+ pages, DSL with page citations p87 §4.2 p112 §7.1 p203 §12.8</span></div>
               <div className="flex gap-2"><span className="text-[#FFD60A]">✓</span><span>SAM 3.1 on-demand once $0.0025 zone + incident 5 frames $0.0125, not per frame $270/hr impossible</span></div>
@@ -130,9 +130,9 @@ export default function PricingPage() {
           </div>
 
           <div className="bg-white p-8 flex flex-col">
-            <div className="text-[12px] font-mono uppercase tracking-[0.08em] text-[#9A9A98]">Enterprise • Intenseye / Protex / Voxel alternative</div>
-            <div className="mt-4 text-[36px] font-[750] tracking-[-0.03em] leading-none">$100k</div>
-            <div className="mt-1 text-[13px] text-[#6B6B6B]">/yr per site • custom rules UI • deployment days • 50+ hazards</div>
+            <div className="text-[12px] font-mono uppercase tracking-[0.08em] text-[#9A9A98]">Enterprise • For $1B+ ops • Americold, M&S, Heineken, Bridgestone, Mars, Coca-Cola</div>
+            <div className="mt-4 text-[36px] font-[750] tracking-[-0.03em] leading-none">Custom</div>
+            <div className="mt-1 text-[13px] text-[#6B6B6B]">$25k-$100k/mo • $1B+ ops • 100+ cams • on-prem • SLA • audit trail p87 • dedicated support</div>
             <div className="mt-8 space-y-3 text-[13px] leading-[1.6] text-[#6B6B6B]">
               <div className="flex gap-2"><span>•</span><span>50+ pre-baked PPE/hazards, custom rules UI, Sentinel edge box</span></div>
               <div className="flex gap-2"><span>•</span><span>No manual → DSL with page citation, no 0.8m measured geometry</span></div>

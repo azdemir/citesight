@@ -76,9 +76,14 @@ export default function Page() {
               <span className="block">The rulebook</span>
               <span className="block text-[#9A9A98] font-[400] italic" style={{ fontFamily: "Instrument Serif, serif" }}>that watches.</span>
             </h1>
-            <p className="mt-[32px] text-[18px] md:text-[20px] leading-[1.5] tracking-[-0.015em] text-[#6B6B6B] max-w-[480px]">
-              Upload any safety manual — 10 pages or 1000+. Compiles into checks that cite every page. A camera audits the workplace — every alert cites a page, not a guess.
+            <p className="mt-[32px] text-[18px] md:text-[20px] leading-[1.5] tracking-[-0.015em] text-[#6B6B6B] max-w-[520px]">
+              Built for billion-dollar operations — Americold, Marks & Spencer, Heineken, Bridgestone, Mars, Coca-Cola. Upload any safety manual — 10 pages or 1000+. Compiles into checks that cite every page. A camera audits the workplace — every alert cites a page p87, not a guess. $0.35/hr vs $4.20/hr VLM vs $270/hr SAM 3.1 per frame impossible.
             </p>
+            <div className="mt-6 flex gap-3 flex-wrap text-[10px] font-mono">
+              <span className="bg-black text-white px-2.5 py-1 rounded-full">Trusted by $1B+ ops</span>
+              <span className="bg-[#F6F6F5] border border-[#EDEDEB] px-2.5 py-1 rounded-full">Americold 77% injury ↓ $1.1M/yr</span>
+              <span className="bg-[#F6F6F5] border border-[#EDEDEB] px-2.5 py-1 rounded-full">M&S 80% incidents ↓ 10 weeks</span>
+            </div>
             <div className="mt-[40px] flex gap-[12px]">
               <a href="/upload" className="group relative h-[52px] px-[28px] bg-[#111] text-white rounded-full text-[14px] font-[600] flex items-center justify-center overflow-hidden transition-all duration-500 hover:scale-[1.02] active:scale-[0.98]">
                 <span className="relative z-10 flex items-center gap-2">Upload rulebook →</span>
