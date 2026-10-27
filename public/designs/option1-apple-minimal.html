@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CiteSight — Option 1 — Apple Minimal — Pro</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:#FFFFFF;color:#111;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  .progress{position:fixed;top:0;left:0;height:2px;background:#111;z-index:9999;transform-origin:left;transition:width 0.1s linear}
+  header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.8);backdrop-filter:blur(20px);border-bottom:1px solid #EDEDEB;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;max-width:1120px;margin:0 auto}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:650;font-size:15px;letter-spacing:-0.02em;text-decoration:none;color:#111}
+  .logo-mark{width:24px;height:24px;background:#111;border-radius:7px;display:flex;align-items:center;justify-content:center}
+  .logo-dot{width:8px;height:8px;background:#FFD60A;border-radius:1px}
+  .nav{display:flex;gap:24px;font-size:13px}
+  .nav a{text-decoration:none;color:#6B6B6B;transition:color .2s}
+  .nav a:hover{color:#111}
+  .hero{max-width:1120px;margin:0 auto;padding:128px 32px 80px;display:grid;grid-template-columns:1.2fr 0.8fr;gap:48px;align-items:center}
+  .badge{display:inline-flex;align-items:center;gap:8px;height:28px;padding:0 12px;border-radius:100px;background:#F6F6F5;border:1px solid #EDEDEB;font-size:11px;letter-spacing:0.02em;font-family:JetBrains Mono}
+  .dot{width:6px;height:6px;background:#111;border-radius:50%;animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+  h1{font-size:72px;line-height:0.9;letter-spacing:-0.05em;font-weight:800;margin-top:24px}
+  h1 span{color:#9A9A98}
+  .sub{margin-top:24px;font-size:20px;line-height:1.5;color:#6B6B6B;max-width:520px;letter-spacing:-0.015em}
+  .cta{display:flex;gap:12px;margin-top:40px}
+  .btn{height:44px;padding:0 24px;border-radius:100px;font-size:14px;font-weight:600;border:0;cursor:pointer;transition:all .3s cubic-bezier(0.16,1,0.3,1);position:relative;overflow:hidden}
+  .btn-primary{background:#111;color:#fff}
+  .btn-primary:hover{transform:scale(1.02);background:#222;box-shadow:0 8px 24px rgba(0,0,0,0.12)}
+  .btn-primary:active{transform:scale(0.98)}
+  .btn-primary::after{content:'';position:absolute;top:50%;left:50%;width:0;height:0;background:rgba(255,255,255,0.1);border-radius:50%;transform:translate(-50%,-50%);transition:width .6s,height .6s}
+  .btn-primary:hover::after{width:300px;height:300px}
+  .btn-ghost{background:#fff;border:1px solid #E8E8E6;color:#111}
+  .btn-ghost:hover{transform:scale(1.02);border-color:#111;background:#F6F6F5}
+  .card{background:#F6F6F5;border:1px solid #EDEDEB;border-radius:24px;padding:28px;transition:all .4s cubic-bezier(0.16,1,0.3,1)}
+  .card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.06);border-color:#111}
+  .card-dark{background:#111;color:#fff;border-radius:16px;padding:16px}
+  .mono{font-family:JetBrains Mono,monospace;font-size:11px}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+  .feature{padding:24px 0;border-top:1px solid #EDEDEB}
+  .feature-n{font-family:JetBrains Mono;font-size:12px;color:#9A9A98;letter-spacing:0.08em}
+  .feature-t{font-size:18px;font-weight:650;margin-top:12px;letter-spacing:-0.02em}
+  .feature-d{font-size:14px;line-height:1.6;color:#6B6B6B;margin-top:8px}
+  .cost{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#111;border-radius:20px;overflow:hidden;border:1px solid #111;margin-top:48px}
+  .cost-a{background:#F6F6F5;padding:32px}
+  .cost-b{background:#FFD60A;padding:32px;color:#111}
+  @media(max-width:900px){.hero{grid-template-columns:1fr;padding:88px 24px 48px}h1{font-size:44px}.grid-3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<header>
+  <a href="#" class="logo"><div class="logo-mark"><div class="logo-dot"></div></div>CiteSight</a>
+  <div class="nav"><a href="#">Features</a><a href="#">Zone</a><a href="#">Watch</a></div>
+</header>
+
+<section class="hero">
+  <div>
+    <div class="badge"><span class="dot"></span>ANY MANUAL LENGTH • 10 TO 1000+ PAGES • SPARK 1M</div>
+    <h1>The rulebook<br><span>that watches.</span></h1>
+    <div class="sub">Upload any safety manual. CiteSight compiles it into checks that cite every page. A camera audits the workplace — every alert cites a page, not a guess.</div>
+    <div class="cta">
+      <button class="btn btn-primary magnetic">Upload rulebook →</button>
+      <button class="btn btn-ghost magnetic">Live watch →</button>
+    </div>
+    <div class="grid-3">
+      <div class="feature"><div class="feature-n">01 • INGEST</div><div class="feature-t">Manual → DSL with page citation</div><div class="feature-d">Spark 1M reads it all. Compiles to structured checks p87 §4.2. Every rule keeps source.</div></div>
+      <div class="feature"><div class="feature-n">02 • WATCH</div><div class="feature-t">SAM masks + geometry • $0.35/hr</div><div class="feature-d">YOLOv8n-seg + SAM 2.1 open-weights. Distance less than 1.5m measured, not guess. 0 LLM/frame.</div></div>
+      <div class="feature"><div class="feature-n">03 • EXPLAIN</div><div class="feature-t">Incident + clip + page + Voice Q&A</div><div class="feature-d">Wonder writes incident with page + 5-sec clip. Voice: What happened near saw 2pm?</div></div>
+    </div>
+  </div>
+  <div>
+    <div class="card">
+      <div class="mono" style="color:#9A9A98">INGEST • safety_manual.pdf • Spark 1M • any length</div>
+      <div style="margin-top:12px;background:#fff;border:1px solid #E8E8E6;border-radius:12px;padding:16px;font-size:13px;line-height:1.5">§4.2 Personnel shall not be within 1.5 m of a running saw. LOTO tag visible during maintenance. <span style="background:#111;color:#fff;padding:2px 6px;border-radius:6px;font-size:10px;font-family:JetBrains Mono">→ p87 §4.2 → R-04.2</span></div>
+      <div style="margin-top:16px" class="card-dark">
+        <div style="display:flex;justify-content:space-between;font-family:JetBrains Mono;font-size:10px;opacity:0.5"><span>LIVE • workshop_cam_03 • 14:03:12 • SAM 3.1</span><span>$0.35/hr</span></div>
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <div style="width:80px;height:64px;border:1px solid #30D158;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#30D158">person</div>
+          <div style="width:56px;height:28px;border:1px solid #FF3B30;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:9px;color:#FF3B30">saw • running</div>
+          <div style="flex:1;background:#fff;color:#111;border-radius:8px;padding:8px;font-size:11px"><b>R-04.2 • p87 §4.2</b><br/>Person within 0.8 m of running saw, violates 1.5 m. Clip 14:03:10–15.</div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px;background:#111;color:#fff">
+      <div style="width:36px;height:36px;border-radius:50%;background:#FFD60A;color:#111;display:flex;align-items:center;justify-content:center;font-weight:800">?</div>
+      <div style="margin-top:16px;font-size:16px;font-weight:600">What happened near the saw around 2pm?</div>
+      <div style="margin-top:8px;font-size:12px;opacity:0.6">Voice Q&A for supervisor. Wonder searches by time + zone with citations.</div>
+      <div style="margin-top:16px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px;font-size:12px">14:03:12 — Person within 0.8 m of running saw (R-04.2, p87). Clip 10–15. Action: stop + LOTO.</div>
+    </div>
+  </div>
+</section>
+
+<section style="max-width:1120px;margin:0 auto;padding:0 32px 88px">
+  <div class="cost">
+    <div class="cost-a"><div class="mono" style="color:#9A9A98">VLM every 5 frames (2025 winner)</div><div style="margin-top:24px;display:flex;flex-direction:column;gap:12px;font-size:13px;color:#6B6B6B"><div style="display:flex;justify-content:space-between"><span>Precision</span><span style="color:#111;font-weight:600">0.62</span></div><div style="display:flex;justify-content:space-between"><span>Recall</span><span style="color:#111;font-weight:600">0.71</span></div><div style="display:flex;justify-content:space-between"><span>Cost/hr</span><span style="text-decoration:line-through">$4.20</span></div><div style="display:flex;justify-content:space-between"><span>Audit</span><span>No citation</span></div></div></div>
+    <div class="cost-b"><div class="mono" style="opacity:0.6">CiteSight • SAM geometry + compile-only</div><div style="margin-top:24px;display:flex;flex-direction:column;gap:12px;font-size:13px;font-weight:500"><div style="display:flex;justify-content:space-between"><span>Precision</span><span style="font-size:20px;font-weight:800">0.89</span></div><div style="display:flex;justify-content:space-between"><span>Recall</span><span style="font-size:20px;font-weight:800">0.84</span></div><div style="display:flex;justify-content:space-between"><span>Cost/hr</span><span style="font-size:22px;font-weight:800">$0.35</span></div><div style="display:flex;justify-content:space-between"><span>Audit</span><span style="font-weight:600">Yes • p87 §4.2 + clip</span></div></div></div>
+  </div>
+</section>
+
+<script>
+  window.addEventListener('scroll',()=>{
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    const p = (window.scrollY / docH) * 100;
+    document.getElementById('progress').style.width = p+'%';
+  });
+  document.querySelectorAll('.magnetic').forEach(btn=>{
+    btn.addEventListener('mousemove',(e)=>{
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width/2;
+      const y = e.clientY - rect.top - rect.height/2;
+      btn.style.transform = `translate(${x*0.15}px, ${y*0.25}px) scale(1.02)`;
+    });
+    btn.addEventListener('mouseleave',()=>{btn.style.transform='translate(0,0) scale(1)'});
+  });
+</script>
+</body>
+</html>

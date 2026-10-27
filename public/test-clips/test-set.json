@@ -1,0 +1,12 @@
+[
+  {"id":"clip_001","file":"workshop_saw_0.8m_violation.mp4","ground_truth":[{"rule":"R-04.2","page":87,"violation":true,"dist":"0.8m"}],"description":"Person 0.8m from running saw - should fire R-04.2 p87"},
+  {"id":"clip_002","file":"workshop_saw_2.0m_safe.mp4","ground_truth":[{"rule":"R-04.2","page":87,"violation":false,"dist":"2.0m"}],"description":"Person 2.0m from saw - safe"},
+  {"id":"clip_003","file":"station3_no_gloves.mp4","ground_truth":[{"rule":"R-07.1","page":112,"violation":true}],"description":"No gloves at station 3"},
+  {"id":"clip_004","file":"station3_gloves_ok.mp4","ground_truth":[{"rule":"R-07.1","page":112,"violation":false}],"description":"Gloves at station 3 - safe"},
+  {"id":"clip_005","file":"forklift_ped_lane_occupied.mp4","ground_truth":[{"rule":"R-12.8","page":203,"violation":true}],"description":"Forklift in pedestrian lane when occupied"},
+  {"id":"clip_006","file":"lumber_yard_no_hardhat.mp4","ground_truth":[{"rule":"R-03.4","page":64,"violation":true}],"description":"No hard hat in lumber yard"},
+  {"id":"clip_007","file":"lumber_yard_hardhat_ok.mp4","ground_truth":[{"rule":"R-03.4","page":64,"violation":false}],"description":"Hard hat present - safe"},
+  {"id":"clip_008","file":"grinder_no_glasses.mp4","ground_truth":[{"rule":"R-09.3","page":144,"violation":true}],"description":"No safety glasses at grinder"},
+  {"id":"clip_009","file":"saw_maintenance_no_loto.mp4","ground_truth":[{"rule":"R-05.6","page":91,"violation":true}],"description":"LOTO tag missing during maintenance"},
+  {"id":"clip_010","file":"workshop_clean_safe.mp4","ground_truth":[],"description":"All safe, no violations"}
+]
