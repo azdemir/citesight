@@ -75,7 +75,6 @@ export default function Page() {
               <div className="h-[8px] w-[8px] bg-[#FFD60A] rounded-[1px] transition-transform duration-500 group-hover:scale-125 group-hover:rotate-90" />
             </div>
             <span className="text-[14px] font-[650] tracking-[-0.02em]">CiteSight</span>
-            <span className="text-[11px] tracking-[-0.01em] text-[#9A9A98] hidden md:inline">— Rulebook Eyes</span>
           </a>
           <nav className="flex items-center gap-[28px] text-[13px]">
             <a href="/features" className="text-[#6B6B6B] hover:text-[#111] transition-colors relative group">Features<span className="absolute -bottom-1 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-500" /></a>
@@ -271,7 +270,7 @@ export default function Page() {
       <footer className="border-t border-[#E8E6E1]">
         <div className="mx-auto max-w-[1280px] px-[32px] py-[48px] grid md:grid-cols-12 gap-[32px] text-[12px]">
           <div className="md:col-span-5">
-            <div className="flex items-center gap-[8px]"><div className="h-[20px] w-[20px] bg-black rounded-[5px] flex items-center justify-center"><div className="h-[6px] w-[6px] bg-[#FFD60A] rounded-[1px]" /></div><span className="font-[650]">CiteSight</span><span className="text-[#9A9A98] ml-2">Rulebook Eyes</span></div>
+            <div className="flex items-center gap-[8px]"><div className="h-[20px] w-[20px] bg-black rounded-[5px] flex items-center justify-center"><div className="h-[6px] w-[6px] bg-[#FFD60A] rounded-[1px]" /></div><span className="font-[650]">CiteSight</span></div>
             <div className="mt-[12px] text-[#6B6B6B] leading-[1.6] max-w-[320px]">Compile long manual into deterministic video checks. SAM geometry, page citations, 10x more efficient. Edge box RTSP tap, no new cameras. Built as digital instrument — every scroll intentional.</div>
           </div>
           <div className="md:col-span-7 grid grid-cols-3 gap-[32px]">
