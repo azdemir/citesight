@@ -142,12 +142,6 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="reveal reveal-1 grid grid-cols-3 gap-px bg-[#EDEBE6] rounded-[16px] overflow-hidden border border-[#EDEDEB]" ref={el=>{revealRefs.current[5]=el}}>
-              <div className="bg-white p-[16px] flex justify-between text-[11px] font-mono"><span className="text-[#9A9A98]">Masks</span><span>5 • real YOLO</span></div>
-              <div className="bg-white p-[16px] flex justify-between text-[11px] font-mono"><span className="text-[#9A9A98]">Geometry</span><span>0.8m measured</span></div>
-              <div className="bg-white p-[16px] flex justify-between text-[11px] font-mono"><span className="text-[#9A9A98]">LLM calls</span><span>0 / frame</span></div>
-            </div>
-
             <div className="reveal reveal-2 mt-[16px] bg-black text-white rounded-[20px] p-[20px] flex gap-[16px] items-center" ref={el=>{revealRefs.current[6]=el}}>
               <div className="h-10 w-10 rounded-full bg-[#FFD60A] text-black flex items-center justify-center font-[800]">?</div>
               <div className="flex-1">
