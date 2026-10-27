@@ -97,8 +97,8 @@ export default function PricingPage() {
             <div className="mt-auto pt-8"><a href="/upload" className="h-11 w-full rounded-full border border-[#EDEDEB] flex items-center justify-center text-[13px] font-[600] hover:border-black transition-colors">Start free →</a></div>
           </div>
 
-          <div className="bg-[#111] text-white p-8 flex flex-col relative border-2 border-black">
-            <div className="absolute -top-3 left-6 h-6 px-3 rounded-full bg-[#FFD60A] text-black text-[11px] font-mono font-[700] flex items-center">MOST POPULAR • $1B+ OPS • 12x MORE EFFICIENT</div>
+          <div className="bg-[#111] text-white p-8 flex flex-col relative border-2 border-black pt-12">
+            <div className="absolute top-4 left-6 h-6 px-3 rounded-full bg-[#FFD60A] text-black text-[11px] font-mono font-[700] flex items-center shadow-[0_2px_8px_rgba(0,0,0,0.12)]">MOST POPULAR • $1B+ OPS • 12x MORE EFFICIENT</div>
             <div className="text-[11px] font-mono uppercase tracking-[0.08em] opacity-60">Growth • For $1B+ ops • Americold, M&S, Heineken</div>
             <div className="mt-4 flex items-baseline gap-2">
               <span className="text-[36px] font-[750] tracking-[-0.03em] leading-none">${annual ? "2,990" : "2,990"}</span>
