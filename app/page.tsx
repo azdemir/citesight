@@ -230,8 +230,7 @@ export default function Page() {
 
       <section className="mx-auto max-w-[1120px] px-8 py-[96px] text-center border-t border-[#EDEDEB] bg-[#FAFAF9] -mx-8 px-8">
         <div className="mx-auto max-w-[720px]">
-          <div className="inline-flex h-7 px-3 rounded-full bg-white border border-[#EDEDEB] text-[11px] font-mono tracking-[0.02em]">YOUR WORKPLACE, YOUR RULES • ANY MANUAL LENGTH</div>
-          <h2 className="mt-6 text-[36px] md:text-[52px] leading-[0.9] tracking-[-0.05em] font-[750]">Upload any manual.<br /><span className="text-[#9A9A98]">Not just 300 pages.</span></h2>
+          <h2 className="text-[36px] md:text-[52px] leading-[0.9] tracking-[-0.05em] font-[750]">Upload any manual.<br /><span className="text-[#9A9A98]">Not just 300 pages.</span></h2>
           <p className="mt-6 mx-auto text-[16px] leading-[1.7] text-[#6B6B6B]">10 pages or 1000+ pages — lab chemical segregation, workshop machinery, kitchen HACCP, warehouse forklift, construction PPE. Spark 1M compiles to DSL with page citations p87 §4.2. Draw zones once in <a href="/zone" className="underline">/zone</a> (lumber yard, forklift lane, station 3), calibrate pixel→meter via aisle 3.2m, then <a href="/watch" className="underline">watch live</a> with SAM 3.1 + YOLOv8n-seg masks. Every alert cites a page + clip, not a guess. Geometry, not VLM. $0.35/hr vs $4.20/hr. Edge box taps existing RTSP, no new cameras.</p>
           <div className="mt-10 flex flex-wrap justify-center gap-3">
             <a href="/upload" className="h-[48px] px-7 rounded-full bg-black text-white text-[14px] font-[600] flex items-center hover:bg-[#222] transition-colors">Upload rulebook →</a>
