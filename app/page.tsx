@@ -13,7 +13,7 @@ export default function Page() {
     (async () => {
       try {
         const Lenis = (await import("lenis")).default;
-        lenis = new Lenis({ lerp: 0.08, smoothWheel: true, syncTouch: true });
+        lenis = new Lenis({ lerp: 0.18, smoothWheel: true, syncTouch: true, wheelMultiplier: 1.2, touchMultiplier: 1.5 });
         const raf = (time: number) => { lenis.raf(time); requestAnimationFrame(raf); };
         requestAnimationFrame(raf);
       } catch {}
