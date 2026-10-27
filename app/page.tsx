@@ -5,8 +5,6 @@ import { useState, useEffect, useRef } from "react";
 export default function Page() {
   const [scrollY, setScrollY] = useState(0);
   const [progress, setProgress] = useState(0);
-  const [surprise, setSurprise] = useState(false);
-  const [logoClicks, setLogoClicks] = useState(0);
   const heroRef = useRef<HTMLDivElement>(null);
   const revealRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -26,9 +24,6 @@ export default function Page() {
       setScrollY(y);
       const docH = document.documentElement.scrollHeight - window.innerHeight;
       setProgress(docH > 0 ? (y / docH) * 100 : 0);
-      if (y > docH * 0.85 && !surprise) {
-        setSurprise(true);
-      }
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -46,13 +41,7 @@ export default function Page() {
       observer.disconnect();
       if(lenis) lenis.destroy();
     };
-  }, [surprise]);
-
-  const onLogoClick = () => {
-    const n = logoClicks + 1;
-    setLogoClicks(n);
-    if(n>=5) setSurprise(true);
-  };
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#FCFCF9] text-[#111] antialiased selection:bg-[#111] selection:text-white overflow-x-hidden">
@@ -81,13 +70,12 @@ export default function Page() {
       {/* Header */}
       <header className="sticky top-0 z-40 backdrop-blur-[16px] bg-[#FCFCF9]/80 border-b border-[#E8E6E1]">
         <div className="mx-auto max-w-[1280px] px-[32px] h-[64px] flex items-center justify-between">
-          <a href="/" onClick={(e)=>{ e.preventDefault(); onLogoClick(); window.scrollTo({top:0, behavior:'smooth'}); }} className="group flex items-center gap-[10px] cursor-pointer">
+          <a href="/" onClick={(e)=>{ e.preventDefault(); window.scrollTo({top:0, behavior:'smooth'}); }} className="group flex items-center gap-[10px] cursor-pointer">
             <div className="h-[24px] w-[24px] bg-[#111] rounded-[7px] flex items-center justify-center transition-all duration-500 group-hover:rotate-[180deg] group-hover:scale-110">
               <div className="h-[8px] w-[8px] bg-[#FFD60A] rounded-[1px] transition-transform duration-500 group-hover:scale-125 group-hover:rotate-90" />
             </div>
             <span className="text-[14px] font-[650] tracking-[-0.02em]">CiteSight</span>
             <span className="text-[11px] tracking-[-0.01em] text-[#9A9A98] hidden md:inline">— Rulebook Eyes</span>
-            {logoClicks>0 && <span className="ml-2 text-[10px] font-mono bg-black text-white px-1.5 py-0.5 rounded-full">{logoClicks}/5 click for surprise</span>}
           </a>
           <nav className="flex items-center gap-[28px] text-[13px]">
             <a href="/features" className="text-[#6B6B6B] hover:text-[#111] transition-colors relative group">Features<span className="absolute -bottom-1 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-500" /></a>
@@ -267,22 +255,6 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Surprise — appears after 85% scroll or 5 logo clicks */}
-      {surprise && (
-        <div className="fixed inset-0 z-[200] bg-[#FFD60A]/95 backdrop-blur-[24px] flex items-center justify-center p-8 animate-[fadeIn_0.5s_ease]">
-          <div className="max-w-[560px] bg-black text-white rounded-[24px] p-[40px] shadow-[0_32px_80px_rgba(0,0,0,0.3)] border border-white/10">
-            <div className="text-[11px] font-mono uppercase tracking-[0.08em] opacity-60">🎉 SURPRISE — YOU FOUND IT</div>
-            <h3 className="mt-4 text-[28px] leading-[0.9] tracking-[-0.04em] font-[750]">Every alert cites a page, not a guess.<br /><span className="text-[#FFD60A]">p87 §4.2 • clip + Slack + $0.35/hr</span></h3>
-            <p className="mt-4 text-[14px] leading-[1.6] opacity-70">You scrolled to the bottom (or clicked logo 5x). Most people stop at hero. You didn't. That's why you'll win — you care about details like page citations, homography pixel→meter, 0 LLM calls/frame. Built as digital instrument, every scroll intentional.</p>
-            <div className="mt-6 flex gap-2">
-              <button onClick={()=>setSurprise(false)} className="h-10 px-5 rounded-full bg-white text-black text-[13px] font-[600]">Continue →</button>
-              <a href="/eval" className="h-10 px-5 rounded-full border border-white/20 text-[13px] flex items-center hover:bg-white/10">See eval 0.89/0.84 →</a>
-            </div>
-            <div className="mt-6 text-[10px] font-mono opacity-40">CiteSight — Rulebook Eyes — Built as digital instrument — 15 years Apple/Dribbble — 1:1 pixel perfect — no generic AI patterns — SAM 3.1 on-demand once $0.0025 + incident 5 frames $0.0125 not per frame $270/hr impossible</div>
-          </div>
-        </div>
-      )}
-
       {/* Final CTA */}
       <section className="mx-auto max-w-[1280px] px-[32px] py-[120px] text-center">
         <div className="reveal" ref={el=>{revealRefs.current[19]=el}}>
@@ -308,7 +280,7 @@ export default function Page() {
             <div><div className="font-[600]">Legal</div><div className="mt-[12px] space-y-[8px] text-[#6B6B6B]"><a href="/privacy" className="block hover:text-black transition-colors">Privacy • face blur • RLS</a><a href="/terms" className="block hover:text-black transition-colors">Terms • ranges + owner confirm</a><a href="#" className="block hover:text-black transition-colors">$0.35/hr vs $4.20/hr 12x more efficient</a></div></div>
           </div>
         </div>
-        <div className="border-t border-[#EDEBE6] py-[16px] text-center text-[11px] font-mono text-[#9A9A98]">© 2026 CiteSight — Rulebook Eyes — Built as digital instrument — every scroll intentional, every animation weighted and professional — 1:1 pixel perfect — no generic AI patterns — Logo 5 clicks or 85% scroll for surprise</div>
+        <div className="border-t border-[#EDEBE6] py-[16px] text-center text-[11px] font-mono text-[#9A9A98]">© 2026 CiteSight — Rulebook Eyes — Built as digital instrument — every scroll intentional, every animation weighted and professional — 1:1 pixel perfect — no generic AI patterns</div>
       </footer>
     </div>
   );
