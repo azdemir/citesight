@@ -81,12 +81,12 @@ export default function Page() {
             </p>
             <div className="mt-[40px] flex gap-[12px]">
               <a href="/upload" className="group relative h-[52px] px-[28px] bg-[#111] text-white rounded-full text-[14px] font-[600] flex items-center justify-center overflow-hidden transition-all duration-500 hover:scale-[1.02] active:scale-[0.98]">
-                <span className="relative z-10 flex items-center gap-2">Upload rulebook <span className="group-hover:translate-x-1 transition-transform duration-300">→</span></span>
+                <span className="relative z-10 flex items-center gap-2">Upload rulebook →</span>
                 <span className="absolute inset-0 bg-[#FFD60A] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
                 <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_50%_0%,rgba(255,214,10,0.3),transparent_60%)]" />
               </a>
               <a href="/watch" className="group h-[52px] px-[28px] rounded-full border border-[#E8E6E1] bg-white text-[14px] font-[500] flex items-center justify-center hover:border-[#111] hover:bg-[#111] hover:text-white transition-all duration-500 hover:scale-[1.02] active:scale-[0.98]">
-                <span>Live watch</span><span className="ml-2 group-hover:rotate-45 transition-transform duration-300">→</span>
+                <span>Live watch</span>→
               </a>
             </div>
             <div className="mt-[48px] flex gap-[24px] text-[11px] font-mono text-[#9A9A98] tracking-[0.02em]">
@@ -261,7 +261,7 @@ export default function Page() {
         <h2 className="text-[40px] md:text-[64px] leading-[0.85] tracking-[-0.05em] font-[750]">Upload any manual.<br /><span className="text-[#9A9A98]">Not just 300 pages.</span></h2>
         <p className="mt-[24px] mx-auto max-w-[520px] text-[16px] leading-[1.7] text-[#6B6B6B]">10 pages or 1000+ pages — lab chemical segregation, workshop machinery, kitchen HACCP, warehouse forklift, construction PPE. Spark 1M compiles to DSL with page citations p87 §4.2. Draw zones once, watch live with SAM geometry. Every alert cites a page + clip, not a guess.</p>
         <div className="mt-[40px] flex flex-wrap justify-center gap-[12px]">
-          <a href="/upload" className="group h-[52px] px-[28px] rounded-full bg-black text-white text-[14px] font-[600] flex items-center gap-2 hover:bg-[#222] transition-all duration-300 hover:scale-[1.02]"><span>Upload rulebook →</span><span className="group-hover:translate-x-1 transition-transform duration-300">↗</span></a>
+          <a href="/upload" className="group h-[52px] px-[28px] rounded-full bg-black text-white text-[14px] font-[600] flex items-center gap-2 hover:bg-[#222] transition-all duration-300 hover:scale-[1.02]"><span>Upload rulebook →</span></a>
           <a href="/zone" className="h-[52px] px-[28px] rounded-full bg-white border border-[#E8E6E1] text-[14px] font-[500] flex items-center hover:border-black transition-colors">Draw zones once → calibrate</a>
           <a href="/watch" className="h-[52px] px-[28px] rounded-full bg-[#FFD60A] text-black text-[14px] font-[600] flex items-center hover:bg-[#FFEB3B] transition-colors">Live watch with YOLO masks →</a>
         </div>
