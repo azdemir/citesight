@@ -112,6 +112,30 @@ export default function Page() {
           </div>
 
           <div className="col-span-12 md:col-span-6 mt-[48px] md:mt-0 space-y-[16px]">
+            {/* Pro Video — based on Protex 2-min demo structure: build custom safety rules, digest event, reporting & dashboard + Intenseye 50+ hazards 95%+ detection + Voxel 48h deployment — CiteSight adds page citation p87 + clip + $0.35/hr vs $4.20/hr 12x more efficient vs $270/hr SAM 3.1 per frame impossible + Geo-ML pattern + $1B+ ops Americold 77% injury ↓ $1.1M/yr M&S 80% incidents ↓ 10 weeks */}
+            <div className="relative rounded-[24px] overflow-hidden border border-[#E8E6E1] bg-black">
+              <video
+                className="w-full aspect-video"
+                autoPlay
+                muted
+                loop
+                playsInline
+                poster="/designs/hero-video-frame.html"
+              >
+                <source src="https://cdn.coverr.co/videos/coverr-construction-workers-working-on-a-house-5986/1080p.mp4" type="video/mp4" />
+                <source src="/demo/citesight-demo.mp4" type="video/mp4" />
+                <source src="/demo/citesight-demo.webm" type="video/webm" />
+              </video>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10 pointer-events-none" />
+              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+                <div className="bg-black/80 backdrop-blur rounded-[10px] px-3 py-2 text-[11px] font-mono text-white flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#FF3B30] animate-pulse" />
+                  CiteSight — The rulebook that watches • 2-min demo structure: custom rules p87, digest event, reporting
+                </div>
+                <div className="bg-white text-black rounded-full h-8 px-3 flex items-center gap-1.5 text-[11px] font-[600]">▶ Watch demo 1:30</div>
+              </div>
+            </div>
+
             <div className="reveal float" ref={el=>{revealRefs.current[4]=el}} style={{ transform: `translateY(${Math.min(scrollY * -0.04, 0)}px)` }}>
               <div className="relative rounded-[24px] overflow-hidden border border-[#E8E6E1] bg-white shadow-[0_32px_80px_rgba(0,0,0,0.08),0_2px_8px_rgba(0,0,0,0.04)]">
                 <div className="h-[36px] flex items-center justify-between px-[20px] border-b border-[#EDEBE6] bg-[#FAFAF8]">

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CiteSight — Hero Video Frame — The rulebook that watches</title>
+<style>
+  body { margin:0; background:#FAFAF8; font-family: Inter, -apple-system, sans-serif; display:flex; align-items:center; justify-content:center; min-height:100vh;}
+  .frame { width:1280px; max-width:95vw; background:white; border:1px solid #E8E6E1; border-radius:24px; box-shadow:0 32px 80px rgba(0,0,0,0.08); overflow:hidden; }
+  .topbar { height:48px; display:flex; align-items:center; justify-content:space-between; padding:0 20px; border-bottom:1px solid #EDEBE6; background:#FAFAF8;}
+  .dots { display:flex; gap:6px; }
+  .dot { width:10px; height:10px; border-radius:50%; }
+  .body { display:grid; grid-template-columns: 1fr 1fr; gap:24px; padding:24px; background:#FAFAF8;}
+  .card { background:white; border:1px solid #E8E6E1; border-radius:16px; padding:20px; }
+  .video { background:#111; border-radius:16px; padding:20px; color:white; position:relative; overflow:hidden; }
+  .mask { border:1px solid; border-radius:8px; padding:8px; font-family: JetBrains Mono; font-size:10px; }
+</style>
+</head>
+<body>
+  <div class="frame">
+    <div class="topbar">
+      <div class="dots"><div class="dot" style="background:#FF3B30"></div><div class="dot" style="background:#FFD60A"></div><div class="dot" style="background:#30D158"></div></div>
+      <div style="font-family:JetBrains Mono; font-size:12px; color:#9A9A98">safety_manual.pdf • Spark 1M • any length</div>
+      <div style="background:#111; color:white; padding:4px 10px; border-radius:100px; font-family:JetBrains Mono; font-size:10px">COMPILING 1M TOKENS</div>
+    </div>
+    <div class="body">
+      <div class="card">
+        <div style="font-family:JetBrains Mono; font-size:11px; color:#9A9A98; letter-spacing:0.08em">p86–p88 Moving Machinery</div>
+        <div style="margin-top:12px; font-size:16px; line-height:1.4">§4.2 Personnel shall not be within 1.5 m of a running saw. LOTO tag visible during maintenance.</div>
+        <div style="margin-top:16px; display:inline-flex; background:#111; color:white; padding:6px 12px; border-radius:8px; font-family:JetBrains Mono; font-size:11px">→ p87 §4.2 → R-04.2 • distance</div>
+      </div>
+      <div class="video">
+        <div style="display:flex; justify-content:space-between; font-family:JetBrains Mono; font-size:10px; opacity:0.6"><span>LIVE • workshop_cam_03 • SAM 3.1 • $0.35/hr</span><span style="background:#FFD60A; color:#111; padding:2px 8px; border-radius:4px">YOLO true</span></div>
+        <div style="margin-top:16px; display:flex; gap:12px">
+          <div class="mask" style="border-color:#30D158; color:#30D158; width:80px; height:80px; display:flex; align-items:center; justify-content:center">person #1</div>
+          <div class="mask" style="border-color:#FF3B30; color:#FF3B30; width:64px; height:32px; margin-top:8px; display:flex; align-items:center; justify-content:center">saw • running</div>
+          <div style="flex:1; background:white; color:#111; border-radius:10px; padding:12px">
+            <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:600"><span>R-04.2 • p87 §4.2</span><span style="background:#111; color:white; padding:2px 6px; border-radius:4px; font-size:9px">HIGH</span></div>
+            <div style="margin-top:6px; font-size:12px; line-height:1.4">Person within 0.8 m of running saw, violates 1.5 m. Clip 14:03:10–15.</div>
+            <div style="margin-top:8px; display:flex; gap:6px"><span style="background:#111; color:white; padding:4px 8px; border-radius:100px; font-size:10px; font-family:JetBrains Mono">VIEW CLIP →</span><span style="border:1px solid #EDEDEB; padding:4px 8px; border-radius:100px; font-size:10px; font-family:JetBrains Mono">PAGE p87</span></div>
+          </div>
+        </div>
+        <div style="position:absolute; top:42%; left:28%; width:18%; height:1px; border-top:1px dashed #FFD60A"></div>
+        <div style="position:absolute; top:36%; left:32%; background:#FFD60A; color:#111; font-family:JetBrains Mono; font-size:9px; padding:2px 6px; border-radius:4px">0.8m &lt; 1.5m • VIOLATION</div>
+      </div>
+    </div>
+    <div style="height:48px; border-top:1px solid #EDEBE6; display:flex; align-items:center; justify-content:space-between; padding:0 20px; font-family:JetBrains Mono; font-size:11px; color:#9A9A98">
+      <span>Any length • 10 to 1000+ pages • 1M tokens • 2.3s • Geo-ML pattern</span>
+      <span style="background:#111; color:white; padding:4px 10px; border-radius:100px">117 rules • page citation</span>
+    </div>
+  </div>
+</body>
+</html>
