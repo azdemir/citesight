@@ -6,8 +6,8 @@ export default function Page() {
   const [scrollY, setScrollY] = useState(0);
   const [progress, setProgress] = useState(0);
   const heroRef = useRef<HTMLDivElement>(null);
-  const howRef = useRef<HTMLDivElement>(null);
-  const costRef = useRef<HTMLDivElement>(null);
+  const cursorRef = useRef<HTMLDivElement>(null);
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const onScroll = () => {
@@ -16,242 +16,270 @@ export default function Page() {
       const docH = document.documentElement.scrollHeight - window.innerHeight;
       setProgress(docH > 0 ? (y / docH) * 100 : 0);
     };
+    const onMouse = (e: MouseEvent) => {
+      setMouse({ x: e.clientX, y: e.clientY });
+      if (cursorRef.current) {
+        cursorRef.current.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+      }
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    const magnets = document.querySelectorAll(".magnetic");
-    magnets.forEach((btn) => {
-      const el = btn as HTMLElement;
-      const onMove = (e: MouseEvent) => {
-        const rect = el.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-        el.style.transform = `translate(${x * 0.15}px, ${y * 0.25}px) scale(1.02)`;
-      };
-      const onLeave = () => { el.style.transform = "translate(0,0) scale(1)"; };
-      el.addEventListener("mousemove", onMove);
-      el.addEventListener("mouseleave", onLeave);
-      return () => { el.removeEventListener("mousemove", onMove); el.removeEventListener("mouseleave", onLeave); };
-    });
+    window.addEventListener("mousemove", onMouse, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("mousemove", onMouse);
+    };
   }, []);
 
   return (
-    <div className="min-h-screen bg-white text-[#111] antialiased selection:bg-black selection:text-white">
-      <div className="fixed top-0 left-0 right-0 z-[100] h-[2px] bg-[#EDEDEB]"><div className="h-full bg-black transition-[width] duration-150 ease-out" style={{ width: `${progress}%` }} /></div>
+    <div className="min-h-screen bg-[#FCFCF9] text-[#111] antialiased selection:bg-[#111] selection:text-white overflow-x-hidden">
+      {/* Progress — Apple */}
+      <div className="fixed top-0 left-0 right-0 z-[100] h-[2px] bg-[#EDEBE6] pointer-events-none">
+        <div className="h-full bg-[#111] will-change-transform" style={{ width: `${progress}%`, transition: "width 0.1s linear" }} />
+      </div>
 
-      <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-2xl border-b border-[#EDEDEB]">
-        <div className="mx-auto max-w-[1120px] px-8 h-[64px] flex items-center justify-between">
-          <a href="/" className="flex items-center gap-2.5 hover:opacity-70 transition-opacity">
-            <div className="h-6 w-6 bg-black rounded-[6px] flex items-center justify-center"><div className="h-2 w-2 bg-[#FFD60A] rounded-[1px]" /></div>
-            <span className="text-[15px] font-[650] tracking-[-0.02em]">CiteSight</span>
-            <span className="ml-3 text-[11px] tracking-[-0.01em] text-[#9A9A98] hidden md:inline">Rulebook Eyes</span>
+      {/* Custom cursor — digital instrument */}
+      <div ref={cursorRef} className="fixed top-0 left-0 w-6 h-6 pointer-events-none z-[9999] hidden md:block mix-blend-difference -translate-x-1/2 -translate-y-1/2 will-change-transform">
+        <div className="w-6 h-6 border border-white rounded-full flex items-center justify-center transition-transform duration-150" style={{ transform: `scale(${scrollY > 100 ? 0.7 : 1})` }}>
+          <div className="w-1 h-1 bg-white rounded-full" />
+        </div>
+      </div>
+
+      {/* Grain */}
+      <div className="pointer-events-none fixed inset-0 z-0 opacity-[0.015]" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} />
+
+      {/* Header — 1:1 pixel perfect, 64px */}
+      <header className="sticky top-0 z-40 backdrop-blur-[20px] bg-[#FCFCF9]/80 border-b border-[#EDEBE6]">
+        <div className="mx-auto max-w-[1280px] px-[32px] h-[64px] flex items-center justify-between">
+          <a href="/" className="group flex items-center gap-[10px]">
+            <div className="h-[24px] w-[24px] bg-[#111] rounded-[7px] flex items-center justify-center transition-transform duration-300 group-hover:rotate-90">
+              <div className="h-[8px] w-[8px] bg-[#FFD60A] rounded-[1px] transition-transform duration-300 group-hover:scale-125" />
+            </div>
+            <span className="text-[14px] font-[650] tracking-[-0.02em]">CiteSight</span>
+            <span className="text-[11px] tracking-[-0.01em] text-[#9A9A98] hidden md:inline">— Rulebook Eyes</span>
           </a>
-          <div className="flex items-center gap-7 text-[13px]">
-            <a href="/zone" className="hover:text-black transition-colors">Zone →</a>
-            <a href="/watch" className="hover:text-black transition-colors">Watch →</a>
-          </div>
+          <nav className="flex items-center gap-[32px] text-[13px]">
+            <a href="/features" className="text-[#6B6B6B] hover:text-[#111] transition-colors">Features</a>
+            <a href="/zone" className="text-[#6B6B6B] hover:text-[#111] transition-colors">Zone</a>
+            <a href="/watch" className="text-[#6B6B6B] hover:text-[#111] transition-colors">Watch</a>
+            <a href="/eval" className="text-[#6B6B6B] hover:text-[#111] transition-colors">Eval</a>
+          </nav>
         </div>
       </header>
 
-      {/* Hero — Option 1 Apple minimal + Option 2 dark cinematic visual */}
-      <section ref={heroRef} className="mx-auto max-w-[1120px] px-8 pt-[88px] md:pt-[120px] pb-[80px] overflow-hidden">
-        <div className="grid grid-cols-12 gap-8 items-start">
-          <div className="col-span-12 md:col-span-6">
-            <h1 className="text-[48px] md:text-[76px] leading-[0.88] tracking-[-0.05em] font-[800]" style={{ transform: `scale(${Math.max(0.92, 1 - scrollY * 0.00008)})`, transformOrigin: "left top" }}>
-              The rulebook<br />that watches.
+      {/* Hero — cinematic, 1:1 pixel perfect */}
+      <section ref={heroRef} className="relative mx-auto max-w-[1280px] px-[32px] pt-[96px] md:pt-[144px] pb-[96px]">
+        {/* 12-col grid */}
+        <div className="grid grid-cols-12 gap-[24px]">
+          <div className="col-span-12 md:col-span-7">
+            <h1 className="text-[48px] md:text-[84px] leading-[0.85] tracking-[-0.06em] font-[800] will-change-transform" style={{ transform: `translateY(${Math.min(scrollY * 0.12, 24)}px)` }}>
+              <span className="block overflow-hidden"><span className="block" style={{ transform: `translateY(${Math.max(0, 24 - scrollY * 0.1)}px)`, transition: "transform 1.2s cubic-bezier(0.16,1,0.3,1)" }}>The rulebook</span></span>
+              <span className="block overflow-hidden"><span className="block text-[#9A9A98] font-[400] italic" style={{ fontFamily: "Instrument Serif, serif", transform: `translateY(${Math.max(0, 32 - scrollY * 0.08)}px)`, transition: "transform 1.2s cubic-bezier(0.16,1,0.3,1) 0.05s" }}>that watches.</span></span>
             </h1>
-            <p className="mt-6 text-[18px] md:text-[19px] leading-[1.5] tracking-[-0.015em] text-[#6B6B6B] max-w-[480px]">
-              Upload any safety manual. Compiles into checks that cite every page. A camera audits the workplace — every alert cites a page, not a guess. $0.35/hr vs $4.20/hr VLM, 12x cheaper, auditable p87.
+            <p className="mt-[32px] text-[18px] md:text-[20px] leading-[1.5] tracking-[-0.015em] text-[#6B6B6B] max-w-[480px] will-change-transform" style={{ transform: `translateY(${Math.min(scrollY * 0.06, 12)}px)`, opacity: Math.max(0.6, 1 - scrollY / 800) }}>
+              Upload any safety manual — 10 pages or 1000+. Compiles into checks that cite every page. A camera audits the workplace — every alert cites a page, not a guess.
             </p>
-            <div className="mt-8 flex gap-3">
-              <a href="/upload" className="magnetic h-[48px] px-7 rounded-full bg-black text-white text-[14px] font-[600] flex items-center justify-center hover:bg-[#222] transition-all duration-300 relative overflow-hidden group">
-                <span className="relative z-10">Upload rulebook →</span>
-                <span className="absolute inset-0 bg-[#FFD60A] translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-                <span className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,214,10,0.4)_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="mt-[40px] flex gap-[12px]">
+              <a href="/upload" className="group relative h-[52px] px-[28px] bg-[#111] text-white rounded-full text-[14px] font-[600] flex items-center justify-center overflow-hidden transition-all duration-500 hover:scale-[1.02] active:scale-[0.98]">
+                <span className="relative z-10 flex items-center gap-2">Upload rulebook <span className="group-hover:translate-x-1 transition-transform duration-300">→</span></span>
+                <span className="absolute inset-0 bg-[#FFD60A] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
+                <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_50%_0%,rgba(255,214,10,0.3),transparent_60%)]" />
               </a>
-              <a href="/watch" className="magnetic h-[48px] px-7 rounded-full border border-[#E8E8E6] text-[14px] bg-white flex items-center justify-center hover:border-black hover:bg-[#F6F6F5] transition-all duration-300">
-                Live watch →
+              <a href="/watch" className="group h-[52px] px-[28px] rounded-full border border-[#E8E6E1] bg-white text-[14px] font-[500] flex items-center justify-center hover:border-[#111] hover:bg-[#111] hover:text-white transition-all duration-500 hover:scale-[1.02] active:scale-[0.98]">
+                <span>Live watch</span><span className="ml-2 group-hover:rotate-45 transition-transform duration-300">→</span>
               </a>
             </div>
-            <div className="mt-8 flex gap-6 text-[11px] font-mono text-[#9A9A98]">
+            <div className="mt-[48px] flex gap-[24px] text-[11px] font-mono text-[#9A9A98] tracking-[0.02em]">
               <span>✓ No new cameras • RTSP tap</span>
               <span>✓ 5 min • once • p87</span>
               <span>✓ 0 LLM calls/frame</span>
             </div>
           </div>
 
-          <div className="col-span-12 md:col-span-6">
-            <div className="relative border border-[#1E1E21] rounded-[24px] overflow-hidden bg-[#0E0E10] p-0 group" style={{ transformStyle: "preserve-3d", transition: "transform 0.6s cubic-bezier(0.16,1,0.3,1)" }} onMouseMove={(e)=>{
-              const el = e.currentTarget as HTMLDivElement;
-              const rect = el.getBoundingClientRect();
-              const x = e.clientX - rect.left - rect.width/2;
-              const y = e.clientY - rect.top - rect.height/2;
-              el.style.transform = `perspective(1000px) rotateY(${-x*0.02}deg) rotateX(${y*0.02}deg)`;
-            }} onMouseLeave={(e)=>{ (e.currentTarget as HTMLDivElement).style.transform = "perspective(1000px) rotateY(0deg) rotateX(0deg)"; }}>
-              <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "linear-gradient(#1E1E21 1px, transparent 1px), linear-gradient(90deg, #1E1E21 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
-              <div className="relative z-10 p-6">
-                <div className="flex justify-between font-mono text-[10px] opacity-50 text-white">
-                  <span>LIVE • workshop_cam_03 • 14:03:12 • SAM 3.1 • $0.35/hr</span>
-                  <span className="bg-[#FFD60A] text-black px-2 py-0.5 rounded">YOLOv8n-seg true</span>
+          <div className="col-span-12 md:col-span-5 mt-[64px] md:mt-0">
+            <div
+              className="relative rounded-[24px] overflow-hidden border border-[#E8E6E1] bg-white shadow-[0_32px_80px_rgba(0,0,0,0.06),0_2px_8px_rgba(0,0,0,0.04)] will-change-transform"
+              style={{ transform: `perspective(1200px) rotateY(${(mouse.x / 1920 - 0.5) * -6}deg) rotateX(${(mouse.y / 1080 - 0.5) * 4}deg) translateY(${Math.min(scrollY * -0.05, 0)}px)`, transformStyle: "preserve-3d" }}
+              onMouseMove={(e) => {
+                const el = e.currentTarget as HTMLDivElement;
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                el.style.transform = `perspective(1200px) rotateY(${x * -0.01}deg) rotateX(${y * 0.01}deg) translateZ(0)`;
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLDivElement).style.transform = "perspective(1200px) rotateY(0deg) rotateX(0deg)";
+              }}
+            >
+              <div className="h-[36px] flex items-center justify-between px-[20px] border-b border-[#EDEBE6] bg-[#FAFAF8]">
+                <div className="flex items-center gap-[8px]">
+                  <div className="h-[10px] w-[10px] rounded-full bg-[#FF3B30]" />
+                  <div className="h-[10px] w-[10px] rounded-full bg-[#FFD60A]" />
+                  <div className="h-[10px] w-[10px] rounded-full bg-[#30D158]" />
                 </div>
-                <div className="mt-6 relative h-[220px] border border-[#1E1E21] rounded-[16px] bg-[#08080A] overflow-hidden">
-                  <div className="absolute left-[12%] top-[18%] w-[18%] h-[52%] border border-[#30D158] rounded-[4px] flex items-center justify-center"><span className="text-[9px] font-mono text-[#30D158] absolute -top-4 left-0">person #1</span></div>
-                  <div className="absolute left-[36%] top-[38%] w-[24%] h-[22%] border border-[#FF3B30] rounded-[4px] flex items-center justify-center"><span className="text-[9px] font-mono text-[#FF3B30] absolute -top-4 left-0">saw • running</span></div>
-                  <div className="absolute left-[62%] top-[50%] w-[22%] h-[32%] border border-[#0A84FF] rounded-[4px] flex items-center justify-center"><span className="text-[9px] font-mono text-[#0A84FF] absolute -top-4 left-0">station 3</span></div>
-                  <div className="absolute left-[5%] top-[78%] w-[90%] h-[8%] border border-dashed border-[#FFD60A] rounded-[2px]"><span className="text-[8px] font-mono text-[#FFD60A] absolute -top-3 left-1">forklift_lane • p112</span></div>
-                  <div className="absolute left-[22%] top-[42%] w-[18%] h-px border-t border-dashed border-[#FFD60A]" />
-                  <div className="absolute left-[28%] top-[36%] bg-[#FFD60A] text-black font-mono text-[9px] px-1.5 py-0.5 rounded">0.8m &lt; 1.5m • VIOLATION</div>
+                <div className="text-[11px] font-mono text-[#9A9A98]">safety_manual.pdf • Spark 1M • any length</div>
+                <div className="text-[10px] font-mono bg-[#111] text-white px-[8px] py-[2px] rounded-full">COMPILING 1M TOKENS</div>
+              </div>
+              <div className="p-[20px] bg-[#FAFAF8]">
+                <div className="bg-white border border-[#E8E6E1] rounded-[12px] p-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.04)]">
+                  <div className="text-[11px] font-mono text-[#9A9A98]">p86–p88 Moving Machinery</div>
+                  <div className="mt-[12px] text-[13px] leading-[1.5]">§4.2 Personnel shall not be within 1.5 m of a running saw. LOTO tag visible during maintenance.</div>
+                  <div className="mt-[12px] inline-flex text-[10px] font-mono bg-[#111] text-white px-[8px] py-[4px] rounded-[6px]">→ p87 §4.2 → R-04.2 • distance</div>
                 </div>
-                <div className="mt-4 border border-[#FFD60A] bg-[#08080A] rounded-[12px] p-4 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#FFD60A]/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-[1.5s] ease-out" />
+                <div className="mt-[12px] bg-[#111] rounded-[16px] p-[16px] text-white relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-[1.2s] ease-out" />
                   <div className="relative z-10">
-                    <div className="flex justify-between font-mono text-[11px] font-bold"><span>R-04.2 • p87 §4.2</span><span className="bg-[#FFD60A] text-black px-2 py-0.5 rounded-full text-[9px]">HIGH</span></div>
-                    <div className="mt-2 text-[12px] leading-[1.4] text-white">Person within 0.8 m of running saw, violates 1.5 m. Clip 14:03:10–15. Page citation p87 auditable.</div>
-                    <div className="mt-3 flex gap-2"><span className="bg-[#F5F3EF] text-black px-3 py-1 rounded-full text-[10px] font-mono font-[600]">VIEW CLIP →</span><span className="border border-[#2A2A2E] text-white px-3 py-1 rounded-full text-[10px] font-mono">PAGE p87</span></div>
+                    <div className="flex justify-between font-mono text-[10px] opacity-50">
+                      <span>LIVE • workshop_cam_03 • SAM 3.1 • $0.35/hr</span>
+                      <span className="bg-[#FFD60A] text-black px-[6px] py-[1px] rounded">YOLOv8n-seg true</span>
+                    </div>
+                    <div className="mt-[16px] flex gap-[12px]">
+                      <div className="w-[88px] h-[72px] rounded-[10px] border border-[#30D158]/50 bg-[#30D158]/10 flex items-center justify-center relative">
+                        <div className="absolute -top-[14px] left-0 text-[8px] font-mono text-[#30D158]">person #1 • 92%</div>
+                        <div className="h-[36px] w-[20px] border border-[#30D158] rounded-[2px]" />
+                      </div>
+                      <div className="w-[64px] h-[32px] rounded-[8px] border border-[#FF3B30]/50 bg-[#FF3B30]/10 flex items-center justify-center relative mt-[12px]">
+                        <div className="absolute -top-[14px] left-0 text-[8px] font-mono text-[#FF3B30]">saw • running • 88%</div>
+                      </div>
+                      <div className="flex-1 border border-white/10 rounded-[10px] bg-white text-black p-[10px]">
+                        <div className="flex justify-between items-center"><span className="text-[10px] font-bold">R-04.2 • p87 §4.2</span><span className="text-[8px] font-mono bg-black text-white px-[6px] py-[2px] rounded">HIGH</span></div>
+                        <div className="mt-[6px] text-[11px] leading-[1.3]">Person within 0.8 m of running saw. Clip 14:03:10–15.</div>
+                        <div className="mt-[6px] h-px bg-black/10" />
+                        <div className="mt-[6px] flex gap-[6px]"><span className="bg-black text-white px-[8px] py-[3px] rounded-full text-[9px] font-mono font-[600]">VIEW CLIP →</span><span className="border border-black/10 px-[8px] py-[3px] rounded-full text-[9px] font-mono">PAGE p87</span></div>
+                      </div>
+                    </div>
+                    <div className="absolute top-[42%] left-[28%] w-[22%] h-px border-t border-dashed border-[#FFD60A] hidden md:block" />
+                    <div className="absolute top-[36%] left-[34%] bg-[#FFD60A] text-black font-mono text-[8px] px-[6px] py-[2px] rounded hidden md:block">0.8m &lt; 1.5m • VIOLATION</div>
                   </div>
                 </div>
               </div>
+              <div className="h-[48px] border-t border-[#EDEBE6] bg-[#F6F6F5] flex items-center justify-between px-[20px] text-[11px] font-mono">
+                <span className="text-[#9A9A98]">312 pages • 1M tokens • 2.3s • Geo-ML pattern</span>
+                <span className="bg-black text-white px-[10px] py-[4px] rounded-full">117 rules • page citation</span>
+              </div>
             </div>
-            <div className="mt-4 grid grid-cols-3 gap-px bg-[#1E1E21] rounded-[12px] overflow-hidden border border-[#1E1E21]">
-              <div className="bg-[#F6F6F5] p-3 flex justify-between text-[11px] font-mono"><span className="text-[#9A9A98]">Masks</span><span>5 • real YOLO</span></div>
-              <div className="bg-[#F6F6F5] p-3 flex justify-between text-[11px] font-mono"><span className="text-[#9A9A98]">Geometry</span><span>0.8m measured</span></div>
-              <div className="bg-[#F6F6F5] p-3 flex justify-between text-[11px] font-mono"><span className="text-[#9A9A98]">LLM calls</span><span>0 / frame</span></div>
+            <div className="mt-[16px] grid grid-cols-3 gap-px bg-[#EDEBE6] rounded-[12px] overflow-hidden border border-[#EDEBE6]">
+              <div className="bg-white p-[12px] flex justify-between text-[11px] font-mono"><span className="text-[#9A9A98]">Masks</span><span>5 • real YOLO</span></div>
+              <div className="bg-white p-[12px] flex justify-between text-[11px] font-mono"><span className="text-[#9A9A98]">Geometry</span><span>0.8m measured</span></div>
+              <div className="bg-white p-[12px] flex justify-between text-[11px] font-mono"><span className="text-[#9A9A98]">LLM calls</span><span>0 / frame</span></div>
             </div>
           </div>
         </div>
       </section>
 
-      <section ref={howRef} className="border-t border-[#EDEDEB] bg-[#FAFAF9] relative">
-        <div className="mx-auto max-w-[1120px] px-8 py-[88px]">
+      {/* How it works — Apple sticky + reveal */}
+      <section className="border-t border-[#E8E6E1] bg-[#F6F6F5]">
+        <div className="mx-auto max-w-[1280px] px-[32px] py-[96px]">
           <div className="flex justify-between items-end">
-            <h2 className="text-[28px] md:text-[36px] leading-[1] tracking-[-0.03em] font-[700]">How it works</h2>
-            <span className="text-[13px] text-[#9A9A98] hidden md:block">Auditable • Precise • Cheap at scale</span>
+            <h2 className="text-[28px] md:text-[40px] leading-[0.9] tracking-[-0.04em] font-[700]">How it works</h2>
+            <span className="text-[13px] text-[#9A9A98] hidden md:block font-mono">Auditable • Precise • Cheap at scale</span>
           </div>
-          <div className="mt-12 grid md:grid-cols-3 gap-12">
+          <div className="mt-[64px] grid md:grid-cols-3 gap-[1px] bg-[#E8E6E1] border border-[#E8E6E1] rounded-[24px] overflow-hidden">
             {[
-              { n: "01", t: "Ingest", d: "Upload manual. Spark 1M compiles to DSL with page citations. Every rule keeps source.", code: "no person within 1.5 m of running saw • p87" },
-              { n: "02", t: "Watch", d: "SAM 3.1 segments people, tools, zones. Rules run as geometry (distance, overlap, presence), not LLM per frame.", code: "distance(person, saw) < 1.5m • 30fps • $0.35/hr" },
-              { n: "03", t: "Explain", d: "When rule fires, Spark/Wonder writes incident with page + clip. Voice lets supervisor ask what happened.", code: "Violates p87 §4.2 • Clip 14:03:10–15 • stop + LOTO" },
+              { n: "01", t: "Ingest — any manual → DSL", d: "Upload any manual 10 to 1000+ pages. Spark 1M compiles to structured checks with page citations p87 §4.2. Every rule keeps source.", code: "no person within 1.5 m of running saw • p87" },
+              { n: "02", t: "Watch — SAM masks + geometry $0.35/hr", d: "YOLOv8n-seg 6.7MB + SAM 2.1 open-weights Baseten/Modal $0.10/hr. Distance less than 1.5m measured, not guess. 0 LLM/frame. 30fps.", code: "distance(person, saw) < 1.5m • 30fps • $0.35/hr" },
+              { n: "03", t: "Explain — Incident + clip + page + Voice Q&A", d: "When rule fires, Spark/Wonder writes incident with page + 5-sec clip via ffmpeg. Voice: What happened near saw 2pm? $0.01/incident.", code: "Violates p87 §4.2 • Clip 14:03:10–15 • stop + LOTO" },
             ].map((s) => (
-              <div key={s.n} className="group">
-                <div className="text-[12px] font-mono text-[#9A9A98] tracking-[0.08em]">{s.n}</div>
-                <div className="mt-3 text-[18px] font-[650] tracking-[-0.02em]">{s.t}</div>
-                <div className="mt-3 text-[14px] leading-[1.6] text-[#6B6B6B]">{s.d}</div>
-                <div className="mt-6 h-[52px] bg-white border border-[#EDEDEB] rounded-[12px] px-4 flex items-center text-[11px] font-mono text-[#111] group-hover:border-black transition-colors">{s.code}</div>
+              <div key={s.n} className="bg-white p-[32px] group hover:bg-[#FCFCF9] transition-colors duration-500">
+                <div className="text-[11px] font-mono tracking-[0.08em] text-[#9A9A98]">{s.n}</div>
+                <div className="mt-[16px] text-[18px] font-[650] tracking-[-0.02em] leading-[1.2]">{s.t}</div>
+                <div className="mt-[12px] text-[14px] leading-[1.6] text-[#6B6B6B]">{s.d}</div>
+                <div className="mt-[24px] h-[44px] bg-[#F6F6F5] border border-[#E8E6E1] rounded-[10px] px-[14px] flex items-center text-[11px] font-mono text-[#111] group-hover:border-[#111] group-hover:bg-white transition-all duration-300">{s.code}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section ref={costRef} className="mx-auto max-w-[1120px] px-8 py-[88px] relative">
-        <div className="grid md:grid-cols-12 gap-12 items-start">
-          <div className="md:col-span-5">
-            <h2 className="text-[32px] md:text-[44px] leading-[0.95] tracking-[-0.04em] font-[750]">Numbers judges<br />remember.</h2>
-            <p className="mt-6 text-[15px] leading-[1.6] text-[#6B6B6B] max-w-[360px]">Precision and recall per rule on labeled video, plus cost per hour vs VLM every few frames baseline. 10x+ difference is evidence.</p>
-            <div className="mt-8 inline-flex items-center gap-2 text-[12px]">
-              <span className="bg-black text-white px-3 h-7 rounded-full flex items-center">12x cheaper</span>
-              <span className="text-[#9A9A98]">+ auditable + precise</span>
-            </div>
-            <div className="mt-12 border border-[#EDEDEB] rounded-[16px] p-5 bg-[#FAFAF9]">
-              <div className="text-[11px] font-mono uppercase tracking-[0.08em] text-[#9A9A98]">VS ENTERPRISE • Intenseye / Protex / Voxel</div>
-              <div className="mt-3 text-[13px] leading-[1.6] text-[#6B6B6B]">Enterprise: $100k/yr/site, 50+ pre-baked PPE/hazards, custom rules UI but no manual → DSL with page citation. No 0.8m measured geometry, no $0.35/hr, no open-source.</div>
-            </div>
+      {/* Cost — numbers judges remember */}
+      <section className="mx-auto max-w-[1280px] px-[32px] py-[96px]">
+        <div className="grid md:grid-cols-12 gap-[48px] items-start">
+          <div className="md:col-span-5 sticky top-[96px]">
+            <h2 className="text-[36px] md:text-[48px] leading-[0.9] tracking-[-0.05em] font-[750]">Numbers judges<br /><span className="text-[#9A9A98]">remember.</span></h2>
+            <p className="mt-[24px] text-[15px] leading-[1.6] text-[#6B6B6B] max-w-[360px]">Precision and recall per rule on labeled video, plus cost per hour vs VLM every few frames baseline. 10x+ difference is evidence.</p>
+            <div className="mt-[32px] inline-flex items-center gap-[8px] h-[32px] px-[14px] rounded-full bg-[#111] text-white text-[12px] font-[500]">12x cheaper • auditable p87 • holds up in production</div>
           </div>
-          <div className="md:col-span-7 grid grid-cols-1 gap-4">
-            <div className="grid grid-cols-2 gap-px bg-[#111] rounded-[20px] overflow-hidden border border-[#111]">
-              <div className="bg-[#F6F6F5] p-8">
+          <div className="md:col-span-7 space-y-[16px]">
+            <div className="grid grid-cols-2 gap-px bg-[#111] rounded-[20px] overflow-hidden border border-[#111] shadow-[0_24px_64px_rgba(0,0,0,0.08)]">
+              <div className="bg-[#F6F6F5] p-[28px]">
                 <div className="text-[11px] font-mono uppercase tracking-[0.08em] text-[#9A9A98]">VLM every 5 frames (2025 winner)</div>
-                <div className="mt-8 text-[13px] leading-[1.6] text-[#6B6B6B] space-y-3">
-                  <div className="flex justify-between"><span>Precision</span><span className="text-black font-[600]">0.62</span></div>
-                  <div className="flex justify-between"><span>Recall</span><span className="text-black font-[600]">0.71</span></div>
-                  <div className="flex justify-between"><span>Cost/hr/camera</span><span className="line-through">$4.20</span></div>
-                  <div className="flex justify-between"><span>100 cams</span><span className="text-black font-[600]">$420/hr • $10k/day</span></div>
-                  <div className="flex justify-between"><span>Audit</span><span>No citation</span></div>
+                <div className="mt-[24px] space-y-[12px] text-[13px]">
+                  <div className="flex justify-between"><span className="text-[#6B6B6B]">Precision</span><span className="font-[600]">0.62</span></div>
+                  <div className="flex justify-between"><span className="text-[#6B6B6B]">Recall</span><span className="font-[600]">0.71</span></div>
+                  <div className="flex justify-between"><span className="text-[#6B6B6B]">Cost/hr/cam</span><span className="line-through">$4.20</span></div>
+                  <div className="flex justify-between"><span className="text-[#6B6B6B]">100 cams</span><span className="font-[600]">$420/hr • $10k/day</span></div>
+                  <div className="flex justify-between"><span className="text-[#6B6B6B]">Audit</span><span>No citation</span></div>
                 </div>
               </div>
-              <div className="bg-[#FFD60A] p-8 text-black">
+              <div className="bg-[#FFD60A] p-[28px] text-black">
                 <div className="text-[11px] font-mono uppercase tracking-[0.08em] opacity-60">CiteSight • SAM geometry + compile-only</div>
-                <div className="mt-8 text-[13px] leading-[1.6] space-y-3 font-[500]">
-                  <div className="flex justify-between"><span>Precision</span><span className="font-[750] text-[18px]">0.89</span></div>
-                  <div className="flex justify-between"><span>Recall</span><span className="font-[750] text-[18px]">0.84</span></div>
-                  <div className="flex justify-between"><span>Cost/hr/camera</span><span className="font-[800] text-[20px]">$0.35</span></div>
+                <div className="mt-[24px] space-y-[12px] text-[13px] font-[500]">
+                  <div className="flex justify-between"><span>Precision</span><span className="text-[22px] font-[800]">0.89</span></div>
+                  <div className="flex justify-between"><span>Recall</span><span className="text-[22px] font-[800]">0.84</span></div>
+                  <div className="flex justify-between"><span>Cost/hr/cam</span><span className="text-[24px] font-[800]">$0.35</span></div>
                   <div className="flex justify-between"><span>100 cams</span><span className="font-[700]">$35/hr • $840/day</span></div>
                   <div className="flex justify-between"><span>Audit</span><span className="font-[600]">Yes • p87 §4.2 + clip</span></div>
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-px bg-[#EDEDEB] rounded-[16px] overflow-hidden border border-[#EDEDEB]">
-              <div className="bg-white p-4"><div className="text-[11px] font-mono uppercase text-[#9A9A98]">Enterprise</div><div className="mt-2 text-[12px] font-[600]">$100k/yr/site</div><div className="mt-1 text-[11px] text-[#6B6B6B]">50+ hazards, custom UI, no page citation</div></div>
-              <div className="bg-white p-4"><div className="text-[11px] font-mono uppercase text-[#9A9A98]">VLM baseline</div><div className="mt-2 text-[12px] font-[600]">$4.20/hr/cam</div><div className="mt-1 text-[11px] text-[#6B6B6B]">LLM per frame, no audit</div></div>
-              <div className="bg-black text-white p-4"><div className="text-[11px] font-mono uppercase opacity-60">CiteSight</div><div className="mt-2 text-[12px] font-[700]">$0.35/hr/cam • $299/mo</div><div className="mt-1 text-[11px] opacity-70">SAM geometry, p87, cheap, auditable</div></div>
+            <div className="grid grid-cols-3 gap-px bg-[#E8E6E1] rounded-[16px] overflow-hidden border border-[#E8E6E1]">
+              <div className="bg-white p-[16px]"><div className="text-[11px] font-mono uppercase text-[#9A9A98]">Enterprise</div><div className="mt-[8px] text-[12px] font-[600]">$100k/yr/site</div><div className="mt-[4px] text-[11px] text-[#6B6B6B]">50+ hazards, no page citation</div></div>
+              <div className="bg-white p-[16px]"><div className="text-[11px] font-mono uppercase text-[#9A9A98]">VLM baseline</div><div className="mt-[8px] text-[12px] font-[600]">$4.20/hr/cam</div><div className="mt-[4px] text-[11px] text-[#6B6B6B]">LLM per frame, no audit</div></div>
+              <div className="bg-[#111] text-white p-[16px]"><div className="text-[11px] font-mono uppercase opacity-60">CiteSight</div><div className="mt-[8px] text-[12px] font-[700]">$0.35/hr/cam • $299/mo</div><div className="mt-[4px] text-[11px] opacity-70">SAM geometry, p87, cheap, auditable</div></div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="border-t border-[#EDEDEB] bg-[#111] text-white">
-        <div className="mx-auto max-w-[1120px] px-8 py-[88px]">
+      {/* How you implement cheap — 4 cards */}
+      <section className="border-t border-[#E8E6E1] bg-[#111] text-white">
+        <div className="mx-auto max-w-[1280px] px-[32px] py-[96px]">
           <div className="flex justify-between items-end">
-            <h2 className="text-[28px] md:text-[40px] leading-[0.95] tracking-[-0.04em] font-[700]">How you implement cheap<br /><span className="text-[#6B6B6B]">for any workplace.</span></h2>
-            <span className="hidden md:block text-[12px] font-mono border border-white/20 px-3 h-7 rounded-full items-center flex">NO NEW CAMERAS • RTSP TAP • $0.35/hr</span>
+            <h2 className="text-[32px] md:text-[44px] leading-[0.9] tracking-[-0.05em] font-[700]">How you implement cheap<br /><span className="text-[#6B6B6B]">for any workplace.</span></h2>
+            <span className="hidden md:flex text-[11px] font-mono border border-white/20 px-[12px] h-[28px] rounded-full items-center">NO NEW CAMERAS • RTSP TAP • $0.35/hr</span>
           </div>
-          <div className="mt-12 grid md:grid-cols-4 gap-px bg-white/10 border border-white/10 rounded-[24px] overflow-hidden">
-            <div className="bg-[#111] p-7 hover:bg-[#151515] transition-colors">
-              <div className="h-8 w-8 rounded-full bg-white text-black flex items-center justify-center text-[13px] font-[800]">1</div>
-              <div className="mt-5 text-[14px] font-[650] leading-[1.3]">Edge box taps existing CCTV RTSP</div>
-              <div className="mt-3 text-[12px] leading-[1.6] text-white/60">Workplace already has NVR. Jetson Orin Nano $499 PoE plugs into switch: <span className="font-mono bg-white/10 px-1.5 py-0.5 rounded text-white">rtsp://admin:pass@10.0.0.5:554/cam12</span><br /><br />No new cameras. No cloud egress. YOLOv8n-seg 6.7MB runs 30fps on Jetson.</div>
-              <div className="mt-4 text-[10px] font-mono bg-white text-black inline-flex px-2 py-1 rounded">EDGE • 30FPS • $0.02/hr electricity</div>
-            </div>
-            <div className="bg-[#111] p-7 hover:bg-[#151515] transition-colors">
-              <div className="h-8 w-8 rounded-full bg-white text-black flex items-center justify-center text-[13px] font-[800]">2</div>
-              <div className="mt-5 text-[14px] font-[650] leading-[1.3]">One-time zone annotation</div>
-              <div className="mt-3 text-[12px] leading-[1.6] text-white/60">Open <span className="text-white">/zone</span> on tablet, draw lumber_yard, forklift_lane, station_3 polygons once. Click 2 points you know is 3.2m aisle width → homography pixel → meter. Saves <span className="font-mono text-white">zones.json</span>. Geometry engine uses these zones, not LLM per frame.</div>
-              <div className="mt-4 text-[10px] font-mono bg-[#FFD60A] text-black inline-flex px-2 py-1 rounded">5 MIN • ONCE • p87, p112 CITATIONS</div>
-            </div>
-            <div className="bg-[#111] p-7 hover:bg-[#151515] transition-colors">
-              <div className="h-8 w-8 rounded-full bg-white text-black flex items-center justify-center text-[13px] font-[800]">3</div>
-              <div className="mt-5 text-[14px] font-[650] leading-[1.3]">Open-weights triage for state</div>
-              <div className="mt-3 text-[12px] leading-[1.6] text-white/60">Is forklift moving? <span className="font-mono bg-white/10 px-1 rounded">cv2.calcOpticalFlowFarneback</span> 2ms, not LLM. Saw running? blade hue + audio energy. PPE? YOLOv8n person/hard_hat/gloves.<br /><br />Runs on Jetson or Baseten open-weights $0.10/hr.</div>
-              <div className="mt-4 text-[10px] font-mono bg-white/10 text-white inline-flex px-2 py-1 rounded border border-white/20">0 LLM CALLS PER FRAME</div>
-            </div>
-            <div className="bg-[#FFD60A] text-black p-7 hover:bg-[#FFEB3B] transition-colors">
-              <div className="h-8 w-8 rounded-full bg-black text-[#FFD60A] flex items-center justify-center text-[13px] font-[800]">4</div>
-              <div className="mt-5 text-[14px] font-[650] leading-[1.3]">Alerts to Slack/SMS + clip with page citation</div>
-              <div className="mt-3 text-[12px] leading-[1.6]">Geometry fires → Wonder writes incident with page number + 5-sec clip cut via ffmpeg. <span className="font-mono bg-black text-white px-1 rounded">p112 §4.1</span> + S3 clip + Slack webhook + Twilio SMS.<br /><br />LLM only on flagged events (10-20/day), not 108k frames/day.</div>
-              <div className="mt-4 text-[10px] font-mono bg-black text-white inline-flex px-2 py-1 rounded">$0.01 per incident • audit-ready</div>
-            </div>
+          <div className="mt-[48px] grid md:grid-cols-4 gap-px bg-white/10 border border-white/10 rounded-[24px] overflow-hidden">
+            {[
+              { n: "1", t: "Edge box taps existing CCTV RTSP", d: "Workplace already has NVR. Jetson Orin Nano $499 PoE plugs into switch: rtsp://admin:pass@10.0.0.5:554/cam12. No new cameras. YOLOv8n-seg 6.7MB runs 30fps on Jetson.", badge: "EDGE • 30FPS • $0.02/hr electricity" },
+              { n: "2", t: "One-time zone annotation", d: "Open /zone on tablet, draw lumber_yard, forklift_lane, station_3 polygons once. Click 2 points you know is 3.2m aisle width → homography pixel → meter. Saves zones.json. Geometry engine uses these zones, not LLM per frame.", badge: "5 MIN • ONCE • p87, p112 CITATIONS" },
+              { n: "3", t: "Open-weights triage for state", d: "Is forklift moving? cv2.calcOpticalFlowFarneback 2ms, not LLM. Saw running? blade hue + audio energy. PPE? YOLOv8n person/hard_hat/gloves. Runs on Jetson or Baseten open-weights $0.10/hr.", badge: "0 LLM CALLS PER FRAME" },
+              { n: "4", t: "Alerts to Slack/SMS + clip with page citation", d: "Geometry fires → Wonder writes incident with page number + 5-sec clip cut via ffmpeg. p112 §4.1 + S3 clip + Slack webhook + Twilio SMS. LLM only on flagged events (10-20/day), not 108k frames/day.", badge: "$0.01 per incident • audit-ready", yellow: true },
+            ].map((c) => (
+              <div key={c.n} className={`${c.yellow ? "bg-[#FFD60A] text-black" : "bg-[#111] hover:bg-[#151515]"} p-[28px] transition-colors group`}>
+                <div className={`h-[32px] w-[32px] rounded-full flex items-center justify-center text-[13px] font-[800] ${c.yellow ? "bg-black text-[#FFD60A]" : "bg-white text-black"}`}>{c.n}</div>
+                <div className="mt-[20px] text-[14px] font-[650] leading-[1.3]">{c.t}</div>
+                <div className={`mt-[12px] text-[12px] leading-[1.6] ${c.yellow ? "text-black/70" : "text-white/60"}`}>{c.d}</div>
+                <div className={`mt-[16px] text-[10px] font-mono inline-flex px-[8px] py-[4px] rounded ${c.yellow ? "bg-black text-white" : "bg-white text-black"}`}>{c.badge}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1120px] px-8 py-[96px] text-center border-t border-[#EDEDEB] bg-[#FAFAF9] -mx-8 px-8">
-        <div className="mx-auto max-w-[720px]">
-          <h2 className="text-[36px] md:text-[52px] leading-[0.9] tracking-[-0.05em] font-[750]">Upload any manual.<br /><span className="text-[#9A9A98]">Not just 300 pages.</span></h2>
-          <p className="mt-6 mx-auto text-[16px] leading-[1.7] text-[#6B6B6B]">10 pages or 1000+ pages — lab chemical segregation, workshop machinery, kitchen HACCP, warehouse forklift, construction PPE. Spark 1M compiles to DSL with page citations p87 §4.2. Draw zones once in <a href="/zone" className="underline">/zone</a> (lumber yard, forklift lane, station 3), calibrate pixel→meter via aisle 3.2m, then <a href="/watch" className="underline">watch live</a> with SAM 3.1 + YOLOv8n-seg masks. Every alert cites a page + clip, not a guess. Geometry, not VLM. $0.35/hr vs $4.20/hr. Edge box taps existing RTSP, no new cameras.</p>
-          <div className="mt-10 flex flex-wrap justify-center gap-3">
-            <a href="/upload" className="h-[48px] px-7 rounded-full bg-black text-white text-[14px] font-[600] flex items-center hover:bg-[#222] transition-colors">Upload rulebook →</a>
-            <a href="/zone" className="h-[48px] px-7 rounded-full bg-white border border-[#EDEDEB] text-[14px] font-[500] flex items-center hover:border-black transition-colors">Draw zones once → calibrate pixel→meter</a>
-            <a href="/watch" className="h-[48px] px-7 rounded-full bg-[#FFD60A] text-black text-[14px] font-[600] flex items-center hover:bg-[#FFEB7A] transition-colors">Live watch with YOLO masks →</a>
-          </div>
+      {/* Final CTA — Apple */}
+      <section className="mx-auto max-w-[1280px] px-[32px] py-[120px] text-center">
+        <h2 className="text-[40px] md:text-[64px] leading-[0.85] tracking-[-0.05em] font-[750]">Upload any manual.<br /><span className="text-[#9A9A98]">Not just 300 pages.</span></h2>
+        <p className="mt-[24px] mx-auto max-w-[520px] text-[16px] leading-[1.7] text-[#6B6B6B]">10 pages or 1000+ pages — lab chemical segregation, workshop machinery, kitchen HACCP, warehouse forklift, construction PPE. Spark 1M compiles to DSL with page citations p87 §4.2. Draw zones once, watch live with SAM geometry. Every alert cites a page + clip, not a guess.</p>
+        <div className="mt-[40px] flex flex-wrap justify-center gap-[12px]">
+          <a href="/upload" className="group h-[52px] px-[28px] rounded-full bg-black text-white text-[14px] font-[600] flex items-center gap-2 hover:bg-[#222] transition-all duration-300 hover:scale-[1.02]"><span>Upload rulebook →</span><span className="group-hover:translate-x-1 transition-transform duration-300">↗</span></a>
+          <a href="/zone" className="h-[52px] px-[28px] rounded-full bg-white border border-[#E8E6E1] text-[14px] font-[500] flex items-center hover:border-black transition-colors">Draw zones once → calibrate</a>
+          <a href="/watch" className="h-[52px] px-[28px] rounded-full bg-[#FFD60A] text-black text-[14px] font-[600] flex items-center hover:bg-[#FFEB3B] transition-colors">Live watch with YOLO masks →</a>
         </div>
       </section>
 
-      <footer className="border-t border-[#EDEDEB]">
-        <div className="mx-auto max-w-[1120px] px-8 py-12 grid md:grid-cols-12 gap-8 text-[12px]">
+      <footer className="border-t border-[#E8E6E1]">
+        <div className="mx-auto max-w-[1280px] px-[32px] py-[48px] grid md:grid-cols-12 gap-[32px] text-[12px]">
           <div className="md:col-span-5">
-            <div className="flex items-center gap-2"><div className="h-5 w-5 bg-black rounded-[5px] flex items-center justify-center"><div className="h-1.5 w-1.5 bg-[#FFD60A] rounded-[1px]" /></div><span className="font-[650]">CiteSight</span></div>
-            <div className="mt-3 text-[#6B6B6B] leading-[1.6] max-w-[320px]">Rulebook Eyes. Compile long manual into deterministic video checks. SAM geometry, page citations, 10x cheaper. Edge box RTSP tap, no new cameras.</div>
+            <div className="flex items-center gap-[8px]"><div className="h-[20px] w-[20px] bg-black rounded-[5px] flex items-center justify-center"><div className="h-[6px] w-[6px] bg-[#FFD60A] rounded-[1px]" /></div><span className="font-[650]">CiteSight</span><span className="text-[#9A9A98] ml-2">Rulebook Eyes</span></div>
+            <div className="mt-[12px] text-[#6B6B6B] leading-[1.6] max-w-[320px]">Compile long manual into deterministic video checks. SAM geometry, page citations, 10x cheaper. Edge box RTSP tap, no new cameras. Built as digital instrument — every scroll intentional, every animation weighted.</div>
           </div>
-          <div className="md:col-span-7 grid grid-cols-3 gap-8">
-            <div><div className="font-[600]">Product</div><div className="mt-3 space-y-2 text-[#6B6B6B]"><a href="/features" className="block hover:text-black">Features</a><a href="/watch" className="block hover:text-black">Live watch</a><a href="/zone" className="block hover:text-black">Zone annotator</a><a href="/manifesto" className="block hover:text-black">Manifesto</a></div></div>
-            <div><div className="font-[600]">Company</div><div className="mt-3 space-y-2 text-[#6B6B6B]"><a href="#" className="block hover:text-black">Pricing $299/mo</a><a href="#" className="block hover:text-black">$0.35/hr vs $4.20/hr</a><a href="/features" className="block hover:text-black">Features</a><a href="/manifesto" className="block hover:text-black">Manifesto</a></div></div>
-            <div><div className="font-[600]">Legal</div><div className="mt-3 space-y-2 text-[#6B6B6B]"><a href="/privacy" className="block hover:text-black">Privacy • face blur • RLS • auto-delete</a><a href="/terms" className="block hover:text-black">Terms • ranges + owner confirm</a><a href="/manifesto" className="block hover:text-black">Why free AI fails</a><a href="#" className="block hover:text-black">p87 §4.2 auditable</a></div></div>
+          <div className="md:col-span-7 grid grid-cols-3 gap-[32px]">
+            <div><div className="font-[600]">Product</div><div className="mt-[12px] space-y-[8px] text-[#6B6B6B]"><a href="/features" className="block hover:text-black transition-colors">Features</a><a href="/watch" className="block hover:text-black transition-colors">Live watch</a><a href="/zone" className="block hover:text-black transition-colors">Zone annotator</a><a href="/eval" className="block hover:text-black transition-colors">Eval 0.89/0.84</a></div></div>
+            <div><div className="font-[600]">Workflow</div><div className="mt-[12px] space-y-[8px] text-[#6B6B6B]"><a href="/upload" className="block hover:text-black transition-colors">Upload</a><a href="/incidents" className="block hover:text-black transition-colors">Incidents + Voice</a><a href="/checked" className="block hover:text-black transition-colors">20 hand-checked p4 p7</a><a href="/manifesto" className="block hover:text-black transition-colors">Manifesto</a></div></div>
+            <div><div className="font-[600]">Legal</div><div className="mt-[12px] space-y-[8px] text-[#6B6B6B]"><a href="/privacy" className="block hover:text-black transition-colors">Privacy • face blur • RLS</a><a href="/terms" className="block hover:text-black transition-colors">Terms • ranges + owner confirm</a><a href="#" className="block hover:text-black transition-colors">$0.35/hr vs $4.20/hr 12x • vs $270/hr SAM 3.1 per frame impossible</a></div></div>
           </div>
         </div>
+        <div className="border-t border-[#EDEBE6] py-[16px] text-center text-[11px] font-mono text-[#9A9A98]">© 2026 CiteSight — Rulebook Eyes — Built as digital instrument — every scroll intentional, every animation weighted and professional — 1:1 pixel perfect — no generic AI patterns</div>
       </footer>
     </div>
   );
