@@ -23,6 +23,50 @@ export default function PricingPage() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-[1120px] px-8 pb-[48px]">
+        <div className="text-center">
+          <h2 className="text-[24px] font-[700] tracking-[-0.02em]">Who is CiteSight for?</h2>
+          <p className="mt-3 mx-auto max-w-[600px] text-[14px] leading-[1.6] text-[#6B6B6B]">Built for workplaces where a missed rule costs $50k shutdown, $15k OSHA fine, or a life. Not just factories — any place with a rulebook and a camera.</p>
+        </div>
+        <div className="mt-8 grid md:grid-cols-3 gap-px bg-[#EDEDEB] border border-[#EDEDEB] rounded-[24px] overflow-hidden">
+          <div className="bg-white p-7">
+            <div className="h-8 w-8 rounded-full bg-black text-white flex items-center justify-center text-[12px] font-[700]">C</div>
+            <div className="mt-4 text-[16px] font-[650]">Commercial • Primary</div>
+            <div className="mt-2 text-[12px] font-mono uppercase tracking-[0.08em] text-[#9A9A98]">Workshops, warehouses, construction, labs, kitchens</div>
+            <div className="mt-4 space-y-2 text-[13px] leading-[1.6] text-[#6B6B6B]">
+              <div>• Small manufacturing shops (metal, wood, auto) — 5k+ US shops scrap 10-20% from safety violations</div>
+              <div>• Warehouses & logistics — forklift pedestrian separation p203, 6ft aisles, horn at cross aisles p4</div>
+              <div>• Construction sites — hard hat + ANSI Z87.1 glasses + steel toes p4, no short pants p4, fall protection</div>
+              <div>• Labs — chemical segregation p28 acids/bases 1ft, flammables yellow cabinet p27, fume hood, LOTO p44</div>
+              <div>• Commercial kitchens — hand wash p12, raw/ready-to-eat separate 0-4°C p18, HACCP</div>
+              <div className="mt-3 font-mono text-[11px] bg-[#F6F6F5] border border-[#EDEDEB] rounded-[8px] p-2">Why commercial pays: 1 OSHA fine $15k + 1 shutdown $50k = 20 years at $299/mo. Enterprise Intenseye/Protex $100k/yr/site vs $0.35/hr. Jetson RTSP tap no new cameras.</div>
+            </div>
+          </div>
+          <div className="bg-[#FAFAF9] p-7">
+            <div className="h-8 w-8 rounded-full bg-[#FFD60A] text-black flex items-center justify-center text-[12px] font-[700]">R</div>
+            <div className="mt-4 text-[16px] font-[650]">Residential • Secondary — Aging in place</div>
+            <div className="mt-2 text-[12px] font-mono uppercase tracking-[0.08em] text-[#9A9A98]">Homes, elderly fall prevention, child safety</div>
+            <div className="mt-4 space-y-2 text-[13px] leading-[1.6] text-[#6B6B6B]">
+              <div>• Elderly fall prevention — loose rug, cords, no grab bar, 36k deaths/yr US 65+ falls #1 killer, $50B cost. Photo → SAM masks → risk p87 → Image after-fix preview → book handyman slot via availability engine (Wavva moat)</div>
+              <div>• Childproofing — unanchored dresser tip-over, open outlet, chemicals low, CPSC risk</div>
+              <div>• Home safety audit — electrical fire 13% home fires 510 deaths/yr, panel double-tap, scorched outlet p?</div>
+              <div className="mt-3 font-mono text-[11px] bg-white border border-[#EDEDEB] rounded-[8px] p-2">Why residential: Same SAM + YOLO geometry, but emotional closer Image after-fix preview. $140-350 fix vs $30k hospitalization. 1 extra job/month covers $299/mo.</div>
+            </div>
+          </div>
+          <div className="bg-black text-white p-7">
+            <div className="h-8 w-8 rounded-full bg-white text-black flex items-center justify-center text-[12px] font-[700]">B</div>
+            <div className="mt-4 text-[16px] font-[650]">Both • Platform</div>
+            <div className="mt-2 text-[12px] font-mono uppercase tracking-[0.08em] opacity-60">Anywhere with rulebook + camera</div>
+            <div className="mt-4 space-y-2 text-[13px] leading-[1.6] opacity-80">
+              <div>• <b className="text-white">Primary is commercial</b> — small businesses lose jobs when they miss safety checks, just like Wavva cleaning businesses lose jobs when they miss calls. Real booking engine with write-time revalidation prevents double-book, timezone-safe, buffer-aware (migration 0022 byte-verified)</div>
+              <div>• <b className="text-white">Secondary is residential</b> — same tech, different rulebook: CDC STEADI fall risk, not OSHA. Reuse availability engine to book handyman, not just report PDF — competitors are report-only $5-$20 per report that closes 0 jobs</div>
+              <div>• Platform: Upload any manual any length 10 to 1000+ pages → DSL p87 → draw zones once → watch live $0.35/hr vs $4.20/hr VLM vs $270/hr SAM 3.1 per frame impossible → incident p87 + clip + Slack/SMS + Voice Q&A real Whisper. Same pipeline for cleaning photo-to-quote, lab segregation, coating defect, fall prevention, etc.</div>
+              <div className="mt-3 font-mono text-[11px] bg-white/10 border border-white/10 rounded-[8px] p-2">Founder fit SWE+ChemE: you built Wavva front-office + availability engine + chemical segregation + coatings + CIP + SDS + scaling. 20 hand-checked rules real page citations p4 p7 p14 p27 p31 p44 etc from 6 manuals different fields.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="mx-auto max-w-[1120px] px-8 pb-[88px]">
         <div className="grid md:grid-cols-3 gap-px bg-[#EDEDEB] border border-[#EDEDEB] rounded-[24px] overflow-hidden">
           <div className="bg-white p-8 flex flex-col">
