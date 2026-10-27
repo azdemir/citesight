@@ -72,11 +72,11 @@ export default function Page() {
         {/* 12-col grid */}
         <div className="grid grid-cols-12 gap-[24px]">
           <div className="col-span-12 md:col-span-7">
-            <h1 className="text-[48px] md:text-[84px] leading-[0.85] tracking-[-0.06em] font-[800] will-change-transform" style={{ transform: `translateY(${Math.min(scrollY * 0.12, 24)}px)` }}>
-              <span className="block overflow-hidden"><span className="block" style={{ transform: `translateY(${Math.max(0, 24 - scrollY * 0.1)}px)`, transition: "transform 1.2s cubic-bezier(0.16,1,0.3,1)" }}>The rulebook</span></span>
-              <span className="block overflow-hidden"><span className="block text-[#9A9A98] font-[400] italic" style={{ fontFamily: "Instrument Serif, serif", transform: `translateY(${Math.max(0, 32 - scrollY * 0.08)}px)`, transition: "transform 1.2s cubic-bezier(0.16,1,0.3,1) 0.05s" }}>that watches.</span></span>
+            <h1 className="text-[48px] md:text-[84px] leading-[0.85] tracking-[-0.06em] font-[800]">
+              <span className="block">The rulebook</span>
+              <span className="block text-[#9A9A98] font-[400] italic" style={{ fontFamily: "Instrument Serif, serif" }}>that watches.</span>
             </h1>
-            <p className="mt-[32px] text-[18px] md:text-[20px] leading-[1.5] tracking-[-0.015em] text-[#6B6B6B] max-w-[480px] will-change-transform" style={{ transform: `translateY(${Math.min(scrollY * 0.06, 12)}px)`, opacity: Math.max(0.6, 1 - scrollY / 800) }}>
+            <p className="mt-[32px] text-[18px] md:text-[20px] leading-[1.5] tracking-[-0.015em] text-[#6B6B6B] max-w-[480px]">
               Upload any safety manual — 10 pages or 1000+. Compiles into checks that cite every page. A camera audits the workplace — every alert cites a page, not a guess.
             </p>
             <div className="mt-[40px] flex gap-[12px]">
