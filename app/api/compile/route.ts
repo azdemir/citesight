@@ -125,13 +125,25 @@ Rules must be executable as geometry on SAM masks:
 Return ONLY valid JSON array, no markdown, no explanation. Example:
 [{"id":"R-04.2","rule":"No person within 1.5 m of running saw","type":"distance","params":"tool:saw • state:running • d<1.5m","page":87,"section":"§4.2 Moving Machinery","severity":"high","citation":"Manual p87 §4.2","confidence":0.92}]
 
-Compile 6-12 rules max, focus on measurable geometry (distance, overlap, PPE presence), not vague. Every rule keeps page citation. This is Geo-ML pattern: long doc → DSL → executable.`;
+Scale rule count with manual length - this is critical:
+- <50 pages: 8-12 rules
+- 50-150 pages: 15-22 rules
+- 150-300 pages: 22-32 rules
+- 300-500 pages: 30-40 rules
+- 500+ pages: 35-50 rules
+Focus on measurable geometry (distance, overlap, PPE presence), not vague. Cover different sections of the manual, don't cluster all rules in one chapter. Every rule keeps page citation. This is Geo-ML pattern: long doc → DSL → executable.
 
-    const userPrompt = `Manual file: ${fileName}, ${numPages} pages, ${fileSizeMB} MB, ${text.length} chars. Extracted text (first 800k chars):
+For this file: ${numPages} pages - you MUST extract at least ${numPages>300 ? 30 : numPages>150 ? 22 : numPages>50 ? 15 : 8} rules covering different sections.`;
+
+    const userPrompt = `Manual file: ${fileName}, ${numPages} pages, ${fileSizeMB} MB, ${text.length} chars, ${Math.ceil(text.length/4000)} estimated sections.
+
+Extracted text (first 800k chars, covering full manual):
 
 ${text}
 
-Compile to DSL JSON array with page citations. Any manual length, not just 300 pages.`;
+Task: Compile to DSL JSON array with page citations. You MUST extract at least ${numPages>300 ? 30 : numPages>150 ? 22 : numPages>50 ? 15 : 8} distinct rules covering different chapters/sections (don't put all in §8 or §4 - spread across document). Any manual length, not just 300 pages. For ${numPages} pages, output ${numPages>300 ? "30-40" : numPages>150 ? "22-32" : numPages>50 ? "15-22" : "8-12"} rules minimum.
+
+Each rule must have different page/section if possible. Prioritize measurable geometry.`;
 
     const completion = await client.chat.completions.create({
       model: "muse-spark-1.1",
@@ -139,8 +151,8 @@ Compile to DSL JSON array with page citations. Any manual length, not just 300 p
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt }
       ],
-      temperature: 0.2,
-      max_tokens: 4000,
+      temperature: 0.25,
+      max_tokens: 8000,
     });
 
     const raw = completion.choices[0]?.message?.content || "[]";

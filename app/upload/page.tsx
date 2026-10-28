@@ -80,9 +80,9 @@ function generatePlanZones(rules: Rule[]): Zone[] {
       });
     });
   });
-  // Ensure we have at most 12 zones to keep plan readable, but keep all if <16
+  // Keep plan readable but allow more for large manuals - up to 28 zones
   const all = Array.from(seen.values());
-  return all.slice(0, 16);
+  return all.slice(0, 28);
 }
 
 function PlanCanvas({ zones, rules, editable=true, onZonesChange }: { zones: Zone[]; rules: Rule[]; editable?: boolean; onZonesChange?: (zs:Zone[])=>void }){
