@@ -15,6 +15,184 @@ const IMPLEMENT = [
   { n: "4", t: "Act on cited evidence", d: "A violation produces a short clip, the rule text and its page citation for the team to review and act on.", badge: "CLIP + CITATION", accent: true },
 ];
 
+function FlowNode({ title, badge, sub, active, className, children }: { title: string; badge: string; sub?: string; active: boolean; className: string; children?: React.ReactNode }) {
+  return (
+    <div className={`absolute w-[190px] rounded-2xl border bg-white p-4 shadow-[0_10px_36px_rgba(0,0,0,0.07)] transition-all duration-700 ${active ? "border-[#2563EB]/60 opacity-100 scale-100" : "border-[#E8E6E1] opacity-45 scale-[0.97]"} ${className}`}>
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-[12.5px] font-semibold tracking-[-0.01em] leading-[1.2]">{title}</span>
+        <span className={`shrink-0 text-[9.5px] font-medium px-2 py-0.5 rounded-full transition-colors duration-500 ${active ? "bg-[#E8F7EE] text-[#15803D]" : "bg-[#F1F1EF] text-[#9A9A98]"}`}>{active ? "✓ " : ""}{badge}</span>
+      </div>
+      {sub && <div className="mt-2 text-[11px] text-[#9A9A98] truncate">{sub}</div>}
+      {children}
+    </div>
+  );
+}
+
+function AnimatedWorkflow() {
+  const [step, setStep] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setStep((s) => (s + 1) % 6), 1250);
+    return () => clearInterval(id);
+  }, []);
+
+  const passed = step < 2 ? 0 : step === 2 ? 7 : 12;
+  const logLines = [
+    ["09:41:07", "frame.received", "workshop_cam_03"],
+    ["09:41:08", "sam.segmented", "person · saw · zones"],
+    ["09:41:08", "rules.evaluated", `${passed}/12 checked`],
+    ["09:41:09", "incident.cited", "R-04.2 · p87 §4.2"],
+  ].slice(0, Math.min(step + 1, 4));
+
+  const pathCls = (on: boolean) => `fill-none stroke-[2] transition-all duration-700 ${on ? "stroke-[#2563EB]" : "stroke-[#D8D8D3]"}`;
+
+  return (
+    <section className="mx-auto max-w-[1120px] px-6 pb-20 md:pb-24">
+      <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
+        <h2 className="text-[32px] md:text-[40px] leading-[0.95] tracking-[-0.04em] font-bold">Watch a rule<br /><span className="text-[#9A9A98]">move through the system</span></h2>
+        <span className="text-[11px] font-mono uppercase tracking-[0.14em] text-[#9A9A98]">Live simulation — loops every few seconds</span>
+      </div>
+
+      <div className="rounded-[24px] border border-[#E8E6E1] bg-white shadow-[0_32px_90px_rgba(0,0,0,0.08)] overflow-hidden">
+        {/* App top bar */}
+        <div className="h-[52px] flex items-center justify-between gap-3 px-4 border-b border-[#EDEBE6] bg-[#FCFCF9]">
+          <div className="flex items-center gap-2 text-[12px] text-[#6B6B6B] min-w-0">
+            <span className="font-semibold text-[#111]">Workflows</span><span className="text-[#D8D8D3]">/</span><span className="truncate">Workshop floor — Lane 3</span><span className="text-[#D8D8D3]">/</span><span className="font-mono">v87</span>
+            <span className="text-[10px] font-medium bg-[#E3ECFF] text-[#2563EB] px-2 py-0.5 rounded-full">Live</span>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="hidden md:flex h-8 px-3 rounded-lg border border-[#EDEBE6] text-[11px] text-[#9A9A98] items-center">Search incidents&nbsp;&nbsp;⌘K</span>
+            <a href="/watch" className="h-8 px-3.5 rounded-lg border border-[#EDEBE6] text-[11.5px] font-medium flex items-center hover:border-[#111] transition-colors">▷ Simulate</a>
+            <a href="/upload" className="h-8 px-3.5 rounded-lg bg-[#111] text-white text-[11.5px] font-semibold flex items-center hover:bg-black">Publish</a>
+          </div>
+        </div>
+
+        <div className="flex">
+          {/* Rail */}
+          <div className="hidden sm:flex w-[52px] shrink-0 flex-col items-center gap-2 py-4 border-r border-[#EDEBE6] text-[#9A9A98]">
+            {["▦", "⌥", "⛁", "✉", "⚙"].map((g, i) => (
+              <span key={i} className={`h-9 w-9 rounded-xl flex items-center justify-center text-[14px] ${i === 1 ? "bg-[#F1F1EF] text-[#111]" : ""}`}>{g}</span>
+            ))}
+          </div>
+
+          <div className="flex-1 min-w-0">
+            {/* Canvas */}
+            <div className="overflow-x-auto">
+              <div className="relative min-w-[920px] h-[480px]" style={{ backgroundImage: "radial-gradient(circle, #E3E3DF 1px, transparent 1px)", backgroundSize: "22px 22px" }}>
+                <div className={`absolute left-1/2 top-[22px] -translate-x-1/2 flex items-center gap-2 h-8 px-4 rounded-full border bg-white shadow-sm text-[12px] font-medium transition-all duration-700 ${step >= 4 ? "border-[#2563EB]/50 text-[#111]" : "border-[#E8E6E1] text-[#9A9A98]"}`}>
+                  <span className={`h-4 w-4 rounded-full flex items-center justify-center text-[9px] text-white transition-colors duration-500 ${step >= 4 ? "bg-[#2563EB]" : "bg-[#D8D8D3]"}`}>✓</span>
+                  {step >= 4 ? "Incident ready — cited to p87" : "Watching…"}
+                </div>
+
+                <svg className="absolute inset-0 w-full h-full" viewBox="0 0 920 480" fill="none" aria-hidden>
+                  <path id="f1" d="M196 240 C 250 240, 250 105, 306 105" className={pathCls(step >= 1)} />
+                  <path id="f2" d="M196 240 C 250 240, 250 235, 306 235" className={pathCls(step >= 1)} />
+                  <path id="f3" d="M196 240 C 250 240, 250 365, 306 365" className={pathCls(step >= 1)} />
+                  <path id="f4" d="M496 105 C 552 105, 548 165, 596 180" className={pathCls(step >= 2)} />
+                  <path id="f5" d="M496 235 C 552 235, 548 205, 596 195" className={pathCls(step >= 2)} />
+                  <path id="f6" d="M496 365 C 552 365, 548 290, 596 260" className={pathCls(step >= 3)} />
+                  <path id="f7" d="M756 195 C 800 185, 800 130, 826 118" className={pathCls(step >= 4)} />
+                  {step >= 1 && ["f1", "f2", "f3"].map((p) => (
+                    <circle key={p} r="4" fill="#2563EB"><animateMotion dur="2.6s" repeatCount="indefinite"><mpath href={`#${p}`} /></animateMotion></circle>
+                  ))}
+                  {step >= 2 && ["f4", "f5", "f6"].map((p) => (
+                    <circle key={p} r="4" fill="#2563EB"><animateMotion dur="2.6s" repeatCount="indefinite"><mpath href={`#${p}`} /></animateMotion></circle>
+                  ))}
+                  {step >= 4 && (
+                    <circle r="4.5" fill="#2563EB"><animateMotion dur="2.2s" repeatCount="indefinite"><mpath href="#f7" /></animateMotion></circle>
+                  )}
+                </svg>
+
+                <FlowNode title="Safety manual" badge="Received" sub="Workshop Line 3 · 117 rules" active={step >= 0} className="left-[16px] top-[176px]">
+                  <div className="mt-3 flex items-center gap-2.5">
+                    <span className="h-9 w-9 rounded-lg bg-[#111] text-white flex items-center justify-center text-[10px] font-mono font-semibold">PDF</span>
+                    <span className="text-[11px] leading-[1.4] text-[#6B6B6B]">Compiled by Spark 1M<br />with page citations</span>
+                  </div>
+                </FlowNode>
+
+                <FlowNode title="SAM segmentation" badge="Segmented" sub="person · saw · zones" active={step >= 1} className="left-[306px] top-[52px]" />
+                <FlowNode title="Zone check" badge="Matched" sub="station_3 polygon" active={step >= 1} className="left-[306px] top-[182px]" />
+                <FlowNode title="PPE check" badge="Synced" sub="gloves · hard hat" active={step >= 1} className="left-[306px] top-[312px]" />
+
+                <FlowNode title="Rule engine" badge="v87" sub="" active={step >= 2} className="left-[596px] top-[118px] w-[160px]">
+                  <div className="mt-2.5 space-y-1.5">
+                    {[["Distance ≥ 1.5 m", true], ["Pedestrian lane clear", true], ["Gloves at station 3", true], ["LOTO tag visible", step >= 3]].map(([label, on]) => (
+                      <div key={label as string} className="flex items-center gap-2 text-[11px]">
+                        <span className={`h-3.5 w-3.5 rounded flex items-center justify-center text-[8px] text-white transition-colors duration-500 ${on && step >= 2 ? "bg-[#2563EB]" : "bg-[#D8D8D3]"}`}>✓</span>
+                        <span className="text-[#555] truncate">{label}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-3 pt-2.5 border-t border-[#F1F1EF] flex justify-between text-[10.5px] text-[#9A9A98]"><span>Rules passed</span><span className="font-mono font-semibold text-[#111]">{passed} / 12</span></div>
+                </FlowNode>
+
+                <FlowNode title="Geometry model" badge="0.8 m" sub="" active={step >= 3} className="left-[596px] top-[268px] w-[160px]">
+                  <div className="mt-1 flex items-end justify-between">
+                    <span className="text-[24px] font-semibold tracking-[-0.03em] leading-none">0.8<span className="text-[13px] text-[#9A9A98] font-normal"> m</span></span>
+                    <svg width="52" height="22" viewBox="0 0 52 22" className="mb-0.5"><polyline points="0,17 10,14 20,15 30,9 40,10 52,3" fill="none" stroke="#2563EB" strokeWidth="1.8" strokeLinejoin="round" /></svg>
+                  </div>
+                  <div className="mt-1 text-[10.5px] text-[#9A9A98]">Measured distance to saw — limit 1.5 m</div>
+                </FlowNode>
+
+                <div className={`absolute right-[14px] top-[52px] w-[196px] rounded-2xl border bg-white p-4 shadow-[0_10px_36px_rgba(0,0,0,0.07)] transition-all duration-700 ${step >= 4 ? "border-[#2563EB]/60 opacity-100 scale-100" : "border-[#E8E6E1] opacity-45 scale-[0.97]"}`}>
+                  <div className="text-[12.5px] font-semibold">Decision</div>
+                  <div className="mt-3 flex items-center gap-3">
+                    <span className={`h-10 w-10 rounded-full flex items-center justify-center text-white text-[15px] transition-colors duration-500 ${step >= 4 ? "bg-[#2563EB]" : "bg-[#D8D8D3]"}`}>✓</span>
+                    <span>
+                      <span className="block text-[16px] font-semibold leading-[1.15]">{step >= 4 ? "Alert — cited" : "Watching"}</span>
+                      <span className="block text-[10.5px] text-[#9A9A98] mt-0.5">Confidence 96%</span>
+                    </span>
+                  </div>
+                  <div className="mt-3 h-1 rounded-full bg-[#F1F1EF] overflow-hidden"><div className="h-full bg-[#2563EB] rounded-full transition-all duration-1000" style={{ width: step >= 4 ? "96%" : "8%" }} /></div>
+                  <div className="mt-3 space-y-1.5 text-[10.5px]">
+                    {[["Cited alert", "82%", step >= 4 ? "82%" : "0%"], ["Human review", "14%", step >= 4 ? "14%" : "0%"], ["Dismissed", "4%", step >= 4 ? "4%" : "0%"]].map(([k, v, w]) => (
+                      <div key={k} className="flex items-center gap-2"><span className="w-[74px] text-[#9A9A98]">{k}</span><span className="flex-1 h-1 rounded-full bg-[#F1F1EF] overflow-hidden"><span className="block h-full bg-[#111] rounded-full transition-all duration-1000" style={{ width: w as string }} /></span><span className="font-mono">{v}</span></div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className={`absolute right-[14px] top-[276px] w-[196px] rounded-2xl border bg-white p-4 shadow-[0_10px_36px_rgba(0,0,0,0.07)] transition-all duration-700 ${step >= 5 ? "border-[#2563EB]/60 opacity-100" : "border-[#E8E6E1] opacity-45"}`}>
+                  <div className="flex justify-between text-[9.5px] font-mono uppercase tracking-[0.14em] text-[#9A9A98]"><span>Inspector</span><span>ESC</span></div>
+                  <div className="mt-2 text-[12.5px] font-semibold">Rule engine</div>
+                  <div className="mt-2.5 space-y-1.5 text-[11px]">
+                    {[["Version", "v87 · published"], ["Rules", "12 evaluated"], ["Overrides", "None"], ["Source", "p87 §4.2"]].map(([k, v]) => (
+                      <div key={k} className="flex justify-between gap-2"><span className="text-[#9A9A98]">{k}</span><span className="font-medium truncate">{v}</span></div>
+                    ))}
+                  </div>
+                  <div className="mt-2.5 pt-2.5 border-t border-[#F1F1EF] text-[10.5px] text-[#2563EB]">● Traced to source · 4 records</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom strip */}
+            <div className="grid md:grid-cols-3 gap-px bg-[#EDEBE6] border-t border-[#EDEBE6]">
+              <div className="bg-white p-5">
+                <div className="flex justify-between text-[11.5px]"><span className="font-semibold">Throughput</span><span className="font-mono text-[#9A9A98]">frames / min</span></div>
+                <div className="mt-4 flex items-end gap-[5px] h-[52px]">
+                  {[16, 24, 13, 30, 20, 36, 18, 28, 15, 33, 22, 38, 19, 26, 31, 17, 34, 23, 40, 27].map((h, i) => (
+                    <span key={i} className={`flex-1 rounded-t-[3px] transition-all duration-700 ${i === (step * 3 + 4) % 20 ? "bg-[#2563EB]" : "bg-[#E4E4E0]"}`} style={{ height: `${h + (i === (step * 3 + 4) % 20 ? 10 : 0)}px` }} />
+                  ))}
+                </div>
+              </div>
+              <div className="bg-white p-5">
+                <div className="flex justify-between text-[11.5px]"><span className="font-semibold">Frame latency</span><span className="font-mono text-[#9A9A98]">24h</span></div>
+                <div className="mt-5 flex items-baseline gap-2"><span className="text-[30px] font-semibold tracking-[-0.03em] leading-none">33</span><span className="text-[12px] text-[#9A9A98]">ms</span><span className="ml-auto text-[11px] font-mono text-[#2563EB]">no model call / frame</span></div>
+              </div>
+              <div className="bg-white p-5">
+                <div className="flex justify-between text-[11.5px]"><span className="font-semibold">Event log</span><span className="flex items-center gap-1.5 text-[#2563EB] text-[10.5px] font-mono"><span className="h-1.5 w-1.5 rounded-full bg-[#2563EB]" style={{ animation: "pulse-dot 1.2s ease-in-out infinite" }} />live</span></div>
+                <div className="mt-3 space-y-1.5 font-mono text-[10.5px] min-h-[62px]">
+                  {logLines.map(([t, ev, src]) => (
+                    <div key={ev} className="flex gap-2 whitespace-nowrap overflow-hidden"><span className="text-[#9A9A98]">{t}</span><span className={ev === "incident.cited" ? "text-[#2563EB] font-medium" : ""}>{ev}</span><span className="ml-auto text-[#9A9A98] truncate">{src}</span></div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Page() {
   const [progress, setProgress] = useState(0);
 
@@ -165,6 +343,8 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+      <AnimatedWorkflow />
 
       {/* HOW IT WORKS */}
       <section className="mx-auto max-w-[1120px] px-6 py-20 md:py-24">
