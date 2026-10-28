@@ -46,7 +46,7 @@ function AnimatedWorkflow() {
   const pathCls = (on: boolean) => `fill-none stroke-[2] transition-all duration-700 ${on ? "stroke-[#2563EB]" : "stroke-[#D8D8D3]"}`;
 
   return (
-    <section className="mx-auto max-w-[1120px] px-6 pt-24 md:pt-36 pb-20 md:pb-24">
+    <section className="mx-auto max-w-[1120px] px-6 py-20 md:py-24">
       <div className="flex flex-col gap-3 mb-8 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
         <h2 className="text-[32px] md:text-[40px] leading-[0.95] tracking-[-0.04em] font-bold">Watch a rule<br /><span className="text-[#9A9A98]">move through the system</span></h2>
         <span className="text-[11px] font-mono uppercase tracking-[0.14em] text-[#9A9A98] sm:text-right sm:pb-1">Live simulation · loops</span>
@@ -207,16 +207,13 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-[#FCFCF9] text-[#111] antialiased selection:bg-[#111] selection:text-white overflow-x-hidden">
-      {/* Smooth gradient backdrop — runs behind the nav and hero so the top of the page has no flat white edge */}
-      <div aria-hidden className="pointer-events-none absolute top-0 inset-x-0 h-[1200px]" style={{ background: "radial-gradient(1100px 540px at 50% -100px, rgba(129,140,248,0.34), transparent 68%), radial-gradient(720px 500px at 8% 220px, rgba(34,211,238,0.18), transparent 68%), radial-gradient(720px 500px at 92% 200px, rgba(167,139,250,0.26), transparent 68%), linear-gradient(180deg, #EBEDFB 0%, #F1EFFB 30%, #F6F5FA 55%, #FBFBF8 80%, #FFFFFF 100%)" }} />
+    <div className="min-h-screen bg-[#FCFCF9] text-[#111] antialiased selection:bg-[#111] selection:text-white overflow-x-hidden">
       <style>{`
-        @keyframes rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes drift { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(40px,-30px) scale(1.08); } }
-        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes drift { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(32px,-18px) scale(1.05); } }
         @keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
-        .rise { animation: rise .9s cubic-bezier(.16,1,.3,1) both; }
-        .rise-1 { animation-delay: .08s; } .rise-2 { animation-delay: .16s; } .rise-3 { animation-delay: .26s; } .rise-4 { animation-delay: .38s; }
+        .rise { animation: rise .7s cubic-bezier(.16,1,.3,1) both; }
+        .rise-1 { animation-delay: .06s; } .rise-2 { animation-delay: .12s; } .rise-3 { animation-delay: .18s; }
       `}</style>
 
       {/* Scroll progress */}
@@ -226,7 +223,7 @@ export default function Page() {
 
       {/* Floating pill nav */}
       <div className="sticky top-4 z-40 px-4">
-        <header className="mx-auto max-w-[1120px] h-[56px] pl-5 pr-2 rounded-full border border-[#E8E6E1] bg-white/75 backdrop-blur-xl flex items-center justify-between shadow-[0_16px_48px_rgba(0,0,0,0.08)]">
+        <header className="mx-auto max-w-[1120px] h-[56px] pl-5 pr-2 rounded-full border border-[#E8E6E1] bg-white/80 backdrop-blur-xl flex items-center justify-between shadow-[0_16px_48px_rgba(0,0,0,0.08)]">
           <a href="/" className="flex items-center gap-2.5">
             <span className="h-6 w-6 bg-[#111] rounded-[7px] flex items-center justify-center">
               <span className="h-2 w-2 bg-[#FFD60A] rounded-[2px]" />
@@ -244,35 +241,38 @@ export default function Page() {
         </header>
       </div>
 
-      {/* HERO — bold gradient, grain, retro grid (light) */}
-      <section className="relative overflow-hidden">
-        <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-[320px] left-1/2 -translate-x-1/2 h-[640px] w-[900px] rounded-full bg-[#818CF8]/15 blur-[160px]" style={{ animation: "drift 14s ease-in-out infinite" }} />
-          <div className="absolute top-[180px] -left-[160px] h-[420px] w-[420px] rounded-full bg-[#22D3EE]/12 blur-[140px]" style={{ animation: "drift 18s ease-in-out infinite" }} />
-          <div className="absolute top-[240px] -right-[140px] h-[420px] w-[420px] rounded-full bg-[#A78BFA]/15 blur-[140px]" style={{ animation: "drift 16s ease-in-out infinite" }} />
-          <div className="absolute inset-0 opacity-[0.035] mix-blend-multiply" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")` }} />
-        </div>
+      {/* HERO */}
+      <section className="relative">
+        {/* Soft wash that fades to page bg — no hard bottom edge */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-[-100px] h-[840px]"
+          style={{
+            background:
+              "radial-gradient(820px 480px at 50% 0%, rgba(129,140,248,0.20), transparent 72%)," +
+              "radial-gradient(520px 400px at 14% 22%, rgba(34,211,238,0.12), transparent 74%)," +
+              "radial-gradient(520px 400px at 86% 18%, rgba(167,139,250,0.14), transparent 74%)",
+            WebkitMaskImage: "linear-gradient(180deg, black 0%, black 42%, transparent 88%)",
+            maskImage: "linear-gradient(180deg, black 0%, black 42%, transparent 88%)",
+          }}
+        />
 
-        <div className="relative mx-auto max-w-[1120px] px-6 pt-16 md:pt-24 pb-10 text-center">
-          <h1 className="rise mt-2 text-[52px] md:text-[104px] leading-[0.84] tracking-[-0.05em] font-extrabold">
+        <div className="relative mx-auto max-w-[1120px] px-6 pt-14 md:pt-[84px] pb-8 text-center">
+          <h1 className="rise text-[48px] md:text-[96px] leading-[0.86] tracking-[-0.05em] font-extrabold">
             <span className="block">The rulebook</span>
             <span className="block bg-gradient-to-r from-[#6366F1] via-[#D97706] to-[#0891B2] bg-clip-text text-transparent">That watches.</span>
           </h1>
-
-          <p className="rise rise-1 mt-7 mx-auto max-w-[540px] text-[16px] md:text-[17px] leading-[1.6] text-[#6B6B6B]">
+          <p className="rise rise-1 mt-6 mx-auto max-w-[520px] text-[15.5px] md:text-[16.5px] leading-[1.6] text-[#6B6B6B]">
             Upload a safety manual. CiteSight turns it into checks a camera can run — and every alert cites the exact page it came from, not a guess.
           </p>
-
-          <div className="rise rise-2 mt-9 flex flex-wrap justify-center gap-3">
-            <a href="/upload" className="h-[52px] px-8 rounded-full bg-[#111] text-white text-[14px] font-semibold flex items-center hover:bg-black hover:scale-[1.02] active:scale-[0.98] transition-all">Upload rulebook →</a>
-            <a href="/watch" className="h-[52px] px-8 rounded-full border border-[#E8E6E1] bg-white text-[14px] font-medium flex items-center hover:border-[#111] transition-all">Watch it work →</a>
+          <div className="rise rise-2 mt-8 flex flex-wrap justify-center gap-3">
+            <a href="/upload" className="h-[48px] px-7 rounded-full bg-[#111] text-white text-[13.5px] font-semibold flex items-center hover:bg-black transition-all">Upload rulebook →</a>
+            <a href="/watch" className="h-[48px] px-7 rounded-full border border-[#E8E6E1] bg-white text-[13.5px] font-medium flex items-center hover:border-[#111] transition-all">Watch it work →</a>
           </div>
         </div>
 
-        {/* Product frame — single, floating */}
-        <div className="rise rise-3 relative mx-auto max-w-[1020px] px-6 pb-16">
-          <div aria-hidden className="absolute inset-x-16 top-10 bottom-0 bg-[#6366F1]/15 blur-[90px] rounded-full pointer-events-none" />
-          <div className="relative rounded-[24px] border border-[#E8E6E1] bg-white shadow-[0_48px_120px_rgba(0,0,0,0.10)] overflow-hidden">
+        <div className="relative mx-auto max-w-[1020px] px-6 pb-12 md:pb-16">
+          <div className="relative rounded-[24px] border border-[#E8E6E1] bg-white shadow-[0_32px_80px_rgba(0,0,0,0.08)] overflow-hidden">
             <div className="h-[44px] flex items-center justify-between px-5 border-b border-[#EDEBE6] bg-[#FAFAF8]">
               <div className="flex items-center gap-2">
                 <span className="h-2.5 w-2.5 rounded-full bg-[#FF3B30]" /><span className="h-2.5 w-2.5 rounded-full bg-[#FFD60A]" /><span className="h-2.5 w-2.5 rounded-full bg-[#30D158]" />
@@ -333,6 +333,8 @@ export default function Page() {
           </div>
         </div>
 
+        {/* White breathing space between hero and workflow */}
+        <div className="h-16 md:h-24 bg-[#FCFCF9]" aria-hidden />
       </section>
 
       <AnimatedWorkflow />
@@ -404,7 +406,7 @@ export default function Page() {
       {/* FINAL CTA */}
       <section className="relative overflow-hidden">
         <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute -bottom-[360px] left-1/2 -translate-x-1/2 h-[560px] w-[860px] rounded-full bg-[#818CF8]/20 blur-[130px]" />
+          <div className="absolute -bottom-[360px] left-1/2 -translate-x-1/2 h-[560px] w-[860px] rounded-full bg-[#818CF8]/12 blur-[130px]" />
         </div>
         <div className="relative mx-auto max-w-[1120px] px-6 py-24 text-center">
           <h2 className="text-[40px] md:text-[64px] leading-[0.88] tracking-[-0.05em] font-extrabold uppercase">Your manual.<br /><span className="bg-gradient-to-r from-[#6366F1] via-[#D97706] to-[#0891B2] bg-clip-text text-transparent">Enforced.</span></h2>
