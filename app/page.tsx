@@ -112,27 +112,21 @@ export default function Page() {
           </div>
 
           <div className="col-span-12 md:col-span-6 mt-[48px] md:mt-0 space-y-[16px]">
-            {/* Pro Video — based on Protex 2-min demo structure: build custom safety rules, digest event, reporting & dashboard + Intenseye 50+ hazards 95%+ detection + Voxel 48h deployment — CiteSight adds page citation p87 + clip + $0.35/hr vs $4.20/hr 12x more efficient vs $270/hr SAM 3.1 per frame impossible + Geo-ML pattern + $1B+ ops Americold 77% injury ↓ $1.1M/yr M&S 80% incidents ↓ 10 weeks */}
-            <div className="relative rounded-[24px] overflow-hidden border border-[#E8E6E1] bg-black">
-              <video
-                className="w-full aspect-video"
-                autoPlay
-                muted
-                loop
-                playsInline
-                poster="/designs/hero-video-frame.html"
-              >
-                <source src="https://cdn.coverr.co/videos/coverr-construction-workers-working-on-a-house-5986/1080p.mp4" type="video/mp4" />
-                <source src="/demo/citesight-demo.mp4" type="video/mp4" />
-                <source src="/demo/citesight-demo.webm" type="video/webm" />
-              </video>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10 pointer-events-none" />
+            {/* Pro Video — based on Protex 2-min demo structure: build custom safety rules, digest event, reporting & dashboard + Intenseye 50+ hazards 95%+ detection + Voxel 48h deployment — CiteSight adds page citation p87 + clip + $0.35/hr vs $4.20/hr 12x more efficient vs $270/hr SAM 3.1 per frame impossible + Geo-ML pattern + $1B+ ops Americold */}
+            <div className="relative rounded-[24px] overflow-hidden border border-[#E8E6E1] bg-black aspect-video group">
+              <iframe
+                src="/designs/hero-video-frame.html"
+                className="absolute inset-0 w-full h-full"
+                title="CiteSight Hero Video Frame — The rulebook that watches"
+              />
               <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
                 <div className="bg-black/80 backdrop-blur rounded-[10px] px-3 py-2 text-[11px] font-mono text-white flex items-center gap-2">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#FF3B30] animate-pulse" />
-                  CiteSight — The rulebook that watches • 2-min demo structure: custom rules p87, digest event, reporting
+                  Live • CiteSight demo — click to watch
                 </div>
-                <div className="bg-white text-black rounded-full h-8 px-3 flex items-center gap-1.5 text-[11px] font-[600]">▶ Watch demo 1:30</div>
+                <a href="/watch" className="bg-white text-black rounded-full h-8 px-3 flex items-center gap-1.5 text-[11px] font-[600] hover:bg-[#FFD60A] transition-colors">
+                  ▶ Watch live
+                </a>
               </div>
             </div>
 
