@@ -106,7 +106,7 @@ export async function POST(req: NextRequest) {
 
 Input: long safety manual text (any length, up to 1M tokens). Output: JSON array of rules.
 Each rule must have:
-- id: R-XX.X
+- id: R-XX.X unique
 - rule: short sentence, e.g. "No person within 1.5 m of running saw"
 - type: distance | overlap | presence | state
 - params: short, e.g. "tool:saw • state:running • d<1.5m" or "zone:station_3 • ppe:gloves"
@@ -125,25 +125,14 @@ Rules must be executable as geometry on SAM masks:
 Return ONLY valid JSON array, no markdown, no explanation. Example:
 [{"id":"R-04.2","rule":"No person within 1.5 m of running saw","type":"distance","params":"tool:saw • state:running • d<1.5m","page":87,"section":"§4.2 Moving Machinery","severity":"high","citation":"Manual p87 §4.2","confidence":0.92}]
 
-Scale rule count with manual length - this is critical:
-- <50 pages: 8-12 rules
-- 50-150 pages: 15-22 rules
-- 150-300 pages: 22-32 rules
-- 300-500 pages: 30-40 rules
-- 500+ pages: 35-50 rules
-Focus on measurable geometry (distance, overlap, PPE presence), not vague. Cover different sections of the manual, don't cluster all rules in one chapter. Every rule keeps page citation. This is Geo-ML pattern: long doc → DSL → executable.
+CRITICAL: Scale rule count with manual length. For ${numPages} pages you MUST output at least ${numPages>300 ? 30 : numPages>150 ? 22 : numPages>50 ? 15 : 8} rules and at most ${numPages>300 ? 45 : numPages>150 ? 32 : numPages>50 ? 22 : 12}. Do not output only 6-9 rules for a ${numPages}-page manual - that is wrong. Cover different chapters, spread pages. Every rule keeps page citation. Geo-ML: long doc → DSL → executable.`;
 
-For this file: ${numPages} pages - you MUST extract at least ${numPages>300 ? 30 : numPages>150 ? 22 : numPages>50 ? 15 : 8} rules covering different sections.`;
+    const userPrompt = `Manual: ${fileName}, ${numPages} pages, ${fileSizeMB} MB, ${text.length} chars.
 
-    const userPrompt = `Manual file: ${fileName}, ${numPages} pages, ${fileSizeMB} MB, ${text.length} chars, ${Math.ceil(text.length/4000)} estimated sections.
-
-Extracted text (first 800k chars, covering full manual):
-
+Text (first 800k chars):
 ${text}
 
-Task: Compile to DSL JSON array with page citations. You MUST extract at least ${numPages>300 ? 30 : numPages>150 ? 22 : numPages>50 ? 15 : 8} distinct rules covering different chapters/sections (don't put all in §8 or §4 - spread across document). Any manual length, not just 300 pages. For ${numPages} pages, output ${numPages>300 ? "30-40" : numPages>150 ? "22-32" : numPages>50 ? "15-22" : "8-12"} rules minimum.
-
-Each rule must have different page/section if possible. Prioritize measurable geometry.`;
+Task: Output JSON array of ${numPages>300 ? "30-40" : numPages>150 ? "22-32" : numPages>50 ? "15-22" : "8-12"} rules. For ${numPages} pages you MUST output >=${numPages>300 ? 30 : numPages>150 ? 22 : numPages>50 ? 15 : 8} rules. Each rule different page/section. Prioritize measurable geometry. MINIMUM ${numPages>300 ? 30 : numPages>150 ? 22 : 15} RULES - do not return fewer.`;
 
     const completion = await client.chat.completions.create({
       model: "muse-spark-1.1",
@@ -151,18 +140,51 @@ Each rule must have different page/section if possible. Prioritize measurable ge
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt }
       ],
-      temperature: 0.25,
+      temperature: 0.15,
       max_tokens: 8000,
     });
 
     const raw = completion.choices[0]?.message?.content || "[]";
     let rules;
     try {
-      // Try extract JSON array from response
+      // Try extract JSON array from response - robust
       const match = raw.match(/\[[\s\S]*\]/);
-      rules = JSON.parse(match ? match[0] : raw);
+      let jsonStr = match ? match[0] : raw;
+      // sometimes model wraps in ```json ... ```
+      jsonStr = jsonStr.replace(/```json|```/g, "").trim();
+      try {
+        rules = JSON.parse(jsonStr);
+      } catch (e1) {
+        // Try to repair: extract individual rule objects via regex
+        console.warn("Array parse failed, trying object extraction", (e1 as any).message);
+        const objRegex = /\{[^{}]*"id"\s*:\s*"R-[^"]+[^{}]*\}/g;
+        const objs = [];
+        let m;
+        while ((m = objRegex.exec(jsonStr)) !== null) {
+          try {
+            // Try parse each object, tolerant
+            let objStr = m[0];
+            // fix trailing commas
+            objStr = objStr.replace(/,\s*}/g, "}");
+            const obj = JSON.parse(objStr);
+            if (obj.id && obj.rule) objs.push(obj);
+          } catch {}
+        }
+        if (objs.length >= 3) {
+          rules = objs;
+        } else {
+          // last resort: try to find all {...} with id
+          const loose = [...jsonStr.matchAll(/\{"id":"R-[^}]+\}/g)];
+          const parsedLoose = loose.map((mm:any)=>{
+            try { return JSON.parse(mm[0]); } catch { return null; }
+          }).filter(Boolean);
+          if (parsedLoose.length>0) rules = parsedLoose;
+          else throw e1;
+        }
+      }
+      if (!Array.isArray(rules) || rules.length===0) throw new Error("empty rules array");
     } catch (e) {
-      console.error("Failed parse rules", raw);
+      console.error("Failed parse rules", raw.slice(0, 2000));
       rules = [
         { id:"R-04.2", rule:"No person within 1.5 m of running saw", type:"distance", params:"tool:saw • state:running • d<1.5m", page:87, section:"§4.2", severity:"high", citation:"Manual p87 §4.2" },
       ];

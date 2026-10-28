@@ -37,22 +37,81 @@ export default function ZonePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Load saved
+  // Load saved - with flag to avoid overwriting auto-generated plan from upload
+  const [initialized, setInitialized] = useState(false);
   useEffect(() => {
+    let loaded = false;
     try {
       const saved = localStorage.getItem("citesight_zones_complicated");
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length>0) setZones(parsed);
+        if (Array.isArray(parsed) && parsed.length>0) {
+          setZones(parsed);
+          setActiveId(parsed[0]?.id || DEFAULT[0].id);
+          loaded = true;
+        }
       }
       const savedCalib = localStorage.getItem("citesight_calib");
       if (savedCalib) setCalib(JSON.parse(savedCalib));
     } catch {}
+    // Fallback: try load from edge if no localStorage
+    if(!loaded){
+      fetch("http://localhost:8000/zones")
+        .then(r=>r.json())
+        .then((edgeZones:any)=>{
+          if(Array.isArray(edgeZones) && edgeZones.length>0 && edgeZones.length!==DEFAULT.length){
+            // edge only has {id, polygon, label} — convert to full Zone with defaults from label or keep
+            const converted: Zone[] = edgeZones.map((ez:any, idx:number)=>{
+              const existing = (DEFAULT as any).find((d:Zone)=>d.id===ez.id);
+              if(existing) return existing;
+              // try to find matching in uploaded rules from localStorage
+              try {
+                const last = JSON.parse(localStorage.getItem("citesight_last_compile")||"{}");
+                const ruleForZone = (last.rules||[]).find((r:any)=> ez.id.includes(r.id.toLowerCase()) || r.params?.includes(ez.id) || r.rule?.toLowerCase().includes(ez.id.replace(/_/g,' ')));
+                if(ruleForZone){
+                  return {
+                    id: ez.id,
+                    polygon: ez.polygon,
+                    label: ez.label || `${ez.id} • ${ruleForZone.id} p${ruleForZone.page}`,
+                    type: ruleForZone.type || "distance",
+                    rule: ruleForZone.id || `R-${idx}`,
+                    page: ruleForZone.page || 1,
+                    section: ruleForZone.section || `§${idx+1}`,
+                    severity: ruleForZone.severity || "high",
+                    color: ruleForZone.severity==="critical" ? "#FF3B30" : ruleForZone.severity==="high" ? "#FFD60A" : "#0A84FF",
+                    params: ruleForZone.params || `zone:${ez.id}`,
+                  } as Zone;
+                }
+              } catch {}
+              return {
+                id: ez.id,
+                polygon: ez.polygon,
+                label: ez.label || ez.id,
+                type: "distance" as ZoneType,
+                rule: `R-${idx+1}`,
+                page: 1,
+                section: `§${idx+1}`,
+                severity: "high" as Severity,
+                color: "#FFD60A",
+                params: `zone:${ez.id}`,
+              } as Zone;
+            });
+            if(converted.length>0){
+              setZones(converted);
+              setActiveId(converted[0].id);
+            }
+          }
+        })
+        .catch(()=>{})
+        .finally(()=> setInitialized(true));
+    }
+    setInitialized(true);
   }, []);
   useEffect(() => {
+    if(!initialized) return; // don't overwrite auto-generated plan from upload on first mount
     try { localStorage.setItem("citesight_zones_complicated", JSON.stringify(zones)); } catch {}
     fetch("http://localhost:8000/zones", { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify(zones.map(({id, polygon, label})=>({id, polygon, label}))) }).catch(()=>{});
-  }, [zones]);
+  }, [zones, initialized]);
   useEffect(()=>{ try{ localStorage.setItem("citesight_calib", JSON.stringify(calib)); }catch{} }, [calib]);
 
   const canvasWH = { w: 1200, h: 750 };
