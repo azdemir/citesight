@@ -1,274 +1,274 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
+
+const STEPS = [
+  { n: "01", t: "Ingest — any manual to DSL", d: "Upload a manual of any length. Spark 1M compiles it to structured checks, and every rule keeps its source page.", code: "no person within 1.5 m of running saw • p87" },
+  { n: "02", t: "Watch — masks become geometry", d: "People, tools and zones are segmented, then checked as distance, overlap and presence — measured, not guessed.", code: "distance(person, saw) < 1.5m • 30fps • $0.35/hr" },
+  { n: "03", t: "Explain — incident, clip, citation", d: "When a rule fires, you get the clip, the plain-language incident and the exact page it came from.", code: "Violates p87 §4.2 • Clip 14:03:10–15" },
+];
+
+const IMPLEMENT = [
+  { n: "1", t: "Connect the cameras you have", d: "An edge box joins the existing camera network and processes video on site. Nothing new on the wall.", badge: "EDGE • 30 FPS" },
+  { n: "2", t: "Draw zones, once", d: "Mark work areas on the floor plan in /zone and calibrate pixels to metres with one known distance.", badge: "5 MIN • ONCE" },
+  { n: "3", t: "Let geometry do the watching", d: "Open-weights models track people, tools and protective equipment. No model call is made on every frame.", badge: "0 MODEL CALLS / FRAME" },
+  { n: "4", t: "Act on cited evidence", d: "A violation produces a short clip, the rule text and its page citation for the team to review and act on.", badge: "CLIP + CITATION", accent: true },
+];
 
 export default function Page() {
-  const [scrollY, setScrollY] = useState(0);
   const [progress, setProgress] = useState(0);
-  const heroRef = useRef<HTMLDivElement>(null);
-  const revealRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    let lenis: any = null;
-    (async () => {
-      try {
-        const Lenis = (await import("lenis")).default;
-        lenis = new Lenis({ lerp: 0.18, smoothWheel: true, syncTouch: true, wheelMultiplier: 1.2, touchMultiplier: 1.5 });
-        const raf = (time: number) => { lenis.raf(time); requestAnimationFrame(raf); };
-        requestAnimationFrame(raf);
-      } catch {}
-    })();
-
     const onScroll = () => {
-      const y = window.scrollY;
-      setScrollY(y);
       const docH = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(docH > 0 ? (y / docH) * 100 : 0);
+      setProgress(docH > 0 ? (window.scrollY / docH) * 100 : 0);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-
-    const observer = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{
-        if(e.isIntersecting) e.target.classList.add("revealed");
-      });
-    }, { threshold: 0.15, rootMargin: "0px 0px -10% 0px" });
-
-    revealRefs.current.forEach(el=>{ if(el) observer.observe(el); });
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      observer.disconnect();
-      if(lenis) lenis.destroy();
-    };
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#FCFCF9] text-[#111] antialiased selection:bg-[#111] selection:text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#05060F] text-white antialiased selection:bg-[#FFD60A] selection:text-black overflow-x-hidden">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
-        .reveal { opacity:0; transform:translateY(24px); transition:all 0.8s cubic-bezier(0.16,1,0.3,1); }
-        .reveal.revealed { opacity:1; transform:translateY(0); }
-        .reveal-1 { transition-delay:0.05s } .reveal-2 { transition-delay:0.12s } .reveal-3 { transition-delay:0.2s }
-        .magnetic { transition:transform 0.3s cubic-bezier(0.16,1,0.3,1); will-change:transform }
-        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
-        .float { animation:float 6s ease-in-out infinite }
-        @keyframes shine { 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
-        .shine::after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,214,10,0.15),transparent);transform:translateX(-100%);animation:shine 2.5s infinite}
-        @keyframes grain { 0%,100%{transform:translate(0,0)} 10%{transform:translate(-0.5%,-0.5%)} 20%{transform:translate(-1%,0.5%)} 30%{transform:translate(0.5%,-1%)} }
+        @keyframes rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes drift { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(40px,-30px) scale(1.08); } }
+        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        @keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+        .rise { animation: rise .9s cubic-bezier(.16,1,.3,1) both; }
+        .rise-1 { animation-delay: .08s; } .rise-2 { animation-delay: .16s; } .rise-3 { animation-delay: .26s; } .rise-4 { animation-delay: .38s; }
       `}</style>
 
-      {/* Progress */}
-      <div className="fixed top-0 left-0 right-0 z-[100] h-[2px] bg-[#EDEBE6] pointer-events-none">
-        <div className="h-full bg-[#111] will-change-transform" style={{ width: `${progress}%` }} />
+      {/* Scroll progress */}
+      <div className="fixed top-0 left-0 right-0 z-[100] h-[2px] bg-white/10 pointer-events-none">
+        <div className="h-full bg-gradient-to-r from-[#818CF8] via-[#FFD60A] to-[#22D3EE] will-change-transform" style={{ width: `${progress}%` }} />
       </div>
 
-      {/* Grain + vignette */}
-      <div className="pointer-events-none fixed inset-0 z-0 opacity-[0.018] mix-blend-multiply" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`, animation: "grain 0.8s steps(1) infinite" }} />
-      <div className="pointer-events-none fixed inset-0 z-0 bg-[radial-gradient(ellipse_at_center,_transparent_60%,_rgba(0,0,0,0.04)_100%)]" />
-
-      {/* Header */}
-      <header className="sticky top-0 z-40 backdrop-blur-[16px] bg-[#FCFCF9]/80 border-b border-[#E8E6E1]">
-        <div className="mx-auto max-w-[1280px] px-[32px] h-[64px] flex items-center justify-between">
-          <a href="/" onClick={(e)=>{ e.preventDefault(); window.scrollTo({top:0, behavior:'smooth'}); }} className="group flex items-center gap-[10px] cursor-pointer">
-            <div className="h-[24px] w-[24px] bg-[#111] rounded-[7px] flex items-center justify-center transition-all duration-500 group-hover:rotate-[180deg] group-hover:scale-110">
-              <div className="h-[8px] w-[8px] bg-[#FFD60A] rounded-[1px] transition-transform duration-500 group-hover:scale-125 group-hover:rotate-90" />
-            </div>
-            <span className="text-[14px] font-[650] tracking-[-0.02em]">CiteSight</span>
+      {/* Floating pill nav — Arbiter style */}
+      <div className="sticky top-4 z-40 px-4">
+        <header className="mx-auto max-w-[1120px] h-[56px] pl-5 pr-2 rounded-full border border-white/10 bg-white/[0.06] backdrop-blur-xl flex items-center justify-between shadow-[0_16px_48px_rgba(0,0,0,0.35)]">
+          <a href="/" className="flex items-center gap-2.5">
+            <span className="h-6 w-6 bg-white rounded-[7px] flex items-center justify-center">
+              <span className="h-2 w-2 bg-[#05060F] rounded-[2px]" />
+            </span>
+            <span className="text-[15px] font-semibold tracking-[-0.02em]">CiteSight</span>
           </a>
-          <nav className="flex items-center gap-[28px] text-[13px]">
-            <a href="/features" className="text-[#6B6B6B] hover:text-[#111] transition-colors relative group">Features<span className="absolute -bottom-1 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-500" /></a>
-            <a href="/zone" className="text-[#6B6B6B] hover:text-[#111] transition-colors relative group">Zone<span className="absolute -bottom-1 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-500" /></a>
-            <a href="/watch" className="text-[#6B6B6B] hover:text-[#111] transition-colors relative group">Watch<span className="absolute -bottom-1 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-500" /></a>
-            <a href="/eval" className="text-[#6B6B6B] hover:text-[#111] transition-colors relative group">Eval<span className="absolute -bottom-1 left-0 w-0 h-px bg-black group-hover:w-full transition-all duration-500" /></a>
+          <nav className="hidden md:flex items-center gap-7 text-[13px] text-white/60">
+            <a href="/features" className="hover:text-white transition-colors">Features</a>
+            <a href="/zone" className="hover:text-white transition-colors">Zone</a>
+            <a href="/watch" className="hover:text-white transition-colors">Watch</a>
+            <a href="/eval" className="hover:text-white transition-colors">Eval</a>
+            <a href="/pricing" className="hover:text-white transition-colors">Pricing</a>
           </nav>
-        </div>
-      </header>
+          <a href="/watch" className="h-10 px-5 rounded-full bg-white text-black text-[13px] font-semibold flex items-center hover:bg-[#FFD60A] transition-colors">Watch live →</a>
+        </header>
+      </div>
 
-      {/* Hero — cinematic with Apple scroll pinning */}
-      <section ref={heroRef} className="relative mx-auto max-w-[1280px] px-[32px] pt-[88px] md:pt-[120px] pb-[96px]">
-        <div className="grid grid-cols-12 gap-[32px] items-start">
-          <div className="col-span-12 md:col-span-6 sticky top-[120px] z-10">
-            <div className="reveal" ref={el=>{revealRefs.current[0]=el}}>
-              <h1 className="text-[48px] md:text-[80px] leading-[0.84] tracking-[-0.06em] font-[800]">
-                <span className="block">The rulebook</span>
-                <span className="block text-[#9A9A98] font-[400] italic" style={{ fontFamily: "Instrument Serif, serif" }}>that watches.</span>
-              </h1>
-            </div>
-            <div className="reveal reveal-1" ref={el=>{revealRefs.current[1]=el}}>
-              <p className="mt-[28px] text-[18px] md:text-[20px] leading-[1.5] tracking-[-0.015em] text-[#6B6B6B] max-w-[440px]">
-                Upload any safety manual — 10 pages or 1000+. Compiles into checks that cite every page. A camera audits the workplace — every alert cites a page, not a guess.
-              </p>
-            </div>
-            <div className="reveal reveal-2 mt-[36px] flex gap-[12px]" ref={el=>{revealRefs.current[2]=el}}>
-              <a href="/upload" className="magnetic group relative h-[52px] px-[28px] bg-[#111] text-white rounded-full text-[14px] font-[600] flex items-center justify-center overflow-hidden hover:bg-[#222] transition-colors">
-                <span className="relative z-10 flex items-center gap-2">Upload rulebook <span>→</span></span>
-                <span className="absolute inset-0 bg-[#FFD60A] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
-              </a>
-              <a href="/watch" className="magnetic h-[52px] px-[28px] rounded-full border border-[#E8E6E1] bg-white text-[14px] font-[500] flex items-center justify-center hover:border-black hover:bg-[#111] hover:text-white transition-all duration-300">
-                Live watch →
-              </a>
-            </div>
+      {/* HERO — bold gradient, grain, retro grid */}
+      <section className="relative overflow-hidden">
+        {/* Gradient mesh */}
+        <div aria-hidden className="pointer-events-none absolute inset-0">
+          <div className="absolute -top-[320px] left-1/2 -translate-x-1/2 h-[640px] w-[900px] rounded-full bg-[#4338CA]/50 blur-[140px]" style={{ animation: "drift 14s ease-in-out infinite" }} />
+          <div className="absolute top-[180px] -left-[160px] h-[420px] w-[420px] rounded-full bg-[#0E7490]/40 blur-[120px]" style={{ animation: "drift 18s ease-in-out infinite" }} />
+          <div className="absolute top-[240px] -right-[140px] h-[420px] w-[420px] rounded-full bg-[#7C3AED]/40 blur-[120px]" style={{ animation: "drift 16s ease-in-out infinite" }} />
+          {/* Retro horizon grid */}
+          <div className="absolute bottom-0 left-[-20%] right-[-20%] h-[300px] opacity-[0.13]" style={{ backgroundImage: "linear-gradient(rgba(129,140,248,.7) 1px, transparent 1px), linear-gradient(90deg, rgba(129,140,248,.7) 1px, transparent 1px)", backgroundSize: "56px 56px", transform: "perspective(420px) rotateX(62deg)", transformOrigin: "bottom", maskImage: "linear-gradient(to top, black 30%, transparent 95%)", WebkitMaskImage: "linear-gradient(to top, black 30%, transparent 95%)" }} />
+          {/* Grain */}
+          <div className="absolute inset-0 opacity-[0.05] mix-blend-overlay" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")` }} />
+        </div>
+
+        <div className="relative mx-auto max-w-[1120px] px-6 pt-16 md:pt-24 pb-10 text-center">
+          <div className="rise inline-flex items-center gap-2 h-8 px-4 rounded-full border border-white/15 bg-white/[0.06] backdrop-blur text-[11px] font-mono uppercase tracking-[0.14em] text-white/70">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#30D158]" style={{ animation: "pulse-dot 1.6s ease-in-out infinite" }} />
+            Workplace safety, cited by page
           </div>
 
-          <div className="col-span-12 md:col-span-6 mt-[48px] md:mt-0 space-y-[16px]">
-            <div className="reveal float" ref={el=>{revealRefs.current[4]=el}} style={{ transform: `translateY(${Math.min(scrollY * -0.04, 0)}px)` }}>
-              <div className="relative rounded-[24px] overflow-hidden border border-[#E8E6E1] bg-white shadow-[0_32px_80px_rgba(0,0,0,0.08),0_2px_8px_rgba(0,0,0,0.04)]">
-                <div className="h-[36px] flex items-center justify-between px-[20px] border-b border-[#EDEBE6] bg-[#FAFAF8]">
-                  <div className="flex items-center gap-[8px]"><div className="h-[10px] w-[10px] rounded-full bg-[#FF3B30]" /><div className="h-[10px] w-[10px] rounded-full bg-[#FFD60A]" /><div className="h-[10px] w-[10px] rounded-full bg-[#30D158]" /></div>
-                  <div className="text-[11px] font-mono text-[#9A9A98]">safety_manual.pdf • Spark 1M • any length</div>
-                  <div className="text-[10px] font-mono bg-[#111] text-white px-[8px] py-[2px] rounded-full animate-pulse">COMPILING 1M TOKENS</div>
-                </div>
-                <div className="p-[20px] bg-[#FAFAF8] grid grid-cols-2 gap-[16px]">
-                  <div className="bg-white border border-[#E8E6E1] rounded-[12px] p-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] transition-shadow duration-500">
-                    <div className="text-[11px] font-mono text-[#9A9A98]">p86–p88 Moving Machinery</div>
-                    <div className="mt-[12px] text-[13px] leading-[1.5]">§4.2 Personnel shall not be within 1.5 m of a running saw. LOTO tag visible during maintenance.</div>
-                    <div className="mt-[12px] inline-flex text-[10px] font-mono bg-[#111] text-white px-[8px] py-[4px] rounded-[6px]">→ p87 §4.2 → R-04.2 • distance</div>
-                  </div>
-                  <div className="bg-[#111] rounded-[16px] p-[16px] text-white relative overflow-hidden group hover:scale-[1.01] transition-transform duration-700" style={{ transform: `translateY(${Math.min(scrollY * 0.02, 8)}px)` }}>
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-[1.2s] ease-out" />
-                    <div className="relative z-10">
-                      <div className="flex justify-between font-mono text-[10px] opacity-50"><span>LIVE • workshop_cam_03 • SAM 3.1 • $0.35/hr</span><span className="bg-[#FFD60A] text-black px-[6px] py-[1px] rounded">YOLO true</span></div>
-                      <div className="mt-[16px] flex gap-[12px]">
-                        <div className="w-[88px] h-[72px] rounded-[10px] border border-[#30D158]/50 bg-[#30D158]/10 flex items-center justify-center relative"><div className="h-[36px] w-[20px] border border-[#30D158] rounded-[2px]" /></div>
-                        <div className="w-[64px] h-[32px] rounded-[8px] border border-[#FF3B30]/50 bg-[#FF3B30]/10 flex items-center justify-center relative mt-[12px]"><div className="h-[12px] w-[20px] border border-[#FF3B30] rounded-[1px]" /></div>
-                        <div className="flex-1 border border-white/10 rounded-[10px] bg-white text-black p-[10px]"><div className="flex justify-between items-center"><span className="text-[10px] font-bold">R-04.2 • p87 §4.2</span><span className="text-[8px] font-mono bg-black text-white px-[6px] py-[2px] rounded">HIGH</span></div><div className="mt-[6px] text-[11px] leading-[1.3]">Person within 0.8 m of running saw. Clip 14:03:10–15.</div></div>
-                      </div>
-                      <div className="absolute top-[42%] left-[28%] w-[22%] h-px border-t border-dashed border-[#FFD60A] hidden md:block" />
+          <h1 className="rise rise-1 mt-8 text-[52px] md:text-[104px] leading-[0.84] tracking-[-0.05em] font-extrabold uppercase">
+            <span className="block">The rulebook</span>
+            <span className="block bg-gradient-to-r from-[#A5B4FC] via-[#FFD60A] to-[#67E8F9] bg-clip-text text-transparent">that watches.</span>
+          </h1>
+
+          <p className="rise rise-2 mt-7 mx-auto max-w-[540px] text-[16px] md:text-[17px] leading-[1.6] text-white/60">
+            Upload a safety manual. CiteSight turns it into checks a camera can run — and every alert cites the exact page it came from, not a guess.
+          </p>
+
+          <div className="rise rise-3 mt-9 flex flex-wrap justify-center gap-3">
+            <a href="/upload" className="h-[52px] px-8 rounded-full bg-white text-black text-[14px] font-semibold flex items-center hover:bg-[#FFD60A] hover:scale-[1.02] active:scale-[0.98] transition-all">Upload rulebook →</a>
+            <a href="/watch" className="h-[52px] px-8 rounded-full border border-white/20 bg-white/[0.06] backdrop-blur text-[14px] font-medium flex items-center hover:bg-white hover:text-black transition-all">Watch it work →</a>
+          </div>
+        </div>
+
+        {/* Product frame — single, floating, glowing */}
+        <div className="rise rise-4 relative mx-auto max-w-[1020px] px-6 pb-16">
+          <div aria-hidden className="absolute inset-x-16 top-10 bottom-0 bg-[#6366F1]/25 blur-[90px] rounded-full pointer-events-none" />
+          <div className="relative rounded-[24px] border border-white/12 bg-[#0A0C1C]/90 backdrop-blur-xl shadow-[0_48px_120px_rgba(0,0,0,0.55)] overflow-hidden">
+            <div className="h-[44px] flex items-center justify-between px-5 border-b border-white/10">
+              <div className="flex items-center gap-2">
+                <span className="h-2.5 w-2.5 rounded-full bg-[#FF3B30]" /><span className="h-2.5 w-2.5 rounded-full bg-[#FFD60A]" /><span className="h-2.5 w-2.5 rounded-full bg-[#30D158]" />
+              </div>
+              <div className="text-[11px] font-mono text-white/40">safety_manual.pdf — Spark 1M</div>
+              <div className="text-[10px] font-mono bg-white text-black px-2.5 py-1 rounded-full font-medium">117 RULES FOUND</div>
+            </div>
+
+            <div className="grid md:grid-cols-2">
+              <div className="p-6 md:p-7 border-b md:border-b-0 md:border-r border-white/10">
+                <div className="text-[11px] font-mono uppercase tracking-[0.14em] text-white/35">From the manual — p86–88</div>
+                <p className="mt-4 text-[15px] leading-[1.6] text-white/85">§4.2 Personnel shall not be within 1.5 m of a running saw. LOTO tag visible during maintenance.</p>
+                <div className="mt-5 inline-flex items-center text-[11px] font-mono bg-[#FFD60A] text-black px-3 py-1.5 rounded-full font-medium">→ p87 §4.2 → R-04.2</div>
+                <div className="mt-7 space-y-2">
+                  {[
+                    ["R-04.2", "No person within 1.5 m of a running saw", "p87"],
+                    ["R-07.1", "Gloves required at station 3", "p112"],
+                    ["R-12.8", "No forklift in a pedestrian lane in use", "p203"],
+                  ].map(([id, rule, page]) => (
+                    <div key={id} className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3">
+                      <span className="text-[11px] font-mono text-white/40">{id}</span>
+                      <span className="flex-1 text-[13px] text-white/80">{rule}</span>
+                      <span className="text-[11px] font-mono text-[#FFD60A]">{page}</span>
                     </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="p-6 md:p-7 bg-black/40">
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-2 text-[11px] font-mono uppercase tracking-[0.14em] text-white/40">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#FF3B30]" style={{ animation: "pulse-dot 1.2s ease-in-out infinite" }} /> Live — workshop camera
+                  </span>
+                  <span className="text-[11px] font-mono text-white/40">$0.35/hr</span>
+                </div>
+
+                <div className="relative mt-5 h-[190px] rounded-2xl border border-white/10 bg-[#070812] overflow-hidden">
+                  <div aria-hidden className="absolute inset-0 opacity-[0.12]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)", backgroundSize: "36px 36px" }} />
+                  <div className="absolute left-[10%] top-[16%] w-[96px] h-[118px] rounded-xl border-2 border-[#30D158] bg-[#30D158]/10">
+                    <span className="absolute -top-6 left-0 text-[10px] font-mono text-[#30D158]">person</span>
                   </div>
+                  <div className="absolute left-[38%] top-[34%] w-[104px] h-[52px] rounded-xl border-2 border-[#FF453A] bg-[#FF453A]/10">
+                    <span className="absolute -top-6 left-0 text-[10px] font-mono text-[#FF453A]">saw — running</span>
+                  </div>
+                  <div aria-hidden className="absolute left-[27%] top-[52%] w-[13%] border-t-2 border-dashed border-[#FFD60A]" />
+                  <div className="absolute left-[29%] top-[40%] bg-[#FFD60A] text-black text-[10px] font-mono font-semibold px-2 py-1 rounded-md">0.8m &lt; 1.5m</div>
                 </div>
-                <div className="h-[48px] border-t border-[#EDEBE6] bg-[#F6F6F5] flex items-center justify-between px-[20px] text-[11px] font-mono"><span className="text-[#9A9A98]">Any length • 10 to 1000+ pages • 1M tokens • 2.3s • Geo-ML pattern</span><span className="bg-black text-white px-[10px] py-[4px] rounded-full">117 rules • page citation</span></div>
-              </div>
-            </div>
 
-            <div className="reveal reveal-2 mt-[16px] bg-black text-white rounded-[20px] p-[20px] flex gap-[16px] items-center" ref={el=>{revealRefs.current[6]=el}}>
-              <div className="h-10 w-10 rounded-full bg-[#FFD60A] text-black flex items-center justify-center font-[800]">?</div>
-              <div className="flex-1">
-                <div className="text-[13px] font-[600]">What happened near the saw around 2pm?</div>
-                <div className="text-[11px] opacity-60 mt-1">Voice Q&A • Wonder searches by time + zone with citations • 14:03:12 person within 0.8m R-04.2 p87 clip 10–15 stop + LOTO</div>
+                <div className="mt-4 rounded-2xl bg-white text-black p-4 flex items-start justify-between gap-4">
+                  <div>
+                    <div className="text-[13px] font-semibold tracking-[-0.01em]">Person within 0.8 m of a running saw</div>
+                    <div className="mt-1 text-[12px] leading-[1.5] text-black/55">Violates R-04.2. Clip 14:03:10–14:03:15 is attached for review.</div>
+                  </div>
+                  <span className="shrink-0 text-[10px] font-mono font-semibold bg-black text-white px-2.5 py-1 rounded-full">p87 §4.2</span>
+                </div>
               </div>
-              <div className="h-8 w-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">🎤</div>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* How it works — Apple sticky reveal */}
-      <section className="border-t border-[#E8E6E1] bg-[#F6F6F5]">
-        <div className="mx-auto max-w-[1280px] px-[32px] py-[96px]">
-          <div className="flex justify-between items-end reveal" ref={el=>{revealRefs.current[7]=el}}>
-            <h2 className="text-[28px] md:text-[40px] leading-[0.9] tracking-[-0.04em] font-[700]">How it works</h2>
-            <span className="text-[13px] text-[#9A9A98] hidden md:block font-mono">Auditable • Precise • Efficient at scale</span>
-          </div>
-          <div className="mt-[64px] grid md:grid-cols-3 gap-[1px] bg-[#E8E6E1] border border-[#E8E6E1] rounded-[24px] overflow-hidden">
-            {[
-              { n: "01", t: "Ingest — any manual → DSL", d: "Upload any manual 10 to 1000+ pages. Spark 1M compiles to structured checks with page citations p87 §4.2. Every rule keeps source.", code: "no person within 1.5 m of running saw • p87" },
-              { n: "02", t: "Watch — SAM masks + geometry $0.35/hr", d: "YOLOv8n-seg 6.7MB + SAM 2.1 open-weights $0.10/hr. Distance less than 1.5m measured, not guess. 0 LLM/frame. 30fps.", code: "distance(person, saw) < 1.5m • 30fps • $0.35/hr" },
-              { n: "03", t: "Explain — Incident + clip + page + Voice Q&A", d: "When rule fires, Spark/Wonder writes incident with page + 5-sec clip via ffmpeg. Voice: What happened near saw 2pm? $0.01/incident.", code: "Violates p87 §4.2 • Clip 14:03:10–15 • stop + LOTO" },
-            ].map((s, i) => (
-              <div key={s.n} className="reveal bg-white p-[32px] group hover:bg-[#FCFCF9] transition-colors" ref={el=>{revealRefs.current[8+i]=el}} style={{ transitionDelay: `${i*0.08}s` }}>
-                <div className="text-[11px] font-mono tracking-[0.08em] text-[#9A9A98]">{s.n}</div>
-                <div className="mt-[16px] text-[18px] font-[650] tracking-[-0.02em] leading-[1.2]">{s.t}</div>
-                <div className="mt-[12px] text-[14px] leading-[1.6] text-[#6B6B6B]">{s.d}</div>
-                <div className="mt-[24px] h-[44px] bg-[#F6F6F5] border border-[#E8E6E1] rounded-[10px] px-[14px] flex items-center text-[11px] font-mono text-[#111] group-hover:border-[#111] group-hover:bg-white transition-all duration-300">{s.code}</div>
-              </div>
+        {/* Marquee */}
+        <div aria-hidden className="relative border-y border-white/10 py-4 overflow-hidden">
+          <div className="flex w-max gap-10 whitespace-nowrap text-[12px] font-mono uppercase tracking-[0.22em] text-white/35" style={{ animation: "marquee 28s linear infinite" }}>
+            {[0, 1].map((n) => (
+              <span key={n} className="flex gap-10">
+                <span>Upload</span><span className="text-[#FFD60A]">✦</span><span>Compile</span><span className="text-[#FFD60A]">✦</span><span>Segment</span><span className="text-[#FFD60A]">✦</span><span>Measure</span><span className="text-[#FFD60A]">✦</span><span>Alert with a citation</span><span className="text-[#FFD60A]">✦</span>
+              </span>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Cost — numbers judges remember with count-up */}
-      <section className="mx-auto max-w-[1280px] px-[32px] py-[96px]">
-        <div className="grid md:grid-cols-12 gap-[48px] items-start">
-          <div className="md:col-span-5 sticky top-[96px] reveal" ref={el=>{revealRefs.current[11]=el}}>
-            <h2 className="text-[36px] md:text-[48px] leading-[0.9] tracking-[-0.05em] font-[750]">Numbers judges<br /><span className="text-[#9A9A98]">remember.</span></h2>
-            <p className="mt-[24px] text-[15px] leading-[1.6] text-[#6B6B6B] max-w-[360px]">Precision and recall per rule on labeled video, plus cost per hour vs VLM every few frames baseline. 10x+ difference is evidence.</p>
-            <div className="mt-[32px] inline-flex items-center gap-[8px] h-[32px] px-[14px] rounded-full bg-[#111] text-white text-[12px] font-[500]">12x more efficient • auditable p87 • holds up in production</div>
-          </div>
-          <div className="md:col-span-7 space-y-[16px]">
-            <div className="reveal grid grid-cols-2 gap-px bg-[#111] rounded-[20px] overflow-hidden border border-[#111] shadow-[0_24px_64px_rgba(0,0,0,0.08)]" ref={el=>{revealRefs.current[12]=el}}>
-              <div className="bg-[#F6F6F5] p-[28px]">
-                <div className="text-[11px] font-mono uppercase tracking-[0.08em] text-[#9A9A98]">VLM every 5 frames (2025 winner)</div>
-                <div className="mt-[24px] space-y-[12px] text-[13px]">
-                  <div className="flex justify-between"><span className="text-[#6B6B6B]">Precision</span><span className="font-[600]">0.62</span></div>
-                  <div className="flex justify-between"><span className="text-[#6B6B6B]">Recall</span><span className="font-[600]">0.71</span></div>
-                  <div className="flex justify-between"><span className="text-[#6B6B6B]">Cost/hr/cam</span><span className="line-through">$4.20</span></div>
-                  <div className="flex justify-between"><span className="text-[#6B6B6B]">100 cams</span><span className="font-[600]">$420/hr • $10k/day</span></div>
-                  <div className="flex justify-between"><span className="text-[#6B6B6B]">Audit</span><span>No citation</span></div>
-                </div>
-              </div>
-              <div className="bg-[#FFD60A] p-[28px] text-black">
-                <div className="text-[11px] font-mono uppercase tracking-[0.08em] opacity-60">CiteSight • SAM geometry + compile-only</div>
-                <div className="mt-[24px] space-y-[12px] text-[13px] font-[500]">
-                  <div className="flex justify-between"><span>Precision</span><span className="text-[22px] font-[800]">0.89</span></div>
-                  <div className="flex justify-between"><span>Recall</span><span className="text-[22px] font-[800]">0.84</span></div>
-                  <div className="flex justify-between"><span>Cost/hr/cam</span><span className="text-[24px] font-[800]">$0.35</span></div>
-                  <div className="flex justify-between"><span>100 cams</span><span className="font-[700]">$35/hr • $840/day</span></div>
-                  <div className="flex justify-between"><span>Audit</span><span className="font-[600]">Yes • p87 §4.2 + clip</span></div>
-                </div>
-              </div>
+      {/* HOW IT WORKS */}
+      <section className="mx-auto max-w-[1120px] px-6 py-20 md:py-24">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <h2 className="text-[32px] md:text-[40px] leading-[0.95] tracking-[-0.04em] font-bold">How it works</h2>
+          <span className="text-[11px] font-mono uppercase tracking-[0.14em] text-white/35">Auditable • Precise • Efficient at scale</span>
+        </div>
+        <div className="mt-10 grid md:grid-cols-3 gap-4">
+          {STEPS.map((s) => (
+            <div key={s.n} className="rounded-[20px] border border-white/10 bg-white/[0.04] p-7 hover:bg-white/[0.07] hover:border-white/20 transition-colors">
+              <div className="text-[11px] font-mono tracking-[0.14em] text-[#FFD60A]">{s.n}</div>
+              <div className="mt-4 text-[17px] font-semibold tracking-[-0.02em] leading-[1.25]">{s.t}</div>
+              <p className="mt-3 text-[14px] leading-[1.6] text-white/55">{s.d}</p>
+              <div className="mt-6 rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-[11px] font-mono leading-[1.5] text-white/70 break-words">{s.code}</div>
             </div>
-            <div className="reveal grid grid-cols-3 gap-px bg-[#E8E6E1] rounded-[16px] overflow-hidden border border-[#E8E6E1]" ref={el=>{revealRefs.current[13]=el}}>
-              <div className="bg-white p-[16px]"><div className="text-[11px] font-mono uppercase text-[#9A9A98]">Enterprise</div><div className="mt-[8px] text-[12px] font-[600]">$100k/yr/site</div><div className="mt-[4px] text-[11px] text-[#6B6B6B]">50+ hazards, no page citation</div></div>
-              <div className="bg-white p-[16px]"><div className="text-[11px] font-mono uppercase text-[#9A9A98]">VLM baseline</div><div className="mt-[8px] text-[12px] font-[600]">$4.20/hr/cam</div><div className="mt-[4px] text-[11px] text-[#6B6B6B]">LLM per frame, no audit</div></div>
-              <div className="bg-[#111] text-white p-[16px]"><div className="text-[11px] font-mono uppercase opacity-60">CiteSight</div><div className="mt-[8px] text-[12px] font-[700]">$0.35/hr/cam • $299/mo</div><div className="mt-[4px] text-[11px] opacity-70">SAM geometry, p87, efficient, auditable</div></div>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* How you implement at scale */}
-      <section className="border-t border-[#E8E6E1] bg-[#111] text-white">
-        <div className="mx-auto max-w-[1280px] px-[32px] py-[96px]">
-          <div className="flex justify-between items-end reveal" ref={el=>{revealRefs.current[14]=el}}>
-            <h2 className="text-[32px] md:text-[44px] leading-[0.9] tracking-[-0.05em] font-[700]">How you implement at scale<br /><span className="text-[#6B6B6B]">for any workplace.</span></h2>
-            <span className="hidden md:flex text-[11px] font-mono border border-white/20 px-[12px] h-[28px] rounded-full items-center">NO NEW CAMERAS • RTSP TAP • $0.35/hr</span>
-          </div>
-          <div className="mt-[48px] grid md:grid-cols-4 gap-px bg-white/10 border border-white/10 rounded-[24px] overflow-hidden">
-            {[
-              { n: "1", t: "Edge box taps existing CCTV RTSP", d: "Workplace already has NVR. Jetson Orin Nano $499 PoE plugs into switch: rtsp://admin:pass@10.0.0.5:554/cam12. No new cameras. YOLOv8n-seg 6.7MB runs 30fps on Jetson.", badge: "EDGE • 30FPS • $0.02/hr electricity" },
-              { n: "2", t: "One-time zone annotation", d: "Open /zone on tablet, draw lumber_yard, forklift_lane, station_3 polygons once. Click 2 points you know is 3.2m aisle width → homography pixel → meter. Saves zones.json.", badge: "5 MIN • ONCE • p87, p112 CITATIONS" },
-              { n: "3", t: "Open-weights triage for state", d: "Is forklift moving? cv2.calcOpticalFlowFarneback 2ms, not LLM. Saw running? blade hue + audio energy. PPE? YOLOv8n person/hard_hat/gloves. Runs on Jetson or Baseten $0.10/hr.", badge: "0 LLM CALLS PER FRAME" },
-              { n: "4", t: "Alerts to Slack/SMS + clip with page citation", d: "Geometry fires → Wonder writes incident with page number + 5-sec clip cut via ffmpeg. p112 §4.1 + S3 clip + Slack webhook + Twilio SMS. LLM only on flagged events.", badge: "$0.01 per incident • audit-ready", yellow: true },
-            ].map((c, i) => (
-              <div key={c.n} className={`reveal ${c.yellow ? "bg-[#FFD60A] text-black" : "bg-[#111] hover:bg-[#151515]"} p-[28px] transition-colors`} ref={el=>{revealRefs.current[15+i]=el}} style={{ transitionDelay: `${i*0.08}s` }}>
-                <div className={`h-[32px] w-[32px] rounded-full flex items-center justify-center text-[13px] font-[800] ${c.yellow ? "bg-black text-[#FFD60A]" : "bg-white text-black"}`}>{c.n}</div>
-                <div className="mt-[20px] text-[14px] font-[650] leading-[1.3]">{c.t}</div>
-                <div className={`mt-[12px] text-[12px] leading-[1.6] ${c.yellow ? "text-black/70" : "text-white/60"}`}>{c.d}</div>
-                <div className={`mt-[16px] text-[10px] font-mono inline-flex px-[8px] py-[4px] rounded ${c.yellow ? "bg-black text-white" : "bg-white text-black"}`}>{c.badge}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="mx-auto max-w-[1280px] px-[32px] py-[120px] text-center">
-        <div className="reveal" ref={el=>{revealRefs.current[19]=el}}>
-          <h2 className="text-[40px] md:text-[64px] leading-[0.85] tracking-[-0.05em] font-[750]">Upload any manual.<br /><span className="text-[#9A9A98]">Not just 300 pages.</span></h2>
-          <p className="mt-[24px] mx-auto max-w-[520px] text-[16px] leading-[1.7] text-[#6B6B6B]">10 pages or 1000+ pages — lab chemical segregation, workshop machinery, kitchen HACCP, warehouse forklift, construction PPE. Spark 1M compiles to DSL with page citations p87 §4.2. Draw zones once, watch live with SAM geometry.</p>
-          <div className="mt-[40px] flex flex-wrap justify-center gap-[12px]">
-            <a href="/upload" className="magnetic h-[52px] px-[28px] rounded-full bg-black text-white text-[14px] font-[600] flex items-center gap-2 hover:bg-[#222] transition-all duration-300"><span>Upload rulebook →</span><span>↗</span></a>
-            <a href="/zone" className="magnetic h-[52px] px-[28px] rounded-full bg-white border border-[#E8E6E1] text-[14px] font-[500] flex items-center hover:border-black transition-colors">Draw zones once → calibrate</a>
-            <a href="/watch" className="magnetic h-[52px] px-[28px] rounded-full bg-[#FFD60A] text-black text-[14px] font-[600] flex items-center hover:bg-[#FFEB3B] transition-colors">Live watch with YOLO masks →</a>
-          </div>
-        </div>
-      </section>
-
-      <footer className="border-t border-[#E8E6E1]">
-        <div className="mx-auto max-w-[1280px] px-[32px] py-[48px] grid md:grid-cols-12 gap-[32px] text-[12px]">
+      {/* NUMBERS */}
+      <section className="mx-auto max-w-[1120px] px-6 pb-20 md:pb-24">
+        <div className="grid md:grid-cols-12 gap-8 items-start">
           <div className="md:col-span-5">
-            <div className="flex items-center gap-[8px]"><div className="h-[20px] w-[20px] bg-black rounded-[5px] flex items-center justify-center"><div className="h-[6px] w-[6px] bg-[#FFD60A] rounded-[1px]" /></div><span className="font-[650]">CiteSight</span></div>
-            <div className="mt-[12px] text-[#6B6B6B] leading-[1.6] max-w-[320px]">Compile long manual into deterministic video checks. SAM geometry, page citations, 10x more efficient. Edge box RTSP tap, no new cameras. Built as digital instrument — every scroll intentional.</div>
+            <h2 className="text-[32px] md:text-[40px] leading-[0.95] tracking-[-0.04em] font-bold">Numbers judges<br /><span className="text-white/35">remember.</span></h2>
+            <p className="mt-5 text-[15px] leading-[1.6] text-white/55 max-w-[360px]">Precision and recall per rule on labelled video, plus cost per hour against a model call on every few frames.</p>
+            <div className="mt-7 inline-flex h-8 px-4 rounded-full bg-white text-black text-[12px] font-semibold items-center">12x more efficient</div>
           </div>
-          <div className="md:col-span-7 grid grid-cols-3 gap-[32px]">
-            <div><div className="font-[600]">Product</div><div className="mt-[12px] space-y-[8px] text-[#6B6B6B]"><a href="/features" className="block hover:text-black transition-colors">Features</a><a href="/watch" className="block hover:text-black transition-colors">Live watch</a><a href="/zone" className="block hover:text-black transition-colors">Zone annotator</a><a href="/eval" className="block hover:text-black transition-colors">Eval 0.89/0.84</a></div></div>
-            <div><div className="font-[600]">Workflow</div><div className="mt-[12px] space-y-[8px] text-[#6B6B6B]"><a href="/upload" className="block hover:text-black transition-colors">Upload</a><a href="/incidents" className="block hover:text-black transition-colors">Incidents + Voice</a><a href="/checked" className="block hover:text-black transition-colors">20 hand-checked p4 p7</a><a href="/manifesto" className="block hover:text-black transition-colors">Manifesto</a></div></div>
-            <div><div className="font-[600]">Legal</div><div className="mt-[12px] space-y-[8px] text-[#6B6B6B]"><a href="/privacy" className="block hover:text-black transition-colors">Privacy • face blur • RLS</a><a href="/terms" className="block hover:text-black transition-colors">Terms • ranges + owner confirm</a><a href="#" className="block hover:text-black transition-colors">$0.35/hr vs $4.20/hr 12x more efficient</a></div></div>
+          <div className="md:col-span-7 grid grid-cols-2 rounded-[20px] overflow-hidden border border-white/10">
+            <div className="bg-white/[0.04] p-7">
+              <div className="text-[11px] font-mono uppercase tracking-[0.14em] text-white/35">Vision model, every few frames</div>
+              <div className="mt-6 space-y-3 text-[13px]">
+                {[["Precision", "0.62"], ["Recall", "0.71"], ["Cost / hr / camera", "$4.20"], ["Audit trail", "None"]].map(([k, v]) => (
+                  <div key={k} className="flex justify-between gap-3"><span className="text-white/45">{k}</span><span className="font-semibold">{v}</span></div>
+                ))}
+              </div>
+            </div>
+            <div className="bg-[#FFD60A] text-black p-7">
+              <div className="text-[11px] font-mono uppercase tracking-[0.14em] text-black/50">CiteSight geometry</div>
+              <div className="mt-6 space-y-3 text-[13px]">
+                {[["Precision", "0.89"], ["Recall", "0.84"], ["Cost / hr / camera", "$0.35"], ["Audit trail", "Page + clip"]].map(([k, v]) => (
+                  <div key={k} className="flex justify-between gap-3"><span className="text-black/60">{k}</span><span className="font-bold">{v}</span></div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
-        <div className="border-t border-[#EDEBE6] py-[16px] text-center text-[11px] font-mono text-[#9A9A98]">© 2026 CiteSight — Rulebook Eyes — Built as digital instrument — every scroll intentional, every animation weighted and professional — 1:1 pixel perfect — no generic AI patterns</div>
+      </section>
+
+      {/* IMPLEMENTATION */}
+      <section className="border-t border-white/10 bg-white/[0.02]">
+        <div className="mx-auto max-w-[1120px] px-6 py-20 md:py-24">
+          <h2 className="text-[32px] md:text-[40px] leading-[0.95] tracking-[-0.04em] font-bold">How you implement at scale<br /><span className="text-white/35">for any workplace.</span></h2>
+          <div className="mt-10 grid md:grid-cols-4 gap-4">
+            {IMPLEMENT.map((c) => (
+              <div key={c.n} className={`rounded-[20px] p-7 ${c.accent ? "bg-[#FFD60A] text-black" : "border border-white/10 bg-white/[0.04]"}`}>
+                <div className={`h-8 w-8 rounded-full flex items-center justify-center text-[13px] font-bold ${c.accent ? "bg-black text-[#FFD60A]" : "bg-white text-black"}`}>{c.n}</div>
+                <div className="mt-5 text-[15px] font-semibold tracking-[-0.01em] leading-[1.3]">{c.t}</div>
+                <p className={`mt-3 text-[13px] leading-[1.6] ${c.accent ? "text-black/65" : "text-white/55"}`}>{c.d}</p>
+                <div className={`mt-5 inline-flex text-[10px] font-mono px-2.5 py-1 rounded-md ${c.accent ? "bg-black text-white" : "bg-white/10 text-white/70"}`}>{c.badge}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FINAL CTA */}
+      <section className="relative overflow-hidden">
+        <div aria-hidden className="pointer-events-none absolute inset-0">
+          <div className="absolute -bottom-[360px] left-1/2 -translate-x-1/2 h-[560px] w-[860px] rounded-full bg-[#4338CA]/40 blur-[130px]" />
+        </div>
+        <div className="relative mx-auto max-w-[1120px] px-6 py-24 text-center">
+          <h2 className="text-[40px] md:text-[64px] leading-[0.88] tracking-[-0.05em] font-extrabold uppercase">Your manual.<br /><span className="bg-gradient-to-r from-[#A5B4FC] via-[#FFD60A] to-[#67E8F9] bg-clip-text text-transparent">Enforced.</span></h2>
+          <p className="mt-6 mx-auto max-w-[480px] text-[15px] leading-[1.7] text-white/55">From a workshop floor to a warehouse aisle — if it is written in your rulebook, CiteSight can watch for it and cite the page.</p>
+          <div className="mt-9 flex flex-wrap justify-center gap-3">
+            <a href="/upload" className="h-[52px] px-8 rounded-full bg-white text-black text-[14px] font-semibold flex items-center hover:bg-[#FFD60A] hover:scale-[1.02] active:scale-[0.98] transition-all">Upload rulebook →</a>
+            <a href="/zone" className="h-[52px] px-8 rounded-full border border-white/20 bg-white/[0.06] backdrop-blur text-[14px] font-medium flex items-center hover:bg-white hover:text-black transition-all">Draw zones →</a>
+            <a href="/watch" className="h-[52px] px-8 rounded-full border border-white/20 bg-white/[0.06] backdrop-blur text-[14px] font-medium flex items-center hover:bg-white hover:text-black transition-all">Watch live →</a>
+          </div>
+        </div>
+      </section>
+
+      <footer className="border-t border-white/10">
+        <div className="mx-auto max-w-[1120px] px-6 py-12 grid md:grid-cols-12 gap-8 text-[13px]">
+          <div className="md:col-span-5">
+            <div className="flex items-center gap-2.5">
+              <span className="h-6 w-6 bg-white rounded-[7px] flex items-center justify-center"><span className="h-2 w-2 bg-[#05060F] rounded-[2px]" /></span>
+              <span className="font-semibold tracking-[-0.02em]">CiteSight</span>
+            </div>
+            <p className="mt-4 text-white/45 leading-[1.6] max-w-[320px]">A long manual, compiled into checks a camera can run — with the page cited on every alert.</p>
+          </div>
+          <div className="md:col-span-7 grid grid-cols-3 gap-8">
+            <div><div className="font-semibold">Product</div><div className="mt-3 space-y-2 text-white/45"><a href="/features" className="block hover:text-white transition-colors">Features</a><a href="/pricing" className="block hover:text-white transition-colors">Pricing</a><a href="/watch" className="block hover:text-white transition-colors">Live watch</a><a href="/eval" className="block hover:text-white transition-colors">Eval</a></div></div>
+            <div><div className="font-semibold">Workflow</div><div className="mt-3 space-y-2 text-white/45"><a href="/upload" className="block hover:text-white transition-colors">Upload</a><a href="/zone" className="block hover:text-white transition-colors">Zone</a><a href="/incidents" className="block hover:text-white transition-colors">Incidents</a><a href="/checked" className="block hover:text-white transition-colors">Checked rules</a></div></div>
+            <div><div className="font-semibold">Legal</div><div className="mt-3 space-y-2 text-white/45"><a href="/privacy" className="block hover:text-white transition-colors">Privacy</a><a href="/terms" className="block hover:text-white transition-colors">Terms</a><a href="/manifesto" className="block hover:text-white transition-colors">Manifesto</a></div></div>
+          </div>
+        </div>
       </footer>
     </div>
   );
