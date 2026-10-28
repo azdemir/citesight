@@ -46,7 +46,7 @@ function AnimatedWorkflow() {
   const pathCls = (on: boolean) => `fill-none stroke-[2] transition-all duration-700 ${on ? "stroke-[#2563EB]" : "stroke-[#D8D8D3]"}`;
 
   return (
-    <section className="mx-auto max-w-[1120px] px-6 pb-20 md:pb-24">
+    <section className="mx-auto max-w-[1120px] px-6 pt-24 md:pt-36 pb-20 md:pb-24">
       <div className="flex flex-col gap-3 mb-8 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
         <h2 className="text-[32px] md:text-[40px] leading-[0.95] tracking-[-0.04em] font-bold">Watch a rule<br /><span className="text-[#9A9A98]">move through the system</span></h2>
         <span className="text-[11px] font-mono uppercase tracking-[0.14em] text-[#9A9A98] sm:text-right sm:pb-1">Live simulation · loops</span>
@@ -209,8 +209,7 @@ export default function Page() {
   return (
     <div className="relative min-h-screen bg-[#FCFCF9] text-[#111] antialiased selection:bg-[#111] selection:text-white overflow-x-hidden">
       {/* Smooth gradient backdrop — runs behind the nav and hero so the top of the page has no flat white edge */}
-      <div aria-hidden className="pointer-events-none absolute top-0 inset-x-0 h-[880px]" style={{ background: "radial-gradient(1100px 540px at 50% -100px, rgba(129,140,248,0.38), transparent 65%), radial-gradient(720px 500px at 8% 220px, rgba(34,211,238,0.22), transparent 65%), radial-gradient(720px 500px at 92% 200px, rgba(167,139,250,0.30), transparent 65%), linear-gradient(180deg, #EBEDFB 0%, #F2F0FC 42%, #EDF8F7 72%, #FCFCF9 100%)" }} />
-      <div aria-hidden className="pointer-events-none absolute top-0 inset-x-0 h-[880px] backdrop-blur-[2px]" style={{ maskImage: "linear-gradient(180deg, black 55%, transparent 100%)", WebkitMaskImage: "linear-gradient(180deg, black 55%, transparent 100%)" }} />
+      <div aria-hidden className="pointer-events-none absolute top-0 inset-x-0 h-[1200px]" style={{ background: "radial-gradient(1100px 540px at 50% -100px, rgba(129,140,248,0.34), transparent 68%), radial-gradient(720px 500px at 8% 220px, rgba(34,211,238,0.18), transparent 68%), radial-gradient(720px 500px at 92% 200px, rgba(167,139,250,0.26), transparent 68%), linear-gradient(180deg, #EBEDFB 0%, #F1EFFB 30%, #F6F5FA 55%, #FBFBF8 80%, #FFFFFF 100%)" }} />
       <style>{`
         @keyframes rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes drift { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(40px,-30px) scale(1.08); } }
