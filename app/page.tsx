@@ -335,16 +335,6 @@ export default function Page() {
           </div>
         </div>
 
-        {/* Marquee */}
-        <div aria-hidden className="relative border-y border-[#EDEBE6] py-4 overflow-hidden">
-          <div className="flex w-max gap-10 whitespace-nowrap text-[12px] font-mono uppercase tracking-[0.22em] text-[#9A9A98]" style={{ animation: "marquee 28s linear infinite" }}>
-            {[0, 1].map((n) => (
-              <span key={n} className="flex gap-10">
-                <span>Upload</span><span className="text-[#D97706]">✦</span><span>Compile</span><span className="text-[#D97706]">✦</span><span>Segment</span><span className="text-[#D97706]">✦</span><span>Measure</span><span className="text-[#D97706]">✦</span><span>Alert with a citation</span><span className="text-[#D97706]">✦</span>
-              </span>
-            ))}
-          </div>
-        </div>
       </section>
 
       <AnimatedWorkflow />
