@@ -85,8 +85,14 @@ function generatePlanZones(rules: Rule[]): Zone[] {
   return all.slice(0, 16);
 }
 
-function PlanCanvas({ zones, rules }: { zones: Zone[]; rules: Rule[] }){
+function PlanCanvas({ zones, rules, editable=true, onZonesChange }: { zones: Zone[]; rules: Rule[]; editable?: boolean; onZonesChange?: (zs:Zone[])=>void }){
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [dragPoint, setDragPoint] = useState<{zoneId:string; idx:number}|null>(null);
+  const dragRef = useRef<{zoneId:string; idx:number}|null>(null);
+  const [activeId, setActiveId] = useState<string|null>(null);
+  const zonesRef = useRef<Zone[]>(zones);
+  useEffect(()=>{ zonesRef.current = zones; }, [zones]);
+
   const draw = useCallback(()=>{
     const c = canvasRef.current; if(!c) return;
     const ctx = c.getContext("2d"); if(!ctx) return;
@@ -97,21 +103,94 @@ function PlanCanvas({ zones, rules }: { zones: Zone[]; rules: Rule[] }){
     for(let i=0;i<W;i+=28){ ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,H); ctx.stroke(); }
     for(let j=0;j<H;j+=28){ ctx.beginPath(); ctx.moveTo(0,j); ctx.lineTo(W,j); ctx.stroke(); }
     zones.forEach(z=>{
+      const isActive = z.id===activeId;
       ctx.beginPath();
       z.polygon.forEach(([x,y], i)=>{ const px=x*W, py=y*H; if(i===0) ctx.moveTo(px,py); else ctx.lineTo(px,py); });
       ctx.closePath();
-      ctx.fillStyle = z.color+"2A"; ctx.fill();
-      ctx.strokeStyle = z.color; ctx.lineWidth = 1.8; ctx.setLineDash(z.type==="distance" ? [] : [7,5]); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = isActive ? z.color+"44" : z.color+"2A";
+      ctx.fill();
+      ctx.strokeStyle = isActive ? "#111" : z.color; ctx.lineWidth = isActive ? 2.4 : 1.8; ctx.setLineDash(z.type==="distance" ? [] : [7,5]); ctx.stroke(); ctx.setLineDash([]);
       // label
       const [lx, ly] = z.polygon[0];
       ctx.fillStyle = "#111"; ctx.font = "11px monospace"; ctx.fillText(z.id, lx*W+4, ly*H+14);
+      if(editable){
+        // draw handles for active or all if few
+        const showHandles = isActive || zones.length<=8;
+        if(showHandles){
+          z.polygon.forEach(([x,y], idx)=>{
+            const isDrag = (dragPoint?.zoneId===z.id && dragPoint?.idx===idx) || (dragRef.current?.zoneId===z.id && dragRef.current?.idx===idx);
+            ctx.beginPath(); ctx.arc(x*W, y*H, isDrag?8:5, 0, Math.PI*2);
+            ctx.fillStyle = isDrag ? "#FFD60A" : "#111"; ctx.fill();
+            ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.stroke();
+          });
+        }
+      }
     });
-    // legend
     ctx.fillStyle = "rgba(0,0,0,0.65)"; ctx.font = "10px monospace";
-    ctx.fillText(`${zones.length} zones auto-generated from ${rules.length} rules • drag to edit in /zone`, 12, H-10);
-  }, [zones, rules]);
+    ctx.fillText(`${zones.length} zones auto-generated from ${rules.length} rules • ${editable ? "drag points to edit directly — no /zone needed" : "drag to edit in /zone"}`, 12, H-10);
+  }, [zones, rules, dragPoint, activeId, editable]);
+
   useEffect(()=>{ draw(); }, [draw]);
-  return <canvas ref={canvasRef} width={900} height={540} className="w-full h-auto block rounded-[14px] border border-[#EDEBE6]" />;
+
+  const normPos = (e: React.MouseEvent<HTMLCanvasElement>)=>{
+    const c = canvasRef.current!; const rect=c.getBoundingClientRect();
+    return { x:(e.clientX-rect.left)/rect.width, y:(e.clientY-rect.top)/rect.height, c, rect };
+  };
+
+  const onMouseDown = (e: React.MouseEvent<HTMLCanvasElement>)=>{
+    if(!editable) return;
+    const { x, y, c } = normPos(e);
+    // find closest point - use ref for latest zones
+    let bestZoneId: string | null = null;
+    let bestIdx = -1;
+    let bestDist = 999;
+    for(const z of zonesRef.current){
+      for(let idx=0; idx<z.polygon.length; idx++){
+        const px=z.polygon[idx][0], py=z.polygon[idx][1];
+        const dx=(px-x)*c.width, dy=(py-y)*c.height;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<30 && d<bestDist){ bestDist=d; bestZoneId=z.id; bestIdx=idx; }
+      }
+    }
+    if(bestZoneId!==null){ setDragPoint({zoneId:bestZoneId, idx:bestIdx}); dragRef.current={zoneId:bestZoneId, idx:bestIdx}; setActiveId(bestZoneId); return; }
+    // else check click inside polygon to select
+    for(const z of zones){
+      // point in polygon ray casting
+      let inside=false;
+      for(let i=0,j=z.polygon.length-1;i<z.polygon.length;j=i++){
+        const xi=z.polygon[i][0], yi=z.polygon[i][1];
+        const xj=z.polygon[j][0], yj=z.polygon[j][1];
+        const intersect=((yi>y)!==(yj>y)) && (x < (xj-xi)*(y-yi)/(yj-yi)+xi);
+        if(intersect) inside=!inside;
+      }
+      if(inside){ setActiveId(z.id); return; }
+    }
+    setActiveId(null);
+  };
+
+  const onMouseMove = (e: React.MouseEvent<HTMLCanvasElement>)=>{
+    const dp = dragRef.current || dragPoint;
+    if(!dp || !onZonesChange) return;
+    const { x, y } = normPos(e);
+    const curZones = zonesRef.current;
+    const newZones = curZones.map(z=>{
+      if(z.id!==dp.zoneId) return z;
+      const poly = [...z.polygon] as [number,number][];
+      poly[dp.idx]=[x,y];
+      return {...z, polygon: poly};
+    });
+    onZonesChange(newZones);
+  };
+
+  const onMouseUp = ()=> { setDragPoint(null); dragRef.current=null; };
+
+  useEffect(()=>{
+    const up = ()=> { setDragPoint(null); dragRef.current=null; };
+    window.addEventListener("mouseup", up);
+    return ()=> window.removeEventListener("mouseup", up);
+  }, []);
+
+  return <canvas ref={canvasRef} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp} width={900} height={540} className={`w-full h-auto block rounded-[14px] border border-[#EDEBE6] ${editable ? "cursor-grab active:cursor-grabbing" : ""}`} />;
 }
 
 export default function UploadPage(){
@@ -329,7 +408,7 @@ export default function UploadPage(){
                     <span className={`px-2.5 py-1 rounded-full text-[10px] font-[700] ${done ? "bg-[#FFD60A] text-black" : "bg-white/10 animate-pulse"}`}>{done ? `✓ ${planZones.length} ZONES READY` : "DRAWING PLAN..."}</span>
                   </div>
                   <div className="p-3 bg-[#FAFAF9]">
-                    {planZones.length>0 ? <PlanCanvas zones={planZones} rules={rules} /> : <div className="h-[300px] flex items-center justify-center text-[12px] font-mono text-[#9A9A98]">Generating plan from document...</div>}
+                    {planZones.length>0 ? <PlanCanvas zones={planZones} rules={rules} editable={true} onZonesChange={(nz)=>{ setPlanZones(nz); if(done && meta) { try{ localStorage.setItem("citesight_zones_complicated", JSON.stringify(nz)); localStorage.setItem("citesight_last_compile", JSON.stringify({ rules, meta })); }catch{} fetch("http://localhost:8000/zones",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(nz.map(({id,polygon,label})=>({id,polygon,label})))}).catch(()=>{}); } }} /> : <div className="h-[300px] flex items-center justify-center text-[12px] font-mono text-[#9A9A98]">Generating plan from document...</div>}
                   </div>
                   <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-3 bg-white border-t border-[#EDEBE6]">
                     <div className="col-span-2">
