@@ -207,7 +207,10 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#FCFCF9] text-[#111] antialiased selection:bg-[#111] selection:text-white overflow-x-hidden">
+    <div className="relative min-h-screen bg-[#FCFCF9] text-[#111] antialiased selection:bg-[#111] selection:text-white overflow-x-hidden">
+      {/* Smooth gradient backdrop — runs behind the nav and hero so the top of the page has no flat white edge */}
+      <div aria-hidden className="pointer-events-none absolute top-0 inset-x-0 h-[880px]" style={{ background: "radial-gradient(1100px 540px at 50% -100px, rgba(129,140,248,0.38), transparent 65%), radial-gradient(720px 500px at 8% 220px, rgba(34,211,238,0.22), transparent 65%), radial-gradient(720px 500px at 92% 200px, rgba(167,139,250,0.30), transparent 65%), linear-gradient(180deg, #EBEDFB 0%, #F2F0FC 42%, #EDF8F7 72%, #FCFCF9 100%)" }} />
+      <div aria-hidden className="pointer-events-none absolute top-0 inset-x-0 h-[880px] backdrop-blur-[2px]" style={{ maskImage: "linear-gradient(180deg, black 55%, transparent 100%)", WebkitMaskImage: "linear-gradient(180deg, black 55%, transparent 100%)" }} />
       <style>{`
         @keyframes rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes drift { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(40px,-30px) scale(1.08); } }
@@ -245,9 +248,9 @@ export default function Page() {
       {/* HERO — bold gradient, grain, retro grid (light) */}
       <section className="relative overflow-hidden">
         <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-[320px] left-1/2 -translate-x-1/2 h-[640px] w-[900px] rounded-full bg-[#818CF8]/25 blur-[140px]" style={{ animation: "drift 14s ease-in-out infinite" }} />
-          <div className="absolute top-[180px] -left-[160px] h-[420px] w-[420px] rounded-full bg-[#22D3EE]/20 blur-[120px]" style={{ animation: "drift 18s ease-in-out infinite" }} />
-          <div className="absolute top-[240px] -right-[140px] h-[420px] w-[420px] rounded-full bg-[#A78BFA]/25 blur-[120px]" style={{ animation: "drift 16s ease-in-out infinite" }} />
+          <div className="absolute -top-[320px] left-1/2 -translate-x-1/2 h-[640px] w-[900px] rounded-full bg-[#818CF8]/15 blur-[160px]" style={{ animation: "drift 14s ease-in-out infinite" }} />
+          <div className="absolute top-[180px] -left-[160px] h-[420px] w-[420px] rounded-full bg-[#22D3EE]/12 blur-[140px]" style={{ animation: "drift 18s ease-in-out infinite" }} />
+          <div className="absolute top-[240px] -right-[140px] h-[420px] w-[420px] rounded-full bg-[#A78BFA]/15 blur-[140px]" style={{ animation: "drift 16s ease-in-out infinite" }} />
           <div className="absolute bottom-0 left-[-20%] right-[-20%] h-[300px] opacity-[0.10]" style={{ backgroundImage: "linear-gradient(rgba(79,70,229,.8) 1px, transparent 1px), linear-gradient(90deg, rgba(79,70,229,.8) 1px, transparent 1px)", backgroundSize: "56px 56px", transform: "perspective(420px) rotateX(62deg)", transformOrigin: "bottom", maskImage: "linear-gradient(to top, black 30%, transparent 95%)", WebkitMaskImage: "linear-gradient(to top, black 30%, transparent 95%)" }} />
           <div className="absolute inset-0 opacity-[0.035] mix-blend-multiply" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")` }} />
         </div>
