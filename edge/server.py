@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Request
 from fastapi.middleware.cors import CORSMiddleware
 import json
 from pathlib import Path
@@ -135,7 +135,15 @@ def get_zones():
     return load_zones()
 
 @app.post("/zones")
-def post_zones(zones: list):
+async def post_zones(request: Request):
+    try:
+        payload = await request.json()
+    except:
+        payload = []
+    # Accept both {"zones": [...]} and raw [...]
+    zones = payload.get("zones") if isinstance(payload, dict) else payload
+    if not isinstance(zones, list):
+        zones = []
     ZONES_PATH.write_text(json.dumps(zones, indent=2))
     # SAM 3.1 on-demand once for zone annotation — 1 image × $0.0025 = $0.0025 one-time, not per frame
     sam31_on_demand([b"zone_floorplan_mock"], reason="zone_annotation once")
