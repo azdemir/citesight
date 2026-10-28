@@ -75,9 +75,9 @@ export default function Page() {
         </div>
 
         <div className="relative mx-auto max-w-[1120px] px-6 pt-16 md:pt-24 pb-10 text-center">
-          <h1 className="rise mt-2 text-[52px] md:text-[104px] leading-[0.84] tracking-[-0.05em] font-extrabold lowercase">
-            <span className="block">the rulebook</span>
-            <span className="block bg-gradient-to-r from-[#6366F1] via-[#D97706] to-[#0891B2] bg-clip-text text-transparent">that watches.</span>
+          <h1 className="rise mt-2 text-[52px] md:text-[104px] leading-[0.84] tracking-[-0.05em] font-extrabold">
+            <span className="block">The rulebook</span>
+            <span className="block bg-gradient-to-r from-[#6366F1] via-[#D97706] to-[#0891B2] bg-clip-text text-transparent">That watches.</span>
           </h1>
 
           <p className="rise rise-1 mt-7 mx-auto max-w-[540px] text-[16px] md:text-[17px] leading-[1.6] text-[#6B6B6B]">
