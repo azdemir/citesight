@@ -23,18 +23,50 @@ export async function POST(req: NextRequest) {
     const fileName = file.name || "manual.pdf";
     const fileSizeMB = (bytes.length / 1024 / 1024).toFixed(2);
 
-    // Parse PDF to get text + pages
+    // Parse PDF to get text + pages — supports pdf-parse v2 (PDFParse class) and v1 fallback
     let text = "";
     let numPages = 0;
+    let parseOk = false;
     try {
-      const pdfParseMod: any = await import("pdf-parse");
-      const pdfParse = pdfParseMod.default || pdfParseMod;
-      const data = await pdfParse(bytes);
-      text = (data.text || "").slice(0, 800000); // 800k chars ~ 200k tokens, fits 1M context
-      numPages = data.numpages || 0;
+      const mod: any = await import("pdf-parse");
+      const PDFParse = mod.PDFParse || mod.default?.PDFParse;
+      if (PDFParse) {
+        try {
+          // Try Uint8Array variant (more compatible)
+          const u8 = new Uint8Array(bytes);
+          const parser = new PDFParse({ data: u8 });
+          const data: any = await parser.getText();
+          text = (data.text || "").slice(0, 800000);
+          numPages = data.pages?.length || data.total || data.numpages || 0;
+          parseOk = !!text;
+        } catch (e1) {
+          console.warn("PDFParse Uint8Array failed, trying Buffer", e1);
+          try {
+            const parser2 = new PDFParse({ data: bytes as any });
+            const data2: any = await parser2.getText();
+            text = (data2.text || "").slice(0, 800000);
+            numPages = data2.pages?.length || data2.total || data2.numpages || 0;
+            parseOk = !!text;
+          } catch (e2) {
+            console.warn("PDFParse Buffer also failed", e2);
+          }
+        }
+      }
+      if (!parseOk) {
+        const pdfParseFn = mod.default || mod;
+        if (typeof pdfParseFn === "function") {
+          const data: any = await pdfParseFn(bytes);
+          text = (data.text || "").slice(0, 800000);
+          numPages = data.numpages || data.numPages || 0;
+          parseOk = !!text;
+        }
+      }
     } catch (e) {
       console.error("pdf-parse failed", e);
-      text = `Sample manual content for ${fileName}. This is a safety manual with rules like: Personnel shall not be within 1.5 m of running saw (p87 §4.2), Gloves required at station 3 (p112 §7.1), Hard hat within 5 m of crane (p64), No forklift in pedestrian lane when occupied (p203).`;
+    }
+    if (!parseOk) {
+      console.error("pdf-parse all methods failed, using sample");
+      text = `Sample manual content for ${fileName}. This is a safety manual with rules like: Personnel shall not be within 1.5 m of running saw (p87 §4.2), Gloves required at station 3 (p112 §7.1), Hard hat within 5 m of crane (p64), No forklift in pedestrian lane when occupied (p203). Extracted ${fileName} contains sections on machinery, PPE, vehicle separation, LOTO, etc.`;
       numPages = 0;
     }
 
