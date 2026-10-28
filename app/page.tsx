@@ -47,9 +47,9 @@ function AnimatedWorkflow() {
 
   return (
     <section className="mx-auto max-w-[1120px] px-6 pb-20 md:pb-24">
-      <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
+      <div className="flex flex-col gap-3 mb-8 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
         <h2 className="text-[32px] md:text-[40px] leading-[0.95] tracking-[-0.04em] font-bold">Watch a rule<br /><span className="text-[#9A9A98]">move through the system</span></h2>
-        <span className="text-[11px] font-mono uppercase tracking-[0.14em] text-[#9A9A98]">Live simulation — loops every few seconds</span>
+        <span className="text-[11px] font-mono uppercase tracking-[0.14em] text-[#9A9A98] sm:text-right sm:pb-1">Live simulation · loops</span>
       </div>
 
       <div className="rounded-[24px] border border-[#E8E6E1] bg-white shadow-[0_32px_90px_rgba(0,0,0,0.08)] overflow-hidden">
@@ -251,7 +251,6 @@ export default function Page() {
           <div className="absolute -top-[320px] left-1/2 -translate-x-1/2 h-[640px] w-[900px] rounded-full bg-[#818CF8]/15 blur-[160px]" style={{ animation: "drift 14s ease-in-out infinite" }} />
           <div className="absolute top-[180px] -left-[160px] h-[420px] w-[420px] rounded-full bg-[#22D3EE]/12 blur-[140px]" style={{ animation: "drift 18s ease-in-out infinite" }} />
           <div className="absolute top-[240px] -right-[140px] h-[420px] w-[420px] rounded-full bg-[#A78BFA]/15 blur-[140px]" style={{ animation: "drift 16s ease-in-out infinite" }} />
-          <div className="absolute bottom-0 left-[-20%] right-[-20%] h-[300px] opacity-[0.10]" style={{ backgroundImage: "linear-gradient(rgba(79,70,229,.8) 1px, transparent 1px), linear-gradient(90deg, rgba(79,70,229,.8) 1px, transparent 1px)", backgroundSize: "56px 56px", transform: "perspective(420px) rotateX(62deg)", transformOrigin: "bottom", maskImage: "linear-gradient(to top, black 30%, transparent 95%)", WebkitMaskImage: "linear-gradient(to top, black 30%, transparent 95%)" }} />
           <div className="absolute inset-0 opacity-[0.035] mix-blend-multiply" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")` }} />
         </div>
 
@@ -323,12 +322,12 @@ export default function Page() {
                   <div className="absolute left-[29%] top-[40%] bg-[#FFD60A] text-black text-[10px] font-mono font-semibold px-2 py-1 rounded-md">0.8m &lt; 1.5m</div>
                 </div>
 
-                <div className="mt-4 rounded-2xl bg-white text-black p-4 flex items-start justify-between gap-4">
-                  <div>
+                <div className="mt-4 rounded-2xl bg-white text-black p-4 flex items-start justify-between gap-3 overflow-hidden">
+                  <div className="min-w-0">
                     <div className="text-[13px] font-semibold tracking-[-0.01em]">Person within 0.8 m of a running saw</div>
                     <div className="mt-1 text-[12px] leading-[1.5] text-black/55">Violates R-04.2. Clip 14:03:10–14:03:15 is attached for review.</div>
                   </div>
-                  <span className="shrink-0 text-[10px] font-mono font-semibold bg-black text-white px-2.5 py-1 rounded-full">p87 §4.2</span>
+                  <span className="shrink-0 text-[10px] font-mono font-semibold bg-black text-white px-2.5 py-1 rounded-full whitespace-nowrap">p87 §4.2</span>
                 </div>
               </div>
             </div>
